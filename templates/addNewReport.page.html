@@ -9,7 +9,33 @@ Add new report
 {{end}}
 
 {{define "content"}}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {{$rep := index .Data "report"}}
 
+            <h1>Add new report</h1>
+            
+
+            <form method="post" action="/user/Register-new-user" class="" novalidate>
+                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+                <div class="form-group mt-5">
+                    <label for="first_name">First name:</label>
+                    {{ with .Form.Errors.Get "first_name"}}
+                        <label class="text-danger">{{.}}</label>
+                    {{end}}
+                    <input class="form-control {{with .Form.Errors.Get "first_name"}} is-invalid {{end}}" type="text" name="first_name" id="first_name" 
+                     autocomplete="off" value="{{$user.FirstName}}" required>
+                </div>
+
+                <hr>
+
+                <input type="submit" class="btn btn-primary" value="Register">
+            </form>
+        </div>
+    </div>
+</div>
 {{end}}
 
 {{define "js"}}
