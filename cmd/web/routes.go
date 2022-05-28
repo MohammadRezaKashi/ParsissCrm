@@ -29,5 +29,7 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/report/add-new-report", handlers.Repo.AddNewReport)
 
+	mux.Post("/report/post-add-new-report", handlers.Repo.PostAddNewReport)
+
 	return mux
 }

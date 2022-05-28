@@ -3,6 +3,7 @@ package dbrepo
 import (
 	"ParsissCrm/internal/models"
 	"context"
+	"log"
 	"time"
 )
 
@@ -44,4 +45,23 @@ func (m *postgresDBRepo) GetAllReports() ([]models.Report, error) {
 	}
 
 	return reports, nil
+}
+
+func (m *postgresDBRepo) AddReport(report models.Report) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+	INSERT INTO public.reports(
+		id, date, access_level, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5);
+	`
+
+	_, err := m.DB.ExecContext(ctx, query, report.ID, report.Date.AddDate(0, 0, 1), report.Acccess_level, time.Now(), time.Now())
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
 }
