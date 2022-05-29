@@ -1,0 +1,4 @@
+add_foreign_key("SurgeriesInformation", "patient_id", {"PatientsInformation": ["id"]}, {
+    "on_delete": "cascade",
+    "on_update": "cascade",
+})
