@@ -18,4 +18,11 @@ create_table("SurgeriesInformation") {
   t.Column("mr", "bool", {})
   t.Column("operator_first", "string", {})
   t.Column("operator_second", "string", {})
+  t.Column("start_time", "timestamp", {})
+  t.Column("stop_time", "timestamp", {})
+  t.Column("enter_time", "timestamp", {})
+  t.Column("exit_time", "timestamp", {})
+  t.Column("enter_patient_time", "timestamp", {})
+  t.Column("head_fix_type", "integer", {})
+  t.Column("cancelation_reason", "string", {})
 }
