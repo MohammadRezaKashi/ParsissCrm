@@ -1,0 +1,1 @@
+drop_foreign_key("SoftwareInformations", "SurgeriesInformation_PatientsInformation_id_fk", {})
