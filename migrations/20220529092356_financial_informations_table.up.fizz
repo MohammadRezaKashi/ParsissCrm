@@ -13,7 +13,7 @@ create_table("FinancialInformations") {
     t.Column("first_caller", "text", {})
     t.Column("Payment_card_number", "text", {})
     t.Column("bank", "text", {})
-    t.Column("discount_percentage", "string", {})
+    t.Column("discount_percentage", "float", {})
     t.Column("discount_reason", "string", {})
     t.Column("credit_amount", "integer", {})
     t.Column("insurance_type", "integer", {})

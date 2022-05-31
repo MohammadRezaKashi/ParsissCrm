@@ -3,7 +3,7 @@ create_table("SurgeriesInformation") {
   t.Column("patient_id", "integer", {})
   t.Column("surgery_date", "date", {})
   t.Column("surgery_time", "timestamp ", {})
-  t.Column("surgery_type", "text", {})
+  t.Column("surgery_type", "integer", {})
   t.Column("surgery_area", "integer", {})
   t.Column("surgery_description", "text", {})
   t.Column("surgery_notes", "text", {})
@@ -25,4 +25,9 @@ create_table("SurgeriesInformation") {
   t.Column("enter_patient_time", "timestamp", {})
   t.Column("head_fix_type", "integer", {})
   t.Column("cancelation_reason", "string", {})
+  t.Column("fre", "float", {})
+  t.Column("registration_time", "timestamp ", {})
+  t.Column("registration_try_number", "integer", {})
+  t.Column("surface_registration_time", "timestamp", {})
+  t.Column("registration_tool_name", "integer", {})
 }

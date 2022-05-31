@@ -2,6 +2,25 @@
 
 {{define "css"}}
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../static/persianDatepicker-master/css/persianDatepicker-default.css" type="text/css"/>
+<style>
+    .nationalCode::-webkit-inner-spin-button,
+    .nationalCode::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .nationalCode {
+        -moz-appearance: textfield;
+    }
+
+    .required-label.required>label::after {
+        color: red;
+        content: "*";
+        order: 1;
+    }
+</style>
 {{end}}
 
 {{define "page-title"}}
@@ -14,32 +33,618 @@ Add new report
         <div class="col">
             {{$rep := index .Data "report"}}
 
-            <h1>Add New Report</h1>
+            <h3 style="margin-top: 20px;"><img src="../static/images/AddImageIcon.png" style="height: 70px; width: 70px;"> Add New Patient</h3>
+
+            <h4 class="mt-4">Patient Information</h4>
 
             <form method="post" action="/report/post-add-new-report" class="" novalidate>
                 <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
-                <div class="form-group mt-5">
-                    <label for="id">Id:</label>
-                    {{ with .Form.Errors.Get "id"}}
-                        <label class="text-danger">{{.}}</label>
-                    {{end}}
-                    <input class="form-control {{with .Form.Errors.Get "id"}} is-invalid {{end}}" type="text" name="id" id="id" 
-                     autocomplete="off" value="{{$rep.ID}}" required>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mt-3 required-label required">
+                            <label for="name">Name:</label>                           
+                            {{ with .Form.Errors.Get "name"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "name"}} is-invalid {{end}}" type="text"
+                                name="name" id="name" autocomplete="off" value="{{$rep.Name}}" required>                            
+                        </div>
+
+                        <div class="form-group mt-3 required-label required">
+                            <label for="family">Family:</label>
+                            {{ with .Form.Errors.Get "family"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "family"}} is-invalid {{end}}"
+                                type="text" name="family" id="family" autocomplete="off" value="{{$rep.Family}}"
+                                required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="age">Age:</label>
+                            {{ with .Form.Errors.Get "age"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "age"}} is-invalid {{end}}" type="number"
+                                name="age" id="age" autocomplete="off" value="{{$rep.Age}}" required>
+                        </div>
+
+                        <div class="form-group mt-3 required-label required">
+                            <label for="national_id">National Id:</label>
+                            {{ with .Form.Errors.Get "national_id"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="nationalCode form-control {{with .Form.Errors.Get "national_id"}} is-invalid {{end}}"
+                                type="number" name="national_id" id="national_id" autocomplete="off"
+                                value="{{$rep.National_Id}}" required>
+                        </div>
+
+                        <div class="form-group mt-3 required-label required">
+                            <label for="phone_number">Phone Number:</label>
+                            {{ with .Form.Errors.Get "phone_number"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "phone_number"}} is-invalid {{end}}"
+                                type="text" name="phone_number" id="phone_number" autocomplete="off"
+                                value="{{$rep.Phone_Number}}" required>
+                        </div>
+
+                    </div>
+                    <div class="col">
+                        
+                        <div class="form-group mt-3">
+                            <label for="address">Address:</label>
+                            {{ with .Form.Errors.Get "address"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "address"}} is-invalid {{end}}"
+                                type="text" name="address" id="address" autocomplete="off" value="{{$rep.Address}}"
+                                required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="place_of_birth">Place Of Birth:</label>
+                            {{ with .Form.Errors.Get "place_of_birth"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "place_of_birth"}} is-invalid {{end}}"
+                                type="text" name="place_of_birth" id="place_of_birth" autocomplete="off" value="{{$rep.PlaceOfBirth}}"
+                                required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="email">Email:</label>
+                            {{ with .Form.Errors.Get "email"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}"
+                                type="text" name="email" id="email" autocomplete="off" value="{{$rep.Email}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="file_number">File Number:</label>
+                            {{ with .Form.Errors.Get "file_number"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "file_number"}} is-invalid {{end}}"
+                                type="text" name="file_number" id="file_number" autocomplete="off" value="{{$rep.FileNumber}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="date_of_hospital_admission">Date Of Hospital Admission:</label>
+                            {{ with .Form.Errors.Get "date_of_hospital_admission"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get " date_of_hospital_admission"}} is-invalid {{end}}" type="text"
+                                name="date_of_hospital_admission" id="date_of_hospital_admission" autocomplete="off"
+                                value="{{$rep.DateOfHospitalAdmission}}" required>
+                        </div>
+                    </div>
                 </div>
+
+
+                <h4 class="mt-4">Surgery Information</h4>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mt-3">
+                            <label for="date">Date:</label>
+                            {{ with .Form.Errors.Get "date"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="usage form-control {{with .Form.Errors.Get "date"}} is-invalid {{end}}" type="text"
+                                name="date" id="date" autocomplete="off" value="{{$rep.Date}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="time">Time:</label>
+                            {{ with .Form.Errors.Get "time"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "time"}} is-invalid {{end}}" type="time"
+                                name="time" id="time" autocomplete="off" value="{{$rep.Time}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="surgery_type">Surgery Type:</label>
+                            {{ with .Form.Errors.Get "surgery_type"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "surgery_type"}} is-invalid {{end}}"
+                                type="text" name="surgery_type" id="surgery_type" autocomplete="off"
+                                value="{{$rep.SurgeryType}}">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="surgery_area">Surgery Area:</label>
+                            {{ with .Form.Errors.Get "surgery_area"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <datalist id="surgery_area">
+                                <option value="Neurosurgery">
+                                <option value="ENT">
+                                <option value="E+N">
+                                <option value="CMF">
+                                <option value="Spine">
+                                <option value="Orthopedics">
+                            </datalist>
+                            <input class="form-control {{with .Form.Errors.Get "surgery_area"}} is-invalid {{end}}"
+                                type="text" name="surgery_area" id="surgery_area" autocomplete="off"
+                                value="{{$rep.SurgeryArea}}" required list="surgery_area">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="surgery_description">Surgery Description:</label>
+                            {{ with .Form.Errors.Get "surgery_description"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}         
+                            <textarea style="height: 150px; width: 100%;" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false"
+                            class="form-control {{with .Form.Errors.Get "surgery_description"}} is-invalid {{end}}"
+                            name="surgery_description" id="surgery_description" autocomplete="off" value="{{$rep.SurgeryDescription}}" required></textarea>                   
+                        </div>   
+                        
+                        <div class="form-group mt-3">
+                            <label for="surgery_result">Surgery Result:</label>
+                            {{ with .Form.Errors.Get "surgery_result"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <datalist id="surgery_result">
+                                <option value="Failed">
+                                <option value="Success">
+                                <option value="Canceled">
+                            </datalist>
+                            <input class="form-control {{with .Form.Errors.Get "surgery_result"}} is-invalid {{end}}"
+                                type="text" name="surgery_result" id="surgery_result" autocomplete="off"
+                                value="{{$rep.SurgeryResult}}" required list="surgery_result">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="fail_reason">Fail Reason:</label>
+                            {{ with .Form.Errors.Get "fail_reason"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}         
+                            <textarea style="height: 150px; width: 100%;" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false"
+                            class="form-control {{with .Form.Errors.Get "fail_reason"}} is-invalid {{end}}"
+                            name="fail_reason" id="fail_reason" autocomplete="off" value="{{$rep.Fail_Reason}}" required></textarea>                   
+                        </div>  
+
+                        <div class="form-group mt-3">
+                            <label for="surgeon_first">Surgeon First:</label>
+                            {{ with .Form.Errors.Get "surgeon_first"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "surgeon_first"}} is-invalid {{end}}"
+                                type="text" name="surgeon_first" id="surgeon_first" autocomplete="off" value="{{$rep.SurgeonFirst}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="surgeon_second">Surgeon Second:</label>
+                            {{ with .Form.Errors.Get "surgeon_second"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "surgeon_second"}} is-invalid {{end}}"
+                                type="text" name="surgeon_second" id="surgeon_second" autocomplete="off" value="{{$rep.SurgeonSecond}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="resident">Resident:</label>
+                            {{ with .Form.Errors.Get "resident"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "resident"}} is-invalid {{end}}"
+                                type="text" name="resident" id="resident" autocomplete="off" value="{{$rep.Resident}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="hospital">Hospital:</label>
+                            {{ with .Form.Errors.Get "hospital"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "hospital"}} is-invalid {{end}}"
+                                type="text" name="hospital" id="hospital" autocomplete="off" value="{{$rep.Hospital}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="hospital_type">Hospital Type:</label>
+                            {{ with .Form.Errors.Get "hospital_type"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <datalist id="hospital_type">
+                                <option value="Private">
+                                <option value="Govermental">
+                                <option value="Other">
+                            </datalist>
+                            <input class="form-control {{with .Form.Errors.Get "hospital_type"}} is-invalid {{end}}"
+                                type="text" name="hospital_type" id="hospital_type" autocomplete="off"
+                                value="{{$rep.HospitalType}}" required list="hospital_type">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="hospital_address">Hospital Address:</label>
+                            {{ with .Form.Errors.Get "hospital_address"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get " hospital_address"}} is-invalid {{end}}" type="text"
+                                name="hospital_address" id="hospital_address" autocomplete="off" value="{{$rep.HospitalAddress}}" required>
+                        </div>
+
+                                                
+                    </div>
+                    <div class="col">                               
+                        
+
+                        
+                        <div class="row">
+                            <div class="col-md-6 form-group mt-3">
+                                <label for="mr">MR:</label>
+                                {{ with .Form.Errors.Get "mr"}}
+                                <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="{{with .Form.Errors.Get "mr"}} is-invalid {{end}}" type="checkbox" name="mr" id="mr"
+                                    autocomplete="off" value="{{$rep.MR}}" required>
+                            </div>
+                        
+                            <div class="col-md-6 form-group mt-3">
+                                <label for="ct">CT:</label>
+                                {{ with .Form.Errors.Get "ct"}}
+                                <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="{{with .Form.Errors.Get "ct"}} is-invalid {{end}}" type="checkbox" name="ct" id="ct"
+                                    autocomplete="off" value="{{$rep.CT}}" required>
+                            </div>
+                        
+                            <div class="col-md-6 form-group mt-3">
+                                <label for="fmri">FMRI:</label>
+                                {{ with .Form.Errors.Get "fmri"}}
+                                <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="{{with .Form.Errors.Get "fmri"}} is-invalid {{end}}" type="checkbox" name="fmri" id="fmri"
+                                    autocomplete="off" value="{{$rep.FMRI}}" required>
+                            </div>
+                        
+                            <div class="col-md-6 form-group mt-3">
+                                <label for="dti">DTI:</label>
+                                {{ with .Form.Errors.Get "dti"}}
+                                <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="{{with .Form.Errors.Get "dti"}} is-invalid {{end}}" type="checkbox" name="dti" id="dti"
+                                    autocomplete="off" value="{{$rep.DTI}}" required>
+                            </div>
+
+                            <div class="col-md-6 form-group mt-3">
+                                <label for="data_is_valid">Data Is Valid:</label>
+                                {{ with .Form.Errors.Get "data_is_valid"}}
+                                <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="{{with .Form.Errors.Get "data_is_valid"}} is-invalid {{end}}" type="checkbox" name="data_is_valid" id="data_is_valid"
+                                    autocomplete="off" value="{{$rep.DataIsValid}}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mt-3">
+                            <label for="operator_first">Operator First:</label>
+                            {{ with .Form.Errors.Get "operator_first"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get " operator_first"}} is-invalid {{end}}" type="text"
+                                name="operator_first" id="operator_first" autocomplete="off" value="{{$rep.OperatorFirst}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="operator_second">Operator Second:</label>
+                            {{ with .Form.Errors.Get "operator_second"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "operator_second"}} is-invalid {{end}}"
+                                type="text" name="operator_second" id="operator_second" autocomplete="off" value="{{$rep.HospitalSecond}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="start_time">Start Time:</label>
+                            {{ with .Form.Errors.Get "start_time"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "start_time"}} is-invalid {{end}}" type="time"
+                                name="start_time" id="start_time" autocomplete="off" value="{{$rep.StartTime}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="stop_time">Stop Time:</label>
+                            {{ with .Form.Errors.Get "stop_time"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "stop_time"}} is-invalid {{end}}" type="time"
+                                name="stop_time" id="stop_time" autocomplete="off" value="{{$rep.StopTime}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="enter_time">Enter Time:</label>
+                            {{ with .Form.Errors.Get "enter_time"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "enter_time"}} is-invalid {{end}}" type="time"
+                                name="enter_time" id="enter_time" autocomplete="off" value="{{$rep.EnterTime}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="exit_time">Exit Time:</label>
+                            {{ with .Form.Errors.Get "exit_time"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "exit_time"}} is-invalid {{end}}" type="time"
+                                name="exit_time" id="exit_time" autocomplete="off" value="{{$rep.ExitTime}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="enter_patient_time">Enter Patient Time:</label>
+                            {{ with .Form.Errors.Get "enter_patient_time"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "enter_patient_time"}} is-invalid {{end}}" type="time"
+                                name="enter_patient_time" id="enter_patient_time" autocomplete="off" value="{{$rep.EnterPatientTime}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="head_fix_type">Head Fix Type:</label>
+                            {{ with .Form.Errors.Get "head_fix_type"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <datalist id="head_fix_type">
+                                <option value="Headband">
+                                <option value="Mayfield">
+                                <option value="Other">
+                            </datalist>
+                            <input class="form-control {{with .Form.Errors.Get "head_fix_type"}} is-invalid {{end}}"
+                                type="text" name="head_fix_type" id="head_fix_type" autocomplete="off" value="{{$rep.HeadFixType}}" required list="head_fix_type">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="cancelation_reason">Cancelation Reason:</label>
+                            {{ with .Form.Errors.Get "cancelation_reason"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "cancelation_reason"}} is-invalid {{end}}"
+                                type="text" name="cancelation_reason" id="cancelation_reason" autocomplete="off" value="{{$rep.CancelationReason}}" required>
+                        </div>         
+                        
+                        <div class="form-group mt-3">
+                            <label for="fre">FRE:</label>
+                            {{ with .Form.Errors.Get "fre"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "fre"}} is-invalid {{end}}"
+                                type="number" name="fre" id="fre" autocomplete="off" value="{{$rep.FRE}}" required>
+                        </div> 
+
+                        <div class="form-group mt-3">
+                            <label for="registration_time">Registration Time:</label>
+                            {{ with .Form.Errors.Get "registration_time"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get " registration_time"}} is-invalid {{end}}" type="number"
+                                name="registration_time" id="registration_time" autocomplete="off" value="{{$rep.RegistrationTime}}" required
+                                placeholder="For example 1 h">
+                        </div>
+                        
+                        <div class="form-group mt-3">
+                            <label for="registration_try_number">Registration Try Number:</label>
+                            {{ with .Form.Errors.Get "registration_try_number"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get " registration_try_number"}} is-invalid {{end}}" type="number"
+                                name="registration_try_number" id="registration_try_number" autocomplete="off"
+                                value="{{$rep.RegistrationTryNumber}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="surface_registration_time">Surface Registration Time:</label>
+                            {{ with .Form.Errors.Get "surface_registration_time"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get " surface_registration_time"}} is-invalid {{end}}" type="number"
+                                name="surface_registration_time" id="surface_registration_time" autocomplete="off"
+                                value="{{$rep.SurfaceRegistrationTime}}" required required placeholder="For example 1 h">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="registration_tool_name">Registration Tool Name:</label>
+                            {{ with .Form.Errors.Get "registration_tool_name"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "registration_tool_name"}} is-invalid {{end}}"
+                                type="text" name="registration_tool_name" id="registration_tool_name" autocomplete="off" value="{{$rep.RegistrationToolName}}" required>
+                        </div> 
+                        
+                    </div>
+
+                </div>
+
+
+                <h4 class="mt-4">Financial Information</h4>
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group mt-3">
+                            <label for="payment_status">Payment Status:</label>
+                            {{ with .Form.Errors.Get "payment_status"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <datalist id="payment_status">
+                                <option value="Paid">
+                                <option value="Unpaid">
+                                <option value="Free">
+                                <option value="Health Plan">
+                                <option value="Paid By Hospital">
+                            </datalist>
+                            <input class="form-control {{with .Form.Errors.Get "payment_status"}} is-invalid {{end}}"
+                                type="text" name="payment_status" id="payment_status" autocomplete="off"
+                                value="{{$rep.PaymentStatus}}" required list="payment_status">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="payment_date">Payment Date:</label>
+                            {{ with .Form.Errors.Get "payment_date"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="usage form-control {{with .Form.Errors.Get "payment_date"}} is-invalid {{end}}" type="text"
+                                name="payment_date" id="payment_date" autocomplete="off" value="{{$rep.PaymentDate}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="receipt_number">Receipt Number:</label>
+                            {{ with .Form.Errors.Get "receipt_number"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "receipt_number"}} is-invalid {{end}}" type="text"
+                                name="receipt_number" id="receipt_number" autocomplete="off" value="{{$rep.ReceiptNumber}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="payment_receipt_amount">Payment Receipt Amount:</label>
+                            {{ with .Form.Errors.Get "payment_receipt_amount"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "payment_receipt_amount"}} is-invalid {{end}}" type="number"
+                                name="payment_receipt_amount" id="payment_receipt_amount" autocomplete="off" value="{{$rep.PaymentReceiptAmount}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="first_contact">First Contact:</label>
+                            {{ with .Form.Errors.Get "first_contact"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="usage form-control {{with .Form.Errors.Get "first_contact"}} is-invalid {{end}}" type="text"
+                                name="first_contact" id="first_contact" autocomplete="off" value="{{$rep.FirstContact}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="first_caller">First Caller:</label>
+                            {{ with .Form.Errors.Get "first_caller"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "first_caller"}} is-invalid {{end}}" type="text"
+                                name="first_caller" id="first_caller" autocomplete="off" value="{{$rep.FirstCaller}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="payment_card_number">Payment Card Number:</label>
+                            {{ with .Form.Errors.Get "payment_card_number"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "payment_card_number"}} is-invalid {{end}}" type="text"
+                                name="payment_card_number" id="payment_card_number" autocomplete="off" value="{{$rep.PaymentCardNumber}}" required>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="form-group mt-3">
+                            <label for="bank">Bank:</label>
+                            {{ with .Form.Errors.Get "bank"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "bank"}} is-invalid {{end}}" type="text"
+                                name="bank" id="bank" autocomplete="off" value="{{$rep.Bank}}" required>
+                        </div>
+
+
+                        <div class="form-group mt-3">
+                            <label for="discount_percentage">Discount Percentage:</label>
+                            {{ with .Form.Errors.Get "discount_percentage"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "discount_percentage"}} is-invalid {{end}}" type="number"
+                                name="discount_percentage" id="discount_percentage" autocomplete="off" value="{{$rep.DiscountPercentage}}" required>
+                        </div>
+
+
+                        <div class="form-group mt-3">
+                            <label for="discount_reason">Discount Reason:</label>
+                            {{ with .Form.Errors.Get "discount_reason"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "discount_reason"}} is-invalid {{end}}" type="text"
+                                name="discount_reason" id="discount_reason" autocomplete="off" value="{{$rep.DiscountReason}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="insurance_type">Insurance Type:</label>
+                            {{ with .Form.Errors.Get "insurance_type"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "insurance_type"}} is-invalid {{end}}"
+                                type="text" name="insurance_type" id="insurance_type" autocomplete="off"
+                                value="{{$rep.InsuranceType}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="financial_verifier">Financial Verifier:</label>
+                            {{ with .Form.Errors.Get "financial_verifier"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "financial_verifier"}} is-invalid {{end}}" type="text"
+                                name="financial_verifier" id="financial_verifier" autocomplete="off" value="{{$rep.FinancialVerifier}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="receipt_received_date">Receipt Received Date:</label>
+                            {{ with .Form.Errors.Get "receipt_received_date"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="usage form-control {{with .Form.Errors.Get "receipt_received_date"}} is-invalid {{end}}" type="text"
+                                name="receipt_received_date" id="receipt_received_date" autocomplete="off" value="{{$rep.ReceiptReceivedDate}}" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="receipt_receiver">Receipt Receiver:</label>
+                            {{ with .Form.Errors.Get "receipt_receiver"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "receipt_receiver"}} is-invalid {{end}}" type="text"
+                                name="receipt_receiver" id="receipt_receiver" autocomplete="off" value="{{$rep.ReceiptReceiver}}" required>
+                        </div>
+
+
+                    </div>                        
+                </div>
+                
 
                 <hr>
 
                 <input type="submit" class="btn btn-primary" value="Add">
             </form>
         </div>
-    </div>    
-</div>    
+    </div>
+</div>
 {{end}}
 
 {{define "js"}}
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+<script src="../static/persianDatepicker-master/js/jquery-1.10.1.min.js"></script>
+<script src="../static/persianDatepicker-master/js/persianDatepicker.min.js"></script>
 <script>
-
+    $(".usage").persianDatepicker();
 </script>
 {{end}}
