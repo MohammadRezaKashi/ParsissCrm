@@ -52,3 +52,79 @@ func (m *postgresDBRepo) AddSurgeriesInformation(surgeriesInformation models.Sur
 	}
 	return nil
 }
+
+func (m *postgresDBRepo) GetAllPatients() ([]models.PersonalInformation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `SELECT * FROM public."PatientsInformation"
+	ORDER BY id ASC `
+
+	var patients []models.PersonalInformation
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var patient models.PersonalInformation
+		err := rows.Scan(&patient.ID, &patient.Name, &patient.PhoneNumber, &patient.NationalID, &patient.Address, &patient.Email, new(time.Time), new(time.Time))
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		patients = append(patients, patient)
+	}
+
+	return patients, nil
+}
+
+func (m *postgresDBRepo) GetPatientByID(id int) (models.PersonalInformation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `SELECT * FROM public."PatientsInformation"
+	WHERE id = $1`
+
+	var patient models.PersonalInformation
+
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(&patient.ID, &patient.Name, &patient.PhoneNumber, &patient.NationalID, &patient.Address, &patient.Email, new(time.Time), new(time.Time))
+	if err != nil {
+		log.Println(err)
+		return models.PersonalInformation{}, err
+	}
+	return patient, nil
+}
+
+func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.SurgeriesInformation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `SELECT * FROM public."SurgeriesInformation"
+	WHERE patient_id = $1
+	ORDER BY id ASC`
+
+	var surgeries []models.SurgeriesInformation
+
+	rows, err := m.DB.QueryContext(ctx, query, id)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var surgery models.SurgeriesInformation
+		err := rows.Scan(&surgery.ID, &surgery.PatientID, &surgery.SurgeryDate, &surgery.SurgeryDay, &surgery.SurgeryType, &surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.SurgeryResult, &surgery.SurgeonFirst, &surgery.SurgeonSecond, &surgery.Resident, &surgery.Hospital, &surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.OperatorFirst, &surgery.OperatorSecond, &surgery.StartTime, &surgery.StopTime, &surgery.EnterTime, &surgery.ExitTime, &surgery.PatientEnterTime, &surgery.HeadFixType, &surgery.CancelationReason, new(time.Time), new(time.Time))
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		surgeries = append(surgeries, surgery)
+	}
+
+	return surgeries, nil
+}

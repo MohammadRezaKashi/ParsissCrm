@@ -10,6 +10,7 @@ type PersonalInformation struct {
 	PhoneNumber string
 	NationalID  string
 	Address     string
+	Email       string
 }
 
 type SurgeriesInformation struct {

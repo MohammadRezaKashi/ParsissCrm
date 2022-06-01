@@ -2,14 +2,15 @@ package driver
 
 import (
 	"ParsissCrm/internal/models"
-	"github.com/jackc/pgtype"
-	"github.com/xuri/excelize/v2"
-	ptime "github.com/yaa110/go-persian-calendar"
-	"golang.org/x/exp/slices"
 	"log"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jackc/pgtype"
+	"github.com/xuri/excelize/v2"
+	ptime "github.com/yaa110/go-persian-calendar"
+	"golang.org/x/exp/slices"
 )
 
 func CreateColumnName() []string {
@@ -102,14 +103,22 @@ func ParseExcelFile(file *excelize.File) {
 				var rowCell = []string{}
 				rowCell = append(rowCell, strings.Split(sheet, " ")[1])
 				rowCell = append(rowCell, strconv.Itoa(ConvertMonthStringToInt(strings.Split(sheet, " ")[0])))
-				for _, col := range columnName[5:] {
+				for index, col := range columnName[5:] {
 					s, err := file.GetCellValue(sheet, col+strconv.Itoa(i))
+					if index == 4 {
+						if s == "" {
+							rowCell = nil
+							break
+						}
+					}
 					if err != nil {
 						log.Fatal(err)
 					}
 					rowCell = append(rowCell, s)
 				}
-				excelCell = append(excelCell, rowCell)
+				if rowCell != nil {
+					excelCell = append(excelCell, rowCell)
+				}
 				i++
 			}
 		}

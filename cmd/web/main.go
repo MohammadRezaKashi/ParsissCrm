@@ -5,7 +5,9 @@ import (
 	"ParsissCrm/internal/driver"
 	"ParsissCrm/internal/handlers"
 	"ParsissCrm/internal/helpers"
+	"ParsissCrm/internal/models"
 	"ParsissCrm/internal/render"
+	"encoding/gob"
 	"flag"
 	"fmt"
 	"log"
@@ -41,6 +43,9 @@ func main() {
 }
 
 func Run() (*driver.DB, error) {
+
+	gob.Register(models.PersonalInformation{})
+
 	inProduction := flag.Bool("production", true, "Application is in production")
 	useCache := flag.Bool("cache", true, "Use template cache")
 	dbName := flag.String("dbname", "", "Database name")
@@ -89,19 +94,24 @@ func Run() (*driver.DB, error) {
 		return nil, err
 	}
 
-	file := driver.OpenExcelFile("Report.xlsx")
-	driver.ParseExcelFile(&file)
-	pis := driver.GetAllPersonalInformation()
-	sis := driver.GetAllSurgeriesInformation()
 	app.TemplateCache = tc
 
 	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
+
+	//ReadFromFile()
+	return db, nil
+}
+
+func ReadFromFile() {
+	file := driver.OpenExcelFile("Report.xlsx")
+	driver.ParseExcelFile(&file)
+	pis := driver.GetAllPersonalInformation()
+	sis := driver.GetAllSurgeriesInformation()
 	for index, pi := range pis {
 		id, _ := handlers.Repo.DB.AddPersonalInformation(pi)
 		handlers.Repo.DB.AddSurgeriesInformation(sis[index], id)
 	}
-	return db, nil
 }

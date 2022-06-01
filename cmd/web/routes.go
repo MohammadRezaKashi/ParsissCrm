@@ -31,5 +31,7 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Post("/report/post-add-new-report", handlers.Repo.PostAddNewReport)
 
+	mux.Get("/report/detail/{id}/show", handlers.Repo.ShowDetail)
+
 	return mux
 }
