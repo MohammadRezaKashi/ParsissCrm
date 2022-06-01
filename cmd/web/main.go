@@ -103,8 +103,5 @@ func Run() (*driver.DB, error) {
 		id, _ := handlers.Repo.DB.AddPersonalInformation(pi)
 		handlers.Repo.DB.AddSurgeriesInformation(sis[index], id)
 	}
-	//for index, si := range sis {
-	//	handlers.Repo.DB.AddSurgeriesInformation(si, pis[index].ID)
-	//}
 	return db, nil
 }

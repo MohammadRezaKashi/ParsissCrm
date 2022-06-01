@@ -1,4 +1,4 @@
-create_table("SurgeriesInformation", {timestamps: false}) {
+create_table("SurgeriesInformation") {
   t.Column("id", "integer", {primary: true})
   t.Column("patient_id", "integer", {})
   t.Column("surgery_date", "date", {})
@@ -29,4 +29,6 @@ create_table("SurgeriesInformation", {timestamps: false}) {
   t.Column("registration_try_number", "integer", {})
   t.Column("surface_registration_time", "timestamp", {})
   t.Column("registration_tool_name", "integer", {})
+  t.Column("created_at", "TIMESTAMPTZ", {default: "NOW()"})
+  t.Column("updated_at", "TIMESTAMPTZ", {default: "NOW()"})
 }

@@ -1,4 +1,4 @@
-create_table("FinancialInformations", {timestamps: false}) {
+create_table("FinancialInformations") {
     t.Column("id", "integer", {primary: true})
     t.Column("patient_id", "integer", {})
     t.Column("payment_status", "integer", {})
@@ -20,4 +20,6 @@ create_table("FinancialInformations", {timestamps: false}) {
     t.Column("financial_verifier", "text", {})
     t.Column("receipt_received_date", "date", {})
     t.Column("receipt_receiver", "string", {})
+    t.Column("created_at", "TIMESTAMPTZ", {default: "NOW()"})
+    t.Column("updated_at", "TIMESTAMPTZ", {default: "NOW()"})
 }

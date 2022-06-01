@@ -1,4 +1,4 @@
-create_table("SoftwareInformations", {timestamps: false}) {
+create_table("SoftwareInformations") {
     t.Column("id", "integer", {primary: true})
     t.Column("patient_id", "integer", {})
     t.Column("is_surface_used", "bool", {})
@@ -9,4 +9,6 @@ create_table("SoftwareInformations", {timestamps: false}) {
     t.Column("accuracy", "float", {})
     t.Column("trustability", "float", {})
     t.Column("fre", "float", {})
+    t.Column("created_at", "TIMESTAMPTZ", {default: "NOW()"})
+    t.Column("updated_at", "TIMESTAMPTZ", {default: "NOW()"})
 }
