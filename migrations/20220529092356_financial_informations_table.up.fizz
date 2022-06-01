@@ -1,4 +1,4 @@
-create_table("FinancialInformations") {
+create_table("FinancialInformations", {timestamps: false}) {
     t.Column("id", "integer", {primary: true})
     t.Column("patient_id", "integer", {})
     t.Column("payment_status", "integer", {})

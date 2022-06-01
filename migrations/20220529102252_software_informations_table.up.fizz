@@ -1,4 +1,4 @@
-create_table("SoftwareInformations") {
+create_table("SoftwareInformations", {timestamps: false}) {
     t.Column("id", "integer", {primary: true})
     t.Column("patient_id", "integer", {})
     t.Column("is_surface_used", "bool", {})

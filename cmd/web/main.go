@@ -89,12 +89,22 @@ func Run() (*driver.DB, error) {
 		return nil, err
 	}
 
+	file := driver.OpenExcelFile("Report.xlsx")
+	driver.ParseExcelFile(&file)
+	pis := driver.GetAllPersonalInformation()
+	sis := driver.GetAllSurgeriesInformation()
 	app.TemplateCache = tc
 
 	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
-
+	for index, pi := range pis {
+		id, _ := handlers.Repo.DB.AddPersonalInformation(pi)
+		handlers.Repo.DB.AddSurgeriesInformation(sis[index], id)
+	}
+	//for index, si := range sis {
+	//	handlers.Repo.DB.AddSurgeriesInformation(si, pis[index].ID)
+	//}
 	return db, nil
 }
