@@ -5,9 +5,7 @@ import (
 	"ParsissCrm/internal/driver"
 	"ParsissCrm/internal/handlers"
 	"ParsissCrm/internal/helpers"
-	"ParsissCrm/internal/models"
 	"ParsissCrm/internal/render"
-	"encoding/gob"
 	"flag"
 	"fmt"
 	"log"
@@ -43,8 +41,6 @@ func main() {
 }
 
 func Run() (*driver.DB, error) {
-
-	gob.Register(models.PersonalInformation{})
 
 	inProduction := flag.Bool("production", true, "Application is in production")
 	useCache := flag.Bool("cache", true, "Use template cache")

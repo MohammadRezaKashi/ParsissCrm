@@ -5,12 +5,17 @@ import (
 )
 
 type PersonalInformation struct {
-	ID          int
-	Name        string
-	PhoneNumber string
-	NationalID  string
-	Address     string
-	Email       string
+	ID                      int
+	Name                    string
+	Family                  string
+	Age                     int
+	PhoneNumber             string
+	NationalID              string
+	Address                 string
+	Email                   string
+	PlaceOfBirth            string
+	FileNumber              string
+	DateOfHospitalAdmission pgtype.Date
 }
 
 type SurgeriesInformation struct {

@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi"
 )
 
 var Repo *Repository
@@ -91,6 +91,7 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 
 	data["patient"] = patient
 	data["surgeryinfo"] = surgeryInfo
+	data["baseurl"] = "http://localhost:8080"
 
 	render.Template(rw, r, "addNewReport.page.html", &models.TemplateData{
 		Form: forms.New(nil),

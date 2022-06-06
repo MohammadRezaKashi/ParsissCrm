@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/jackc/pgtype"
 	"github.com/justinas/nosurf"
 )
 
@@ -18,11 +19,16 @@ var app *config.AppConfig
 var pathToTemplates = "./templates"
 
 var functions = template.FuncMap{
-	"humanDate": HumanDate,
+	"humanDate":       HumanDate,
+	"humanPgtypeDate": HumanPgtypeDate,
 }
 
 func HumanDate(t time.Time) string {
 	return t.Format("2006-01-02")
+}
+
+func HumanPgtypeDate(t pgtype.Date) string {
+	return t.Time.Format("2006/01/02")
 }
 
 func NewRenderer(a *config.AppConfig) {

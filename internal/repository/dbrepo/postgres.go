@@ -5,6 +5,9 @@ import (
 	"context"
 	"log"
 	"time"
+
+	"github.com/jackc/pgtype"
+	"github.com/nleeper/goment"
 )
 
 func (m *postgresDBRepo) AddPersonalInformation(personalInfo models.PersonalInformation) (int, error) {
@@ -117,12 +120,29 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 	defer rows.Close()
 
 	for rows.Next() {
+		var startTime, stopTime, enterTime, exitTime, patientEnterTime pgtype.Time
 		var surgery models.SurgeriesInformation
-		err := rows.Scan(&surgery.ID, &surgery.PatientID, &surgery.SurgeryDate, &surgery.SurgeryDay, &surgery.SurgeryType, &surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.SurgeryResult, &surgery.SurgeonFirst, &surgery.SurgeonSecond, &surgery.Resident, &surgery.Hospital, &surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.OperatorFirst, &surgery.OperatorSecond, &surgery.StartTime, &surgery.StopTime, &surgery.EnterTime, &surgery.ExitTime, &surgery.PatientEnterTime, &surgery.HeadFixType, &surgery.CancelationReason, new(time.Time), new(time.Time))
+		err := rows.Scan(&surgery.ID, &surgery.PatientID, &surgery.SurgeryDate, &surgery.SurgeryDay,
+			&surgery.SurgeryType, &surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.SurgeryResult,
+			&surgery.SurgeonFirst, &surgery.SurgeonSecond, &surgery.Resident, &surgery.Hospital,
+			&surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.OperatorFirst,
+			&surgery.OperatorSecond, &startTime, &stopTime, &enterTime, &exitTime,
+			&patientEnterTime, &surgery.HeadFixType, &surgery.CancelationReason, new(time.Time), new(time.Time))
 		if err != nil {
 			log.Println(err)
 			return nil, err
 		}
+		st, _ := goment.New(startTime.Microseconds * 1000)
+		surgery.StartTime.Time = st.ToTime().UTC()
+		st, _ = goment.New(stopTime.Microseconds * 1000)
+		surgery.StopTime.Time = st.ToTime().UTC()
+		st, _ = goment.New(enterTime.Microseconds * 1000)
+		surgery.EnterTime.Time = st.ToTime().UTC()
+		st, _ = goment.New(exitTime.Microseconds * 1000)
+		surgery.ExitTime.Time = st.ToTime().UTC()
+		st, _ = goment.New(patientEnterTime.Microseconds * 1000)
+		surgery.PatientEnterTime.Time = st.ToTime().UTC()
+
 		surgeries = append(surgeries, surgery)
 	}
 
