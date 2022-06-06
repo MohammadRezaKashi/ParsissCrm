@@ -30,13 +30,15 @@ Add new report
 {{end}}
 
 {{define "content"}}
+
+{{$rep := index .Data "report"}}
+{{$patient := index .Data "patient"}}
+{{$surgery := index .Data "surgeryinfo"}}
+{{$baseurl := index .Data "baseurl"}}
+
 <div class="container">
     <div class="row">
-        <div class="col">
-            {{$rep := index .Data "report"}}
-            {{$patient := index .Data "patient"}}
-            {{$surgery := index .Data "surgeryinfo"}}
-            {{$baseurl := index .Data "baseurl"}}
+        <div class="col">            
 
             <h3 style="margin-top: 20px;"><img src="{{$baseurl}}/static/images/AddImageIcon.png"
                     style="height: 70px; width: 70px;"> Add New Patient</h3>
@@ -155,7 +157,7 @@ Add new report
                 <h4 class="mt-4">Surgery Information</h4>
 
                 <div class="row">
-                    <div class="col">
+                    <div class="col">                        
                         
                         <div class="form-group mt-3">
                             <label for="surgery_date">Date:</label>
