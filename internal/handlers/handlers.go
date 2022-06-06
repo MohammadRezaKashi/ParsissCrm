@@ -90,7 +90,7 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 
 	data["patient"] = patient
-	data["surgeryinfo"] = surgeryInfo
+	data["surgeryinfo"] = surgeryInfo[0]
 	data["baseurl"] = "http://localhost:8080"
 
 	render.Template(rw, r, "addNewReport.page.html", &models.TemplateData{
