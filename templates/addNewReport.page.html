@@ -1,8 +1,10 @@
 {{template "base" .}}
 
 {{define "css"}}
+{{$baseurl := index .Data "baseurl"}}
+
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="../static/persianDatepicker-master/css/persianDatepicker-default.css" type="text/css" />
+<link rel="stylesheet" href="{{$baseurl}}/static/persianDatepicker-master/css/persianDatepicker-default.css" type="text/css" />
 <style>
     .nationalCode::-webkit-inner-spin-button,
     .nationalCode::-webkit-outer-spin-button {
@@ -32,8 +34,11 @@ Add new report
     <div class="row">
         <div class="col">
             {{$rep := index .Data "report"}}
+            {{$patient := index .Data "patient"}}
+            {{$surgery := index .Data "surgeryinfo"}}
+            {{$baseurl := index .Data "baseurl"}}
 
-            <h3 style="margin-top: 20px;"><img src="../static/images/AddImageIcon.png"
+            <h3 style="margin-top: 20px;"><img src="{{$baseurl}}/static/images/AddImageIcon.png"
                     style="height: 70px; width: 70px;"> Add New Patient</h3>
 
             <h4 class="mt-4">Patient Information</h4>
@@ -49,7 +54,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " name"}} is-invalid {{end}}" type="text"
-                                name="name" id="name" autocomplete="off" value="{{$rep.Name}}" required>
+                                name="name" id="name" autocomplete="off" value="{{$patient.Name}}" required>
                         </div>
 
                         <div class="form-group mt-3 required-label required">
@@ -58,7 +63,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " family"}} is-invalid {{end}}"
-                                type="text" name="family" id="family" autocomplete="off" value="{{$rep.Family}}"
+                                type="text" name="family" id="family" autocomplete="off" value="{{$patient.Family}}"
                                 required>
                         </div>
 
@@ -68,7 +73,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " age"}} is-invalid {{end}}"
-                                type="number" name="age" id="age" autocomplete="off" value="{{$rep.Age}}" required>
+                                type="number" name="age" id="age" autocomplete="off" value="{{$patient.Age}}" required>
                         </div>
 
                         <div class="form-group mt-3 required-label required">
@@ -78,7 +83,7 @@ Add new report
                             {{end}}
                             <input class="nationalCode form-control {{with .Form.Errors.Get " national_id"}} is-invalid
                                 {{end}}" type="number" name="national_id" id="national_id" autocomplete="off"
-                                value="{{$rep.National_Id}}" required>
+                                value="{{$patient.NationalID}}" required>
                         </div>
 
                         <div class="form-group mt-3 required-label required">
@@ -88,7 +93,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " phone_number"}} is-invalid {{end}}"
                                 type="text" name="phone_number" id="phone_number" autocomplete="off"
-                                value="{{$rep.Phone_Number}}" required>
+                                value="{{$patient.PhoneNumber}}" required>
                         </div>
 
                     </div>
@@ -100,7 +105,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " address"}} is-invalid {{end}}"
-                                type="text" name="address" id="address" autocomplete="off" value="{{$rep.Address}}"
+                                type="text" name="address" id="address" autocomplete="off" value="{{$patient.Address}}"
                                 required>
                         </div>
 
@@ -111,7 +116,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " place_of_birth"}} is-invalid {{end}}"
                                 type="text" name="place_of_birth" id="place_of_birth" autocomplete="off"
-                                value="{{$rep.PlaceOfBirth}}" required>
+                                value="{{$patient.PlaceOfBirth}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -120,7 +125,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " email"}} is-invalid {{end}}"
-                                type="text" name="email" id="email" autocomplete="off" value="{{$rep.Email}}" required>
+                                type="text" name="email" id="email" autocomplete="off" value="{{$patient.Email}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -130,7 +135,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " file_number"}} is-invalid {{end}}"
                                 type="text" name="file_number" id="file_number" autocomplete="off"
-                                value="{{$rep.FileNumber}}" required>
+                                value="{{$patient.FileNumber}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -138,10 +143,10 @@ Add new report
                             {{ with .Form.Errors.Get "date_of_hospital_admission"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " date_of_hospital_admission"}}
+                            <input class="usage form-control {{with .Form.Errors.Get " date_of_hospital_admission"}}
                                 is-invalid {{end}}" type="text" name="date_of_hospital_admission"
                                 id="date_of_hospital_admission" autocomplete="off"
-                                value="{{$rep.DateOfHospitalAdmission}}" required>
+                                value="{{humanPgtypeDate $patient.DateOfHospitalAdmission}}" required>
                         </div>
                     </div>
                 </div>
@@ -151,13 +156,15 @@ Add new report
 
                 <div class="row">
                     <div class="col">
+                        
                         <div class="form-group mt-3">
-                            <label for="date">Date:</label>
-                            {{ with .Form.Errors.Get "date"}}
+                            <label for="surgery_date">Date:</label>
+                            {{ with .Form.Errors.Get "surgery_date"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <input class="usage form-control {{with .Form.Errors.Get " date"}} is-invalid {{end}}"
-                                type="text" name="date" id="date" autocomplete="off" value="{{$rep.Date}}" required>
+                            <input class="usage form-control {{with .Form.Errors.Get " surgery_date"}} is-invalid {{end}}" type="text"
+                                name="surgery_date" id="surgery_date" autocomplete="off" value="{{humanPgtypeDate $surgery.SurgeryDate}}"
+                                required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -676,9 +683,11 @@ Add new report
 {{end}}
 
 {{define "js"}}
+{{$baseurl := index .Data "baseurl"}}
+
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
-<script src="../static/persianDatepicker-master/js/jquery-1.10.1.min.js"></script>
-<script src="../static/persianDatepicker-master/js/persianDatepicker.min.js"></script>
+<script src="{{$baseurl}}/static/persianDatepicker-master/js/jquery-1.10.1.min.js"></script>
+<script src="{{$baseurl}}/static/persianDatepicker-master/js/persianDatepicker.min.js"></script>
 <script>
     $(".usage").persianDatepicker();
 </script>
