@@ -23,6 +23,7 @@ type SurgeriesInformation struct {
 	PatientID          int
 	SurgeryDate        pgtype.Date
 	SurgeryDay         string
+	SurgeryTime        string
 	SurgeryType        string
 	SurgeryArea        int
 	SurgeryDescription string

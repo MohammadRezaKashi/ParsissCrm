@@ -170,12 +170,36 @@ Add new report
                         </div>
 
                         <div class="form-group mt-3">
-                            <label for="time">Time:</label>
-                            {{ with .Form.Errors.Get "time"}}
+                            <label for="surgery_day">Day:</label>
+                            {{ with .Form.Errors.Get "surgery_day"}}
+                            <label class="text-surgery_day">{{.}}</label>
+                            {{end}}
+                            <select id="surgery_day" class="form-control">
+                                <option disabled selected value> -- select an option -- </option>
+                                <option value="Saturday" {{if eq $surgery.SurgeryTime "Saturday"}} selected="selected" {{end}}>Saturday</option>
+                                <option value="Sunday" {{if eq $surgery.SurgeryTime "Sunday"}} selected="selected" {{end}}>Sunday</option>
+                                <option value="Monday" {{if eq $surgery.SurgeryTime "Monday"}} selected="selected" {{end}}>Monday</option>
+                                <option value="Tuesday" {{if eq $surgery.SurgeryTime "Tuesday"}} selected="selected" {{end}}>Tuesday</option>
+                                <option value="Wednesday" {{if eq $surgery.SurgeryTime "Wednesday"}} selected="selected" {{end}}>Wednesday</option>
+                                <option value="Thursday" {{if eq $surgery.SurgeryTime "Thursday"}} selected="selected" {{end}}>Thursday</option>
+                                <option value="Friday" {{if eq $surgery.SurgeryTime "Friday"}} selected="selected" {{end}}>Friday</option>
+                            </select>
+                            <input class="form-control {{with .Form.Errors.Get " surgery_day"}} is-invalid {{end}}" type="hidden"
+                                name="surgery_day" id="surgery_day" autocomplete="off" value="{{$surgery.SurgeryDay}}" required required list="surgery_day">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="surgery_time">Time:</label>
+                            {{ with .Form.Errors.Get "surgery_time"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " time"}} is-invalid {{end}}" type="time"
-                                name="time" id="time" autocomplete="off" value="{{$rep.Time}}" required>
+                            <select id="surgery_time" class="form-control">
+                                <option disabled selected value> -- select an option -- </option>
+                                <option value="Morning" {{if eq $surgery.SurgeryTime "Morning"}} selected="selected" {{end}}>Morning</option>
+                                <option value="Afternoon" {{if eq $surgery.SurgeryTime "Afternoon"}} selected="selected" {{end}}>Afternoon</option>
+                            </select>
+                            <input class="form-control {{with .Form.Errors.Get " time"}} is-invalid {{end}}" type="hidden"
+                                name="surgery_time" id="surgery_time" autocomplete="off" value="{{$surgery.SurgeryTime}}" required required list="surgery_time">
                         </div>
 
                         <div class="form-group mt-3">
@@ -193,17 +217,18 @@ Add new report
                             {{ with .Form.Errors.Get "surgery_area"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <datalist id="surgery_area">
-                                <option value="Neurosurgery">
-                                <option value="ENT">
-                                <option value="E+N">
-                                <option value="CMF">
-                                <option value="Spine">
-                                <option value="Orthopedics">
+                            <select id="surgery_area" class="form-control">
+                                <option disabled selected value> -- select an option -- </option>
+                                <option value="Neurosurgery" {{if eq $surgery.SurgeryTime "Neurosurgery"}} selected="selected" {{end}}>Neurosurgery</option>
+                                <option value="ENT"{{if eq $surgery.SurgeryTime "ENT"}} selected="selected" {{end}}>ENT</option>
+                                <option value="E+N"{{if eq $surgery.SurgeryTime "E+N"}} selected="selected" {{end}}>E+N</option>
+                                <option value="CMF"{{if eq $surgery.SurgeryTime "CMF"}} selected="selected" {{end}}>CMF</option>
+                                <option value="Spine"{{if eq $surgery.SurgeryTime "Spine"}} selected="selected" {{end}}>Spine</option>
+                                <option value="Orthopedics"{{if eq $surgery.SurgeryTime "Orthopedics"}} selected="selected" {{end}}>Orthopedics</option>
                             </datalist>
                             <input class="form-control {{with .Form.Errors.Get " surgery_area"}} is-invalid {{end}}"
-                                type="text" name="surgery_area" id="surgery_area" autocomplete="off"
-                                value="{{$rep.SurgeryArea}}" required list="surgery_area">
+                                type="hidden" name="surgery_area" id="surgery_area" autocomplete="off"
+                                value="{{$surgery.SurgeryArea}}" required list="surgery_area">
                         </div>
 
                         <div class="form-group mt-3">
