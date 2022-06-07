@@ -1,1 +1,1 @@
-drop_foreign_key("FinancialInformations", "FinancialInformations_PatientsInformation_id_fk", {})
+drop_foreign_key("FinancialInformation", "FinancialInformation_PatientsInformation_id_fk", {})

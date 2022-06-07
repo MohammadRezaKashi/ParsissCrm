@@ -174,6 +174,50 @@ func GetAllSurgeriesInformation() []models.SurgeriesInformation {
 	return surgeryInfo
 }
 
+func GetAllFinancialInformation() []models.FinancialInformation {
+	var financialInfo []models.FinancialInformation
+	if excelCell == nil {
+		return financialInfo
+	}
+	for _, row := range excelCell {
+		receiptNumber, _ := strconv.Atoi(row[49])
+		financialInfo = append(financialInfo, models.FinancialInformation{
+			PaymentStatus:      row[5],
+			DateOfFirstContact: ConvertStringToDate(row[21]),
+			FirstCaller:        row[22],
+			DateOfPayment:      ConvertStringToDate(row[25]),
+			LastFourDigitsCard: row[26],
+			CashAmount:         row[27],
+			Bank:               row[28],
+			DiscountPercent:    ConvertDiscountPercentToFloat64(row[29]),
+			ReasonForDiscount:  row[30],
+			CreditAmount:       ConvertCreditAmountToInt(row[31]),
+			TypeOfInsurance:    row[32],
+			FinancialVerifier:  row[33],
+			ReceiptNumber:      receiptNumber,
+			ReceiptDate:        ConvertStringToDate(row[50]),
+			ReceiptReceiver:    row[51],
+		})
+	}
+	return financialInfo
+}
+
+func ConvertCreditAmountToInt(s string) int {
+	if s == "**" {
+		return 0
+	}
+	i, _ := strconv.Atoi(s)
+	return i
+}
+
+func ConvertDiscountPercentToFloat64(s string) float64 {
+	if s == "**" {
+		return 0
+	}
+	f, _ := strconv.ParseFloat(s, 32)
+	return f
+}
+
 func ConvertSurgeryAreaToInt(s string) int {
 	switch s {
 	case "N":
@@ -185,24 +229,39 @@ func ConvertSurgeryAreaToInt(s string) int {
 	case "E+N":
 		return 3
 		break
+	case "C":
+		return 4
+		break
+	case "S":
+		return 5
+		break
+	case "O":
+		return 6
+		break
 	}
 	return 0
 }
 
 func ConvertStringToDate(date string) pgtype.Date {
-	d := strings.Split(date, "-")
-	t := ptime.Time{}
-	year, _ := strconv.Atoi(d[0])
-	month, _ := strconv.Atoi(d[1])
-	day, _ := strconv.Atoi(d[2])
-	t.Set(year, ptime.Month(month), day, 0, 0, 0, 0, ptime.Iran())
-	gt := t.Time()
-	var pgDate = pgtype.Date{
-		Time:             gt,
-		Status:           2,
-		InfinityModifier: 0,
+	d := strings.FieldsFunc(date, func(r rune) bool {
+		return r == '-' || r == '/'
+	})
+	if len(d) == 3 {
+		t := ptime.Time{}
+		year, _ := strconv.Atoi(d[0])
+		month, _ := strconv.Atoi(d[1])
+		day, _ := strconv.Atoi(d[2])
+		t.Set(year, ptime.Month(month), day, 0, 0, 0, 0, ptime.Iran())
+		gt := t.Time()
+		var pgDate = pgtype.Date{
+			Time:             gt,
+			Status:           2,
+			InfinityModifier: 0,
+		}
+		return pgDate
+	} else {
+		return pgtype.Date{}
 	}
-	return pgDate
 }
 
 func ConvertStringToTimestamp(ts string) pgtype.Timestamp {

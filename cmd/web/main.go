@@ -97,7 +97,7 @@ func Run() (*driver.DB, error) {
 	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 
-	//ReadFromFile()
+	ReadFromFile()
 	return db, nil
 }
 
@@ -106,8 +106,16 @@ func ReadFromFile() {
 	driver.ParseExcelFile(&file)
 	pis := driver.GetAllPersonalInformation()
 	sis := driver.GetAllSurgeriesInformation()
+	fis := driver.GetAllFinancialInformation()
 	for index, pi := range pis {
 		id, _ := handlers.Repo.DB.AddPersonalInformation(pi)
-		handlers.Repo.DB.AddSurgeriesInformation(sis[index], id)
+		err := handlers.Repo.DB.AddSurgeriesInformation(sis[index], id)
+		if err != nil {
+			return
+		}
+		err = handlers.Repo.DB.AddFinancialInformation(fis[index], id)
+		if err != nil {
+			return
+		}
 	}
 }

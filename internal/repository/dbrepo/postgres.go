@@ -56,6 +56,31 @@ func (m *postgresDBRepo) AddSurgeriesInformation(surgeriesInformation models.Sur
 	return nil
 }
 
+func (m *postgresDBRepo) AddFinancialInformation(financialInfo models.FinancialInformation, patientID int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+	INSERT INTO public."FinancialInformation"(
+		patient_id, payment_status, payment_date, payment_amount, payment_type, payment_notes, receipt_number,
+	                                          payment_receipt_date, first_contact, first_caller,
+	                                          last_four_card_number, bank, discount_percentage, discount_reason,
+	                                          credit_amount, insurance_type, financial_verifier, receipt_received_date,
+	                                          receipt_receiver)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`
+	_, err := m.DB.ExecContext(ctx, query, patientID, financialInfo.PaymentStatus, financialInfo.DateOfPayment.Time,
+		financialInfo.CashAmount, 0, "", financialInfo.ReceiptNumber, financialInfo.ReceiptDate.Time,
+		financialInfo.DateOfFirstContact.Time, financialInfo.FirstCaller, financialInfo.LastFourDigitsCard,
+		financialInfo.Bank, financialInfo.DiscountPercent, financialInfo.ReasonForDiscount, financialInfo.CreditAmount,
+		financialInfo.TypeOfInsurance, financialInfo.FinancialVerifier, financialInfo.ReceiptDate.Time,
+		financialInfo.ReceiptReceiver)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
 func (m *postgresDBRepo) GetAllPatients() ([]models.PersonalInformation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()

@@ -1,4 +1,4 @@
-add_foreign_key("FinancialInformations", "patient_id", {"PatientsInformation": ["id"]}, {
+add_foreign_key("FinancialInformation", "patient_id", {"PatientsInformation": ["id"]}, {
     "on_delete": "cascade",
     "on_update": "cascade",
 })

@@ -1,1 +1,1 @@
-sql("drop table FinancialInformations)
+sql("drop table FinancialInformation)
