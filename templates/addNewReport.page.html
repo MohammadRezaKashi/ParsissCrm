@@ -420,7 +420,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " operator_second"}} is-invalid {{end}}"
                                 type="text" name="operator_second" id="operator_second" autocomplete="off"
-                                value="{{$rep.HospitalSecond}}" required>
+                                value="{{$surgery.OperatorSecond}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -430,7 +430,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " start_time"}} is-invalid {{end}}"
                                 type="time" name="start_time" id="start_time" autocomplete="off"
-                                value="{{$rep.StartTime}}" required>
+                                value="{{timestampToTime $surgery.StartTime}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -439,7 +439,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " stop_time"}} is-invalid {{end}}"
-                                type="time" name="stop_time" id="stop_time" autocomplete="off" value="{{$rep.StopTime}}"
+                                type="time" name="stop_time" id="stop_time" autocomplete="off" value="{{timestampToTime $surgery.StopTime}}"
                                 required>
                         </div>
 
@@ -450,7 +450,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " enter_time"}} is-invalid {{end}}"
                                 type="time" name="enter_time" id="enter_time" autocomplete="off"
-                                value="{{$rep.EnterTime}}" required>
+                                value="{{timestampToTime $surgery.EnterTime}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -459,18 +459,18 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " exit_time"}} is-invalid {{end}}"
-                                type="time" name="exit_time" id="exit_time" autocomplete="off" value="{{$rep.ExitTime}}"
+                                type="time" name="exit_time" id="exit_time" autocomplete="off" value="{{timestampToTime $surgery.ExitTime}}"
                                 required>
                         </div>
 
                         <div class="form-group mt-3">
-                            <label for="enter_patient_time">Enter Patient Time:</label>
-                            {{ with .Form.Errors.Get "enter_patient_time"}}
+                            <label for="patient_enter_time">Patient Enter Time:</label>
+                            {{ with .Form.Errors.Get "patient_enter_time"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " enter_patient_time"}} is-invalid
-                                {{end}}" type="time" name="enter_patient_time" id="enter_patient_time"
-                                autocomplete="off" value="{{$rep.EnterPatientTime}}" required>
+                            <input class="form-control {{with .Form.Errors.Get " patient_enter_time"}} is-invalid
+                                {{end}}" type="time" name="patient_enter_time" id="patient_enter_time"
+                                autocomplete="off" value="{{timestampToTime $surgery.PatientEnterTime}}" required>
                         </div>
 
                         <div class="form-group mt-3">

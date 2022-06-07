@@ -21,6 +21,7 @@ var pathToTemplates = "./templates"
 var functions = template.FuncMap{
 	"humanDate":       HumanDate,
 	"humanPgtypeDate": HumanPgtypeDate,
+	"timestampToTime": TimestampToTime,
 }
 
 func HumanDate(t time.Time) string {
@@ -29,6 +30,10 @@ func HumanDate(t time.Time) string {
 
 func HumanPgtypeDate(t pgtype.Date) string {
 	return t.Time.Format("2006/01/02")
+}
+
+func TimestampToTime(t pgtype.Timestamp) string {
+	return t.Time.Format("15:04")
 }
 
 func NewRenderer(a *config.AppConfig) {
