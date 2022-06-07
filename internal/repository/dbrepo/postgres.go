@@ -35,17 +35,17 @@ func (m *postgresDBRepo) AddSurgeriesInformation(surgeriesInformation models.Sur
 	INSERT INTO public."SurgeriesInformation"(
 		patient_id, surgery_date, surgery_day, surgery_type, surgery_area, surgery_description,
 	                                          surgery_result, surgeon_first, surgeon_second, resident, hospital,
-	                                          hospital_type, hospital_address, ct, mr, operator_first, operator_second,
+	                                          hospital_type, hospital_address, ct, mr, fmri, dti, operator_first, operator_second,
 	                                          start_time, stop_time, enter_time, exit_time, enter_patient_time,
 	                                          head_fix_type, cancellation_reason)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22,
-		        $23, $24)`
+		        $23, $24, $25, $26)`
 	_, err := m.DB.ExecContext(ctx, query, patientID, surgeriesInformation.SurgeryDate, surgeriesInformation.SurgeryDay,
 		surgeriesInformation.SurgeryType, surgeriesInformation.SurgeryArea, surgeriesInformation.SurgeryDescription,
 		surgeriesInformation.SurgeryResult, surgeriesInformation.SurgeonFirst, surgeriesInformation.SurgeonSecond,
 		surgeriesInformation.Resident, surgeriesInformation.Hospital, surgeriesInformation.HospitalType,
-		surgeriesInformation.HospitalAddress, surgeriesInformation.CT, surgeriesInformation.MR,
-		surgeriesInformation.OperatorFirst, surgeriesInformation.OperatorSecond,
+		surgeriesInformation.HospitalAddress, surgeriesInformation.CT, surgeriesInformation.MR, surgeriesInformation.FMRI,
+		surgeriesInformation.FMRI, surgeriesInformation.OperatorFirst, surgeriesInformation.OperatorSecond,
 		surgeriesInformation.StartTime.Time, surgeriesInformation.StopTime.Time, surgeriesInformation.EnterTime.Time,
 		surgeriesInformation.ExitTime.Time, surgeriesInformation.PatientEnterTime.Time, surgeriesInformation.HeadFixType,
 		surgeriesInformation.CancelationReason)
@@ -150,7 +150,7 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 		err := rows.Scan(&surgery.ID, &surgery.PatientID, &surgery.SurgeryDate, &surgery.SurgeryDay,
 			&surgery.SurgeryType, &surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.SurgeryResult,
 			&surgery.SurgeonFirst, &surgery.SurgeonSecond, &surgery.Resident, &surgery.Hospital,
-			&surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.OperatorFirst,
+			&surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.FMRI, &surgery.DTI, &surgery.OperatorFirst,
 			&surgery.OperatorSecond, &startTime, &stopTime, &enterTime, &exitTime,
 			&patientEnterTime, &surgery.HeadFixType, &surgery.CancelationReason, new(time.Time), new(time.Time))
 		if err != nil {

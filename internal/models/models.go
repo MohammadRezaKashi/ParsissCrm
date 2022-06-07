@@ -65,3 +65,8 @@ type FinancialInformation struct {
 	ReceiptDate        pgtype.Date
 	ReceiptReceiver    string
 }
+
+type Option struct {
+	Value, Text string
+	Selected    string
+}
