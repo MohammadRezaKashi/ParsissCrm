@@ -314,6 +314,9 @@ Add new report
                                 required>
                         </div>
 
+                    </div>
+                    <div class="col">
+
                         <div class="form-group mt-3">
                             <label for="hospital_type">Hospital Type:</label>
                             {{ with .Form.Errors.Get "hospital_type"}}
@@ -339,10 +342,6 @@ Add new report
                                 type="text" name="hospital_address" id="hospital_address" autocomplete="off"
                                 value="{{$surgery.HospitalAddress}}" required>
                         </div>
-
-
-                    </div>
-                    <div class="col">
                     
                         <div class="form-group mt-3">
                             <label for="mr">MR:</label>
@@ -486,7 +485,7 @@ Add new report
                             </datalist>
                             <input class="form-control {{with .Form.Errors.Get " head_fix_type"}} is-invalid {{end}}"
                                 type="hidden" name="head_fix_type" id="head_fix_type" autocomplete="off"
-                                value="{{$rep.HeadFixType}}" required list="head_fix_type">
+                                value="{{$surgery.HeadFixType}}" required list="head_fix_type">
                         </div>
 
                         <div class="form-group mt-3">
@@ -496,58 +495,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " cancelation_reason"}} is-invalid
                                 {{end}}" type="text" name="cancelation_reason" id="cancelation_reason"
-                                autocomplete="off" value="{{$rep.CancelationReason}}" required>
-                        </div>
-
-                        <div class="form-group mt-3">
-                            <label for="fre">FRE:</label>
-                            {{ with .Form.Errors.Get "fre"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " fre"}} is-invalid {{end}}"
-                                type="number" name="fre" id="fre" autocomplete="off" value="{{$rep.FRE}}" required>
-                        </div>
-
-                        <div class="form-group mt-3">
-                            <label for="registration_time">Registration Time:</label>
-                            {{ with .Form.Errors.Get "registration_time"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " registration_time"}} is-invalid
-                                {{end}}" type="number" name="registration_time" id="registration_time"
-                                autocomplete="off" value="{{$rep.RegistrationTime}}" required
-                                placeholder="For example 1 h">
-                        </div>
-
-                        <div class="form-group mt-3">
-                            <label for="registration_try_number">Registration Try Number:</label>
-                            {{ with .Form.Errors.Get "registration_try_number"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " registration_try_number"}} is-invalid
-                                {{end}}" type="number" name="registration_try_number" id="registration_try_number"
-                                autocomplete="off" value="{{$rep.RegistrationTryNumber}}" required>
-                        </div>
-
-                        <div class="form-group mt-3">
-                            <label for="surface_registration_time">Surface Registration Time:</label>
-                            {{ with .Form.Errors.Get "surface_registration_time"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " surface_registration_time"}} is-invalid
-                                {{end}}" type="number" name="surface_registration_time" id="surface_registration_time"
-                                autocomplete="off" value="{{$rep.SurfaceRegistrationTime}}" required required
-                                placeholder="For example 1 h">
-                        </div>
-
-                        <div class="form-group mt-3">
-                            <label for="registration_tool_name">Registration Tool Name:</label>
-                            {{ with .Form.Errors.Get "registration_tool_name"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " registration_tool_name"}} is-invalid
-                                {{end}}" type="text" name="registration_tool_name" id="registration_tool_name"
-                                autocomplete="off" value="{{$rep.RegistrationToolName}}" required>
+                                autocomplete="off" value="{{$surgery.CancelationReason}}" required>
                         </div>
 
                     </div>
@@ -709,10 +657,8 @@ Add new report
                                 value="{{$rep.ReceiptReceiver}}" required>
                         </div>
 
-
                     </div>
                 </div>
-
 
                 <hr>
                 {{if eq $patient.Name ""}}
