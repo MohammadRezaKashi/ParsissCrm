@@ -46,3 +46,8 @@ type SurgeriesInformation struct {
 	HeadFixType        int
 	CancelationReason  string
 }
+
+type Option struct {
+	Value, Text string
+	Selected    string
+}
