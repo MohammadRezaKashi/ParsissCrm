@@ -38,40 +38,40 @@ func ConvertMonthStringToInt(month string) int {
 	switch month {
 	case "فروردین":
 		return 1
-		break
+
 	case "اردیبهشت":
 		return 2
-		break
+
 	case "خرداد":
 		return 3
-		break
+
 	case "تیر":
 		return 4
-		break
+
 	case "مرداد":
 		return 5
-		break
+
 	case "شهریور":
 		return 6
-		break
+
 	case "مهر":
 		return 7
-		break
+
 	case "آبان":
 		return 8
-		break
+
 	case "آذر":
 		return 9
-		break
+
 	case "دی":
 		return 10
-		break
+
 	case "بهمن":
 		return 11
-		break
+
 	case "اسفند":
 		return 12
-		break
+
 	}
 	return 0
 }
@@ -156,8 +156,8 @@ func GetAllSurgeriesInformation() []models.SurgeriesInformation {
 			Hospital:          row[10],
 			HospitalType:      ConvertHospitalTypeToInt(row[11]),
 			SurgeryResult:     ConvertSurgeryResultToInt(row[13]),
-			CT:                row[15],
-			MR:                row[16],
+			CT:                ConvertImageValidityToInt(row[15]),
+			MR:                ConvertImageValidityToInt(row[16]),
 			SurgeryType:       row[17],
 			SurgeryArea:       ConvertSurgeryAreaToInt(row[18]),
 			OperatorFirst:     row[19],
@@ -174,17 +174,36 @@ func GetAllSurgeriesInformation() []models.SurgeriesInformation {
 	return surgeryInfo
 }
 
+func ConvertImageValidityToInt(s string) int {
+	switch s {
+	case "چک نشده ":
+		return 1
+
+	case "ندارد":
+		return 2
+
+	case "چک شد / تحویل بیمار ":
+		return 3
+
+	case "نامعتبر":
+		return 4
+
+	}
+
+	return 0
+}
+
 func ConvertSurgeryAreaToInt(s string) int {
 	switch s {
 	case "N":
 		return 1
-		break
+
 	case "E":
 		return 2
-		break
+
 	case "E+N":
 		return 3
-		break
+
 	}
 	return 0
 }
@@ -219,10 +238,10 @@ func ConvertHospitalTypeToInt(s string) int {
 	switch s {
 	case "خصوصی":
 		return 1
-		break
+
 	case "دولتی":
 		return 2
-		break
+
 	}
 	return 0
 }
@@ -231,10 +250,10 @@ func ConvertSurgeryResultToInt(s string) int {
 	switch s {
 	case "برگزار شد":
 		return 1
-		break
+
 	case "کنسل شد":
 		return 2
-		break
+
 	}
 	return 0
 }
@@ -243,10 +262,10 @@ func ConvertHeadFixTypeToInt(s string) int {
 	switch s {
 	case "میفیلد":
 		return 1
-		break
+
 	case "هدبند":
 		return 2
-		break
+
 	}
 	return 0
 }

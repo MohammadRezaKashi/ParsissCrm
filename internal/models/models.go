@@ -34,8 +34,10 @@ type SurgeriesInformation struct {
 	Hospital           string
 	HospitalType       int
 	HospitalAddress    string
-	CT                 string
-	MR                 string
+	CT                 int
+	MR                 int
+	FMRI               int
+	DTI                int
 	OperatorFirst      string
 	OperatorSecond     string
 	StartTime          pgtype.Timestamp

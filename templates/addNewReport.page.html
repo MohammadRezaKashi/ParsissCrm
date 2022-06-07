@@ -41,6 +41,10 @@ Add new report
 {{$hospitaltype := index .Data "hospitaltype"}}
 {{$paymentstatus := index .Data "paymentstatus"}}
 {{$headfixtype := index .Data "headfixtype"}}
+{{$ct := index .Data "ct"}}
+{{$mr := index .Data "mr"}}
+{{$fmri := index .Data "fmri"}}
+{{$dti := index .Data "dti"}}
 {{$baseurl := index .Data "baseurl"}}
 
 <div class="container">
@@ -184,11 +188,11 @@ Add new report
                             <select id="surgery_day" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
                                 {{range $surgeryday}}
-                                <option value="{{.Value}}" {{if eq .Selected .Value}}selected="selected" {{end}}>{{.Text}}</option>
+                                <option value="{{.Value}}" {{if eq .Selected "selected"}}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " surgery_day"}} is-invalid {{end}}" type="hidden"
-                                name="surgery_day" id="surgery_day" autocomplete="off" value="{{$surgery.SurgeryDay}}" required required list="surgery_day">
+                                name="surgery_day" id="surgery_day" autocomplete="off" value="{{$surgery.SurgeryDay}}" required required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -199,7 +203,7 @@ Add new report
                             <select id="surgery_time" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
                                 {{range $surgerytime}}
-                                <option value="{{.Value}}" {{if eq .Selected .Value}}selected="selected" {{end}}>{{.Text}}</option>
+                                <option value="{{.Value}}" {{if eq .Selected "selected"}}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " time"}} is-invalid {{end}}" type="hidden"
@@ -213,7 +217,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " surgery_type"}} is-invalid {{end}}"
                                 type="text" name="surgery_type" id="surgery_type" autocomplete="off"
-                                value="{{$rep.SurgeryType}}">
+                                value="{{$surgery.SurgeryType}}">
                         </div>
 
                         <div class="form-group mt-3">
@@ -224,7 +228,7 @@ Add new report
                             <select id="surgery_area" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
                                 {{range $surgeryarea}}
-                                <option value="{{.Value}}" {{if eq .Selected .Value}}selected="selected" {{end}}>{{.Text}}</option>
+                                <option value="{{.Value}}" {{if eq .Selected "selected"}}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </datalist>
                             <input class="form-control {{with .Form.Errors.Get " surgery_area"}} is-invalid {{end}}"
@@ -251,7 +255,7 @@ Add new report
                             <select id="surgery_result" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
                                 {{range $surgeryresult}}
-                                <option value="{{.Value}}" {{if eq .Selected .Value}}selected="selected" {{end}}>{{.Text}}</option>
+                                <option value="{{.Value}}" {{if eq .Selected "selected"}}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </datalist>
                             <input class="form-control {{with .Form.Errors.Get " surgery_result"}} is-invalid {{end}}"
@@ -277,7 +281,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " surgeon_first"}} is-invalid {{end}}"
                                 type="text" name="surgeon_first" id="surgeon_first" autocomplete="off"
-                                value="{{$rep.SurgeonFirst}}" required>
+                                value="{{$surgery.SurgeonFirst}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -287,7 +291,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " surgeon_second"}} is-invalid {{end}}"
                                 type="text" name="surgeon_second" id="surgeon_second" autocomplete="off"
-                                value="{{$rep.SurgeonSecond}}" required>
+                                value="{{$surgery.SurgeonSecond}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -296,7 +300,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " resident"}} is-invalid {{end}}"
-                                type="text" name="resident" id="resident" autocomplete="off" value="{{$rep.Resident}}"
+                                type="text" name="resident" id="resident" autocomplete="off" value="{{$surgery.Resident}}"
                                 required>
                         </div>
 
@@ -306,7 +310,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " hospital"}} is-invalid {{end}}"
-                                type="text" name="hospital" id="hospital" autocomplete="off" value="{{$rep.Hospital}}"
+                                type="text" name="hospital" id="hospital" autocomplete="off" value="{{$surgery.Hospital}}"
                                 required>
                         </div>
 
@@ -318,12 +322,12 @@ Add new report
                             <select id="hospital_type" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
                                 {{range $hospitaltype}}
-                                <option value="{{.Value}}" {{if eq .Selected .Value}}selected="selected" {{end}}>{{.Text}}</option>
+                                <option value="{{.Value}}" {{if eq .Selected "selected"}}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </datalist>
                             <input class="form-control {{with .Form.Errors.Get " hospital_type"}} is-invalid {{end}}"
                                 type="hidden" name="hospital_type" id="hospital_type" autocomplete="off"
-                                value="{{$rep.HospitalType}}" required list="hospital_type">
+                                value="{{$surgery.HospitalType}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -333,71 +337,80 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " hospital_address"}} is-invalid {{end}}"
                                 type="text" name="hospital_address" id="hospital_address" autocomplete="off"
-                                value="{{$rep.HospitalAddress}}" required>
+                                value="{{$surgery.HospitalAddress}}" required>
                         </div>
 
 
                     </div>
                     <div class="col">
-
-
-
-                        <div class="row">
-                            <div class="col-md-6 form-group mt-3">
-                                <label for="mr">MR:</label>
-                                {{ with .Form.Errors.Get "mr"}}
-                                <label class="text-danger">{{.}}</label>
+                    
+                        <div class="form-group mt-3">
+                            <label for="mr">MR:</label>
+                            {{ with .Form.Errors.Get "mr"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <select id="mr" class="form-control">
+                                <option disabled selected value> -- select an option -- </option>
+                                {{range $mr}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
-                                <input class="{{with .Form.Errors.Get " mr"}} is-invalid {{end}}" type="checkbox"
-                                    name="mr" id="mr" autocomplete="off" value="{{$rep.MR}}" required>
-                            </div>
-
-                            <div class="col-md-6 form-group mt-3">
-                                <label for="ct">CT:</label>
-                                {{ with .Form.Errors.Get "ct"}}
-                                <label class="text-danger">{{.}}</label>
-                                {{end}}
-                                <input class="{{with .Form.Errors.Get " ct"}} is-invalid {{end}}" type="checkbox"
-                                    name="ct" id="ct" autocomplete="off" value="{{$rep.CT}}" required>
-                            </div>
-
-                            <div class="col-md-6 form-group mt-3">
-                                <label for="fmri">FMRI:</label>
-                                {{ with .Form.Errors.Get "fmri"}}
-                                <label class="text-danger">{{.}}</label>
-                                {{end}}
-                                <input class="{{with .Form.Errors.Get " fmri"}} is-invalid {{end}}" type="checkbox"
-                                    name="fmri" id="fmri" autocomplete="off" value="{{$rep.FMRI}}" required>
-                            </div>
-
-                            <div class="col-md-6 form-group mt-3">
-                                <label for="dti">DTI:</label>
-                                {{ with .Form.Errors.Get "dti"}}
-                                <label class="text-danger">{{.}}</label>
-                                {{end}}
-                                <input class="{{with .Form.Errors.Get " dti"}} is-invalid {{end}}" type="checkbox"
-                                    name="dti" id="dti" autocomplete="off" value="{{$rep.DTI}}" required>
-                            </div>
-
-                            <div class="col-md-6 form-group mt-3">
-                                <label for="data_is_valid">Data Is Valid:</label>
-                                {{ with .Form.Errors.Get "data_is_valid"}}
-                                <label class="text-danger">{{.}}</label>
-                                {{end}}
-                                <input class="{{with .Form.Errors.Get " data_is_valid"}} is-invalid {{end}}"
-                                    type="checkbox" name="data_is_valid" id="data_is_valid" autocomplete="off"
-                                    value="{{$rep.DataIsValid}}" required>
-                            </div>
+                            </select>
+                            <input class="form-control {{with .Form.Errors.Get " mr"}} is-invalid {{end}}" type="hidden" name="mr" id="mr"
+                                autocomplete="off" value="{{$surgery.MR}}" required>
                         </div>
-
+                        
+                        <div class="form-group mt-3">
+                            <label for="ct">CT:</label>
+                            {{ with .Form.Errors.Get "ct"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <select id="ct" class="form-control">
+                                <option disabled selected value> -- select an option -- </option>
+                                {{range $ct}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
+                            </select>
+                            <input class="form-control {{with .Form.Errors.Get " ct"}} is-invalid {{end}}" type="hidden" name="ct" id="ct"
+                                autocomplete="off" value="{{$surgery.CT}}" required>
+                        </div>
+                        
+                        <div class="form-group mt-3">
+                            <label for="fmri">FMRI:</label>
+                            {{ with .Form.Errors.Get "fmri"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <select id="fmri" class="form-control">
+                                <option disabled selected value> -- select an option -- </option>
+                                {{range $fmri}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
+                            </select>
+                            <input class="form-control {{with .Form.Errors.Get " fmri"}} is-invalid {{end}}" type="hidden" name="fmri" id="fmri"
+                                autocomplete="off" value="{{$surgery.FMRI}}" required>
+                        </div>
+                        
+                        <div class="form-group mt-3">
+                            <label for="dti">DTI:</label>
+                            {{ with .Form.Errors.Get "dti"}}
+                            <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <select id="dti" class="form-control">
+                                <option disabled selected value> -- select an option -- </option>
+                                {{range $dti}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
+                            </select>
+                            <input class="form-control {{with .Form.Errors.Get " dti"}} is-invalid {{end}}" type="hidden" name="dti" id="dti"
+                                autocomplete="off" value="{{$surgery.DTI}}" required>
+                        </div>
+                    
                         <div class="form-group mt-3">
                             <label for="operator_first">Operator First:</label>
                             {{ with .Form.Errors.Get "operator_first"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " operator_first"}} is-invalid {{end}}"
-                                type="text" name="operator_first" id="operator_first" autocomplete="off"
-                                value="{{$rep.OperatorFirst}}" required>
+                            <input class="form-control {{with .Form.Errors.Get " operator_first"}} is-invalid {{end}}" type="text"
+                                name="operator_first" id="operator_first" autocomplete="off" value="{{$surgery.OperatorFirst}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -538,7 +551,6 @@ Add new report
                         </div>
 
                     </div>
-
                 </div>
 
 
