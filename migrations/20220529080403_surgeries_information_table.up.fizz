@@ -26,6 +26,8 @@ create_table("SurgeriesInformation") {
   t.Column("enter_patient_time", "Time", {})
   t.Column("head_fix_type", "integer", {})
   t.Column("cancellation_reason", "text", {})
+  t.Column("file_number", "text", {})
+  t.Column("date_of_hospital_admission", "date", {})
   t.Column("created_at", "TIMESTAMPTZ", {default: "NOW()"})
   t.Column("updated_at", "TIMESTAMPTZ", {default: "NOW()"})
 }
