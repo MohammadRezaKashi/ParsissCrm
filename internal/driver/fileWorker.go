@@ -14,7 +14,7 @@ import (
 )
 
 func CreateColumnName() []string {
-	col := []string{}
+	var col []string
 	for _, itr := range []string{"", "A", "B"} {
 		for r := 'A'; r <= 'Z'; r++ {
 			col = append(col, itr+string(r))
@@ -27,7 +27,7 @@ func CreateColumnName() []string {
 }
 
 func CreateMonths() []string {
-	months := []string{}
+	var months []string
 	for r := 1; r <= 12; r++ {
 		months = append(months, ptime.Month(r).String())
 	}
@@ -38,40 +38,28 @@ func ConvertMonthStringToInt(month string) int {
 	switch month {
 	case "فروردین":
 		return 1
-
 	case "اردیبهشت":
 		return 2
-
 	case "خرداد":
 		return 3
-
 	case "تیر":
 		return 4
-
 	case "مرداد":
 		return 5
-
 	case "شهریور":
 		return 6
-
 	case "مهر":
 		return 7
-
 	case "آبان":
 		return 8
-
 	case "آذر":
 		return 9
-
 	case "دی":
 		return 10
-
 	case "بهمن":
 		return 11
-
 	case "اسفند":
 		return 12
-
 	}
 	return 0
 }
@@ -84,7 +72,7 @@ func OpenExcelFile(path string) excelize.File {
 	return *file
 }
 
-var excelCell = [][]string{}
+var excelCell [][]string
 
 func ParseExcelFile(file *excelize.File) {
 	columnName := CreateColumnName()
@@ -100,7 +88,7 @@ func ParseExcelFile(file *excelize.File) {
 				if s == "" {
 					break
 				}
-				var rowCell = []string{}
+				var rowCell []string
 				rowCell = append(rowCell, strings.Split(sheet, " ")[1])
 				rowCell = append(rowCell, strconv.Itoa(ConvertMonthStringToInt(strings.Split(sheet, " ")[0])))
 				for index, col := range columnName[5:] {
@@ -126,7 +114,7 @@ func ParseExcelFile(file *excelize.File) {
 }
 
 func GetAllPersonalInformation() []models.PersonalInformation {
-	var personalInfo = []models.PersonalInformation{}
+	var personalInfo []models.PersonalInformation
 	if excelCell == nil {
 		return personalInfo
 	}
@@ -142,7 +130,7 @@ func GetAllPersonalInformation() []models.PersonalInformation {
 }
 
 func GetAllSurgeriesInformation() []models.SurgeriesInformation {
-	var surgeryInfo = []models.SurgeriesInformation{}
+	var surgeryInfo []models.SurgeriesInformation
 	if excelCell == nil {
 		return surgeryInfo
 	}
@@ -242,18 +230,13 @@ func ConvertImageValidityToInt(s string) int {
 	switch s {
 	case "چک نشده ":
 		return 1
-
 	case "ندارد":
 		return 2
-
 	case "چک شد / تحویل بیمار ":
 		return 3
-
 	case "نامعتبر":
 		return 4
-
 	}
-
 	return 0
 }
 
@@ -261,10 +244,8 @@ func ConvertSurgeryAreaToInt(s string) int {
 	switch s {
 	case "N":
 		return 1
-
 	case "E":
 		return 2
-
 	case "E+N":
 		return 3
 	case "C":
@@ -313,10 +294,8 @@ func ConvertHospitalTypeToInt(s string) int {
 	switch s {
 	case "خصوصی":
 		return 1
-
 	case "دولتی":
 		return 2
-
 	}
 	return 0
 }
@@ -325,10 +304,8 @@ func ConvertSurgeryResultToInt(s string) int {
 	switch s {
 	case "برگزار شد":
 		return 1
-
 	case "کنسل شد":
 		return 2
-
 	}
 	return 0
 }
@@ -337,10 +314,8 @@ func ConvertHeadFixTypeToInt(s string) int {
 	switch s {
 	case "میفیلد":
 		return 1
-
 	case "هدبند":
 		return 2
-
 	}
 	return 0
 }

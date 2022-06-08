@@ -1,10 +1,13 @@
 create_table("PatientsInformation") {
   t.Column("id", "integer", {primary: true})
   t.Column("name", "string", {default: ""})
+  t.Column("family", "string", {default: ""})
+  t.Column("age", "int", {default: ""})
   t.Column("phone", "string", {default: ""})
   t.Column("national_id", "string", {default: ""})
   t.Column("address", "string", {default: ""})
   t.Column("email", "string", {default: ""})
+  t.Column("place_of_birthday", "string", {default: ""})
   t.Column("created_at", "TIMESTAMPTZ", {default: "NOW()"})
   t.Column("updated_at", "TIMESTAMPTZ", {default: "NOW()"})
   }

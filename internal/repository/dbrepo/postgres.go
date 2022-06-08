@@ -173,3 +173,22 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 
 	return surgeries, nil
 }
+
+func (m *postgresDBRepo) PutpersonalInformation(personalInfo models.PersonalInformation) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+	UPDATE public."PatientsInformation"
+	SET name = $1, family = $2, age = $3, phone_number = $4, national_id = $5, address = $6, email = $7,
+	    place_of_birthday = $8, updated_at = $9
+	WHERE id = $10`
+	_, err := m.DB.ExecContext(ctx, query, personalInfo.Name, personalInfo.Family, personalInfo.Age,
+		personalInfo.PhoneNumber, personalInfo.NationalID, personalInfo.Address, personalInfo.Email,
+		personalInfo.PlaceOfBirth, time.Now(), personalInfo.ID)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
