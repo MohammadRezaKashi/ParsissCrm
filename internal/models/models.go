@@ -66,6 +66,14 @@ type FinancialInformation struct {
 	ReceiptReceiver    string
 }
 
+type SoftwareInformation struct {
+	FRE                     float64
+	RegistrationTime        int
+	RegistrationTryNumber   int
+	SurfaceRegistrationTime int
+	RegistrationToolName    string
+}
+
 type Option struct {
 	Value, Text string
 	Selected    string

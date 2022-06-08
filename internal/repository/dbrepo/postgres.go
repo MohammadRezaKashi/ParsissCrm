@@ -150,8 +150,8 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 		err := rows.Scan(&surgery.ID, &surgery.PatientID, &surgery.SurgeryDate, &surgery.SurgeryDay,
 			&surgery.SurgeryType, &surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.SurgeryResult,
 			&surgery.SurgeonFirst, &surgery.SurgeonSecond, &surgery.Resident, &surgery.Hospital,
-			&surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.FMRI, &surgery.DTI, &surgery.OperatorFirst,
-			&surgery.OperatorSecond, &startTime, &stopTime, &enterTime, &exitTime,
+			&surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.FMRI, &surgery.DTI,
+			&surgery.OperatorFirst, &surgery.OperatorSecond, &startTime, &stopTime, &enterTime, &exitTime,
 			&patientEnterTime, &surgery.HeadFixType, &surgery.CancelationReason, new(time.Time), new(time.Time))
 		if err != nil {
 			log.Println(err)

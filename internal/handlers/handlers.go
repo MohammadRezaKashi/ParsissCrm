@@ -283,8 +283,8 @@ func GetAllSelectOptions() ([]models.Option, []models.Option, []models.Option, [
 
 	headfixtype := []models.Option{
 		{Value: "1", Text: "Headband", Selected: ""},
-		{Value: "1", Text: "Mayfield", Selected: ""},
-		{Value: "1", Text: "Other", Selected: ""},
+		{Value: "2", Text: "Mayfield", Selected: ""},
+		{Value: "3", Text: "Other", Selected: ""},
 	}
 
 	imagevalidity := []models.Option{
