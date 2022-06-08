@@ -155,11 +155,16 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// for _, item := range headfixtype {
-	// 	if item.Value == surgeryInfo[0].HeadFixType {
-	// 		item.Selected = "selected"
-	// 	}
-	// }
+	for index, item := range headfixtype {
+		val, err := strconv.Atoi(item.Value)
+		if err != nil {
+			continue
+		}
+
+		if val == surgeryInfo[0].HeadFixType {
+			headfixtype[index].Selected = "selected"
+		}
+	}
 
 	var ct []models.Option
 	copier.Copy(&ct, &imagevalidity)
