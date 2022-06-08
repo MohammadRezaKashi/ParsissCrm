@@ -149,7 +149,7 @@ func GetAllSurgeriesInformation() []models.SurgeriesInformation {
 	for _, row := range excelCell {
 		surgeryInfo = append(surgeryInfo, models.SurgeriesInformation{
 			SurgeryDate:       ConvertStringToDate(row[0] + "-" + row[1] + "-" + row[2]),
-			SurgeryDay:        row[3],
+			SurgeryDay:        ConvertSurgeryDayToInt(row[3]),
 			SurgeonFirst:      row[7],
 			SurgeonSecond:     row[8],
 			Resident:          row[9],
@@ -172,6 +172,26 @@ func GetAllSurgeriesInformation() []models.SurgeriesInformation {
 		})
 	}
 	return surgeryInfo
+}
+
+func ConvertSurgeryDayToInt(s string) int {
+	switch s {
+	case "شنبه":
+		return 1
+	case "یکشنبه":
+		return 2
+	case "دوشنبه":
+		return 3
+	case "سه شنبه":
+		return 4
+	case "چهارشنبه":
+		return 5
+	case "پنج شنبه":
+		return 6
+	case "جمعه":
+		return 7
+	}
+	return 0
 }
 
 func GetAllFinancialInformation() []models.FinancialInformation {

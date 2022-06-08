@@ -45,7 +45,7 @@ func (m *postgresDBRepo) AddSurgeriesInformation(surgeriesInformation models.Sur
 		surgeriesInformation.SurgeryResult, surgeriesInformation.SurgeonFirst, surgeriesInformation.SurgeonSecond,
 		surgeriesInformation.Resident, surgeriesInformation.Hospital, surgeriesInformation.HospitalType,
 		surgeriesInformation.HospitalAddress, surgeriesInformation.CT, surgeriesInformation.MR, surgeriesInformation.FMRI,
-		surgeriesInformation.FMRI, surgeriesInformation.OperatorFirst, surgeriesInformation.OperatorSecond,
+		surgeriesInformation.DTI, surgeriesInformation.OperatorFirst, surgeriesInformation.OperatorSecond,
 		surgeriesInformation.StartTime.Time, surgeriesInformation.StopTime.Time, surgeriesInformation.EnterTime.Time,
 		surgeriesInformation.ExitTime.Time, surgeriesInformation.PatientEnterTime.Time, surgeriesInformation.HeadFixType,
 		surgeriesInformation.CancelationReason)

@@ -2,7 +2,7 @@ create_table("SurgeriesInformation") {
   t.Column("id", "integer", {primary: true})
   t.Column("patient_id", "integer", {})
   t.Column("surgery_date", "date", {})
-  t.Column("surgery_day", "text ", {})
+  t.Column("surgery_day", "int", {})
   t.Column("surgery_type", "text", {})
   t.Column("surgery_area", "integer", {})
   t.Column("surgery_description", "text", {})
