@@ -43,7 +43,7 @@ type SurgeriesInformation struct {
 	ExitTime                pgtype.Timestamp
 	PatientEnterTime        pgtype.Timestamp
 	HeadFixType             int
-	CancelationReason       string
+	CancellationReason      string
 	FileNumber              string
 	DateOfHospitalAdmission pgtype.Date
 }

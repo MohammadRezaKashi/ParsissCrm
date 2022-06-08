@@ -48,7 +48,7 @@ func (m *postgresDBRepo) AddSurgeriesInformation(surgeriesInformation models.Sur
 		surgeriesInformation.DTI, surgeriesInformation.OperatorFirst, surgeriesInformation.OperatorSecond,
 		surgeriesInformation.StartTime.Time, surgeriesInformation.StopTime.Time, surgeriesInformation.EnterTime.Time,
 		surgeriesInformation.ExitTime.Time, surgeriesInformation.PatientEnterTime.Time, surgeriesInformation.HeadFixType,
-		surgeriesInformation.CancelationReason)
+		surgeriesInformation.CancellationReason)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -152,7 +152,7 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 			&surgery.SurgeonFirst, &surgery.SurgeonSecond, &surgery.Resident, &surgery.Hospital,
 			&surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.FMRI, &surgery.DTI,
 			&surgery.OperatorFirst, &surgery.OperatorSecond, &startTime, &stopTime, &enterTime, &exitTime,
-			&patientEnterTime, &surgery.HeadFixType, &surgery.CancelationReason, new(time.Time), new(time.Time))
+			&patientEnterTime, &surgery.HeadFixType, &surgery.CancellationReason, new(time.Time), new(time.Time))
 		if err != nil {
 			log.Println(err)
 			return nil, err
@@ -186,6 +186,36 @@ func (m *postgresDBRepo) PutPersonalInformation(personalInfo models.PersonalInfo
 	_, err := m.DB.ExecContext(ctx, query, personalInfo.Name, personalInfo.Family, personalInfo.Age,
 		personalInfo.PhoneNumber, personalInfo.NationalID, personalInfo.Address, personalInfo.Email,
 		personalInfo.PlaceOfBirth, time.Now(), personalInfo.ID)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesInformation) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+	UPDATE public."SurgeriesInformation"
+	SET patient_id = $1, surgery_date = $2, surgery_day = $3, surgery_type = $4, surgery_area = $5,
+	    surgery_description = $6, surgery_result = $7, surgeon_first = $8, surgeon_second = $9,
+	    resident = $10, hospital = $11, hospital_type = $12, hospital_address = $13, ct = $14,
+	    mr = $15, fmri = $16, dti = $17, operator_first = $18, operator_second = $19, start_time = $20,
+	    stop_time = $21, enter_time = $22, exit_time = $23, patient_enter_time = $24, head_fix_type = $25,
+	    cancellation_reason = $26, file_number = $27, date_of_hospital_admission = $28, updated_at = $29
+	WHERE id = $30`
+	_, err := m.DB.ExecContext(ctx, query, surgeriesInfo.PatientID, surgeriesInfo.SurgeryDate,
+		surgeriesInfo.SurgeryDay, surgeriesInfo.SurgeryType, surgeriesInfo.SurgeryArea,
+		surgeriesInfo.SurgeryDescription, surgeriesInfo.SurgeryResult, surgeriesInfo.SurgeonFirst,
+		surgeriesInfo.SurgeonSecond, surgeriesInfo.Resident, surgeriesInfo.Hospital,
+		surgeriesInfo.HospitalType, surgeriesInfo.HospitalAddress, surgeriesInfo.CT,
+		surgeriesInfo.MR, surgeriesInfo.FMRI, surgeriesInfo.DTI, surgeriesInfo.OperatorFirst,
+		surgeriesInfo.OperatorSecond, surgeriesInfo.StartTime.Time, surgeriesInfo.StopTime.Time,
+		surgeriesInfo.EnterTime.Time, surgeriesInfo.ExitTime.Time, surgeriesInfo.PatientEnterTime.Time,
+		surgeriesInfo.HeadFixType, surgeriesInfo.CancellationReason, surgeriesInfo.FileNumber,
+		surgeriesInfo.DateOfHospitalAdmission, time.Now(), surgeriesInfo.ID)
 	if err != nil {
 		log.Println(err)
 		return err
