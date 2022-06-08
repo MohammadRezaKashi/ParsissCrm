@@ -99,7 +99,7 @@ func (m *postgresDBRepo) GetAllPatients() ([]models.PersonalInformation, error) 
 
 	for rows.Next() {
 		var patient models.PersonalInformation
-		err := rows.Scan(&patient.ID, &patient.Name, &patient.PhoneNumber, &patient.NationalID, &patient.Address, &patient.Email, new(time.Time), new(time.Time))
+		err := rows.Scan(&patient.ID, &patient.Name, &patient.Family, &patient.Age, &patient.PhoneNumber, &patient.NationalID, &patient.Address, &patient.Email, &patient.PlaceOfBirth, new(time.Time), new(time.Time))
 		if err != nil {
 			log.Println(err)
 			return nil, err
@@ -119,7 +119,7 @@ func (m *postgresDBRepo) GetPatientByID(id int) (models.PersonalInformation, err
 
 	var patient models.PersonalInformation
 
-	err := m.DB.QueryRowContext(ctx, query, id).Scan(&patient.ID, &patient.Name, &patient.PhoneNumber, &patient.NationalID, &patient.Address, &patient.Email, new(time.Time), new(time.Time))
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(&patient.ID, &patient.Name, &patient.Family, &patient.Age, &patient.PhoneNumber, &patient.NationalID, &patient.Address, &patient.Email, &patient.PlaceOfBirth, new(time.Time), new(time.Time))
 	if err != nil {
 		log.Println(err)
 		return models.PersonalInformation{}, err
@@ -174,13 +174,13 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 	return surgeries, nil
 }
 
-func (m *postgresDBRepo) PutpersonalInformation(personalInfo models.PersonalInformation) error {
+func (m *postgresDBRepo) PutPersonalInformation(personalInfo models.PersonalInformation) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	query := `
 	UPDATE public."PatientsInformation"
-	SET name = $1, family = $2, age = $3, phone_number = $4, national_id = $5, address = $6, email = $7,
+	SET name = $1, family = $2, age = $3, phone = $4, national_id = $5, address = $6, email = $7,
 	    place_of_birthday = $8, updated_at = $9
 	WHERE id = $10`
 	_, err := m.DB.ExecContext(ctx, query, personalInfo.Name, personalInfo.Family, personalInfo.Age,

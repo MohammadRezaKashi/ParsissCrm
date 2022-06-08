@@ -87,6 +87,77 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 
 }
 
+func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
+	patient, ok := m.App.Session.Get(r.Context(), "patient").(models.PersonalInformation)
+	if !ok {
+		m.App.Session.Put(r.Context(), "error", "can't get personal information data!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+	}
+
+	err := r.ParseForm()
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse from!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
+
+	patient.Name = r.Form.Get("name")
+	patient.Family = r.Form.Get("family")
+	age, err := strconv.Atoi(r.Form.Get("age"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse age!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
+	patient.Age = age
+	patient.Address = r.Form.Get("address")
+	patient.Email = r.Form.Get("email")
+	patient.NationalID = r.Form.Get("national_id")
+	patient.PhoneNumber = r.Form.Get("phone_number")
+	patient.PlaceOfBirth = r.Form.Get("place_of_birth")
+
+	err = m.DB.PutPersonalInformation(patient)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't update personal information!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
+
+	surgery, ok := m.App.Session.Get(r.Context(), "surgeryinfo").(models.SurgeriesInformation)
+	if !ok {
+		m.App.Session.Put(r.Context(), "error", "can't get surgery information data!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+	}
+
+	surgery.FileNumber = r.Form.Get("file_number")
+	surgery.DateOfHospitalAdmission = driver.ConvertStringToDate(r.Form.Get("date_of_hospital_admission"))
+	surgery.SurgeryDate = driver.ConvertStringToDate(r.Form.Get("surgery_date"))
+	surgery.SurgeryDay, _ = strconv.Atoi(r.Form.Get("surgery_day"))
+	surgery.SurgeryType = r.Form.Get("surgery_type")
+	surgery.SurgeryArea, _ = strconv.Atoi(r.Form.Get("surgery_area"))
+	surgery.SurgeryDescription = r.Form.Get("surgery_description")
+	surgery.SurgeryResult, _ = strconv.Atoi(r.Form.Get("surgery_result"))
+	surgery.SurgeonFirst = r.Form.Get("surgeon_first")
+	surgery.SurgeonSecond = r.Form.Get("surgeon_second")
+	surgery.Resident = r.Form.Get("resident")
+	surgery.Hospital = r.Form.Get("hospital")
+	surgery.HospitalType, _ = strconv.Atoi(r.Form.Get("hospital_type"))
+	surgery.HospitalAddress = r.Form.Get("hospital_address")
+	surgery.CT, _ = strconv.Atoi(r.Form.Get("ct"))
+	surgery.MR, _ = strconv.Atoi(r.Form.Get("mr"))
+	surgery.FMRI, _ = strconv.Atoi(r.Form.Get("fmri"))
+	surgery.DTI, _ = strconv.Atoi(r.Form.Get("dti"))
+	surgery.OperatorFirst = r.Form.Get("operator_first")
+	surgery.OperatorSecond = r.Form.Get("operator_second")
+	surgery.HeadFixType, _ = strconv.Atoi(r.Form.Get("head_fix_type"))
+	surgery.OperatorSecond = r.Form.Get("cancelation_reason")
+
+	err = m.DB.PutSurgeriesInformation(surgery)
+
+	m.App.Session.Put(r.Context(), "flash", "Saved successfully")
+	http.Redirect(rw, r, "/report/detail/"+strconv.Itoa(patient.ID)+"/show", http.StatusSeeOther)
+}
+
 func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
@@ -233,6 +304,9 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 	data["fmri"] = fmri
 	data["dti"] = dti
 	data["baseurl"] = "http://localhost:8080"
+
+	m.App.Session.Put(r.Context(), "surgeryinfo", surgeryInfo[0])
+	m.App.Session.Put(r.Context(), "patient", patient)
 
 	render.Template(rw, r, "addNewReport.page.html", &models.TemplateData{
 		Form: forms.New(nil),
