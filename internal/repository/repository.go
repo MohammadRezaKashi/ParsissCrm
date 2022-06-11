@@ -10,4 +10,5 @@ type DatabaseRepo interface {
 	GetPatientByID(id int) (models.PersonalInformation, error)
 	GetSurgicalInformationByPatientID(id int) ([]models.SurgeriesInformation, error)
 	PutPersonalInformation(personalInfo models.PersonalInformation) error
+	PutSurgeriesInformation(surgeriesInfo models.SurgeriesInformation) error
 }

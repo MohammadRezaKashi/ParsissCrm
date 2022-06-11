@@ -481,7 +481,7 @@ Add new report
                             <select id="head_fix_type" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
                                 {{range $headfixtype}}
-                                <option value="{{.Value}}" {{if eq .Selected .Value}}selected="selected" {{end}}>{{.Text}}</option>
+                                <option value="{{.Value}}" {{if eq .Selected "selected"}}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </datalist>
                             <input class="form-control {{with .Form.Errors.Get " head_fix_type"}} is-invalid {{end}}"
@@ -496,7 +496,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " cancelation_reason"}} is-invalid
                                 {{end}}" type="text" name="cancelation_reason" id="cancelation_reason"
-                                autocomplete="off" value="{{$surgery.CancelationReason}}" required>
+                                autocomplete="off" value="{{$surgery.CancellationReason}}" required>
                         </div>
 
                     </div>

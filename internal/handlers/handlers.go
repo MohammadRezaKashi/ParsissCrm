@@ -133,6 +133,7 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 	surgery.DateOfHospitalAdmission = driver.ConvertStringToDate(r.Form.Get("date_of_hospital_admission"))
 	surgery.SurgeryDate = driver.ConvertStringToDate(r.Form.Get("surgery_date"))
 	surgery.SurgeryDay, _ = strconv.Atoi(r.Form.Get("surgery_day"))
+	surgery.SurgeryTime, _ = strconv.Atoi(r.Form.Get("surgery_time"))
 	surgery.SurgeryType = r.Form.Get("surgery_type")
 	surgery.SurgeryArea, _ = strconv.Atoi(r.Form.Get("surgery_area"))
 	surgery.SurgeryDescription = r.Form.Get("surgery_description")
@@ -153,6 +154,11 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 	surgery.OperatorSecond = r.Form.Get("cancelation_reason")
 
 	err = m.DB.PutSurgeriesInformation(surgery)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't update surgery information!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
 
 	m.App.Session.Put(r.Context(), "flash", "Saved successfully")
 	http.Redirect(rw, r, "/report/detail/"+strconv.Itoa(patient.ID)+"/show", http.StatusSeeOther)
@@ -181,17 +187,27 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 
 	surgeryDay, surgerytime, surgeryarea, surgeryresult, hospitaltype, paymentstatus, headfixtype, imagevalidity := GetAllSelectOptions()
 
-	// for _, item := range surgeryDay {
-	// 	if item.Value == surgeryInfo[0].SurgeryDay {
-	// 		item.Selected = "selected"
-	// 	}
-	// }
+	for index, item := range surgeryDay {
+		val, err := strconv.Atoi(item.Value)
+		if err != nil {
+			continue
+		}
 
-	// for _, item := range surgerytime {
-	// 	if item.Value == surgeryInfo[0].SurgeryTime {
-	// 		item.Selected = "selected"
-	// 	}
-	// }
+		if val == surgeryInfo[0].SurgeryDay {
+			surgeryDay[index].Selected = "selected"
+		}
+	}
+
+	for index, item := range surgerytime {
+		val, err := strconv.Atoi(item.Value)
+		if err != nil {
+			continue
+		}
+
+		if val == surgeryInfo[0].SurgeryTime {
+			surgerytime[index].Selected = "selected"
+		}
+	}
 
 	for index, item := range surgeryarea {
 		val, err := strconv.Atoi(item.Value)
