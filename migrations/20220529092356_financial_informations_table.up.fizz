@@ -7,7 +7,6 @@ create_table("FinancialInformation") {
     t.Column("payment_type", "integer", {})
     t.Column("payment_notes", "text", {})
     t.Column("receipt_number", "int", {})
-    t.Column("payment_receipt_date", "date", {})
     t.Column("first_contact", "date", {})
     t.Column("first_caller", "text", {})
     t.Column("last_four_card_number", "string", {})
