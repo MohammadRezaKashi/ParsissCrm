@@ -178,6 +178,40 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 	return surgeries, nil
 }
 
+func (m *postgresDBRepo) GetFinancialInformationByPatientID(id int) ([]models.FinancialInformation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `SELECT * FROM public."FinancialInformation"
+	WHERE patient_id = $1
+	ORDER BY id ASC`
+
+	var financials []models.FinancialInformation
+
+	rows, err := m.DB.QueryContext(ctx, query, id)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var financial models.FinancialInformation
+
+		err := rows.Scan(&financial.ID, &financial.PatientID, &financial.PaymentStatus, &financial.DateOfPayment,
+			&financial.CashAmount, 0, "", &financial.ReceiptNumber, &financial.DateOfFirstContact,
+			&financial.FirstCaller, &financial.LastFourDigitsCard, &financial.Bank, &financial.DiscountPercent,
+			&financial.ReasonForDiscount, 0, &financial.TypeOfInsurance, &financial.FinancialVerifier,
+			&financial.ReceiptDate, &financial.ReceiptReceiver, new(time.Time), new(time.Time))
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+	}
+
+	return financials, nil
+}
+
 func (m *postgresDBRepo) PutPersonalInformation(personalInfo models.PersonalInformation) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -201,10 +235,6 @@ func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesI
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	if surgeriesInfo.DateOfHospitalAdmission.Status == pgtype.Undefined {
-		surgeriesInfo.DateOfHospitalAdmission.Status = pgtype.Present
-	}
-
 	query := `
 	UPDATE public."SurgeriesInformation"
 	SET patient_id = $1, surgery_date = $2, surgery_day = $3, surgery_type = $4, surgery_area = $5,
@@ -212,8 +242,9 @@ func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesI
 	    resident = $10, hospital = $11, hospital_type = $12, hospital_address = $13, ct = $14,
 	    mr = $15, fmri = $16, dti = $17, operator_first = $18, operator_second = $19, start_time = $20,
 	    stop_time = $21, enter_time = $22, exit_time = $23, patient_enter_time = $24, head_fix_type = $25,
-	    cancellation_reason = $26, file_number = $27, date_of_hospital_admission = $28, updated_at = $29, surgery_time = $31
-	WHERE id = $30`
+	    cancellation_reason = $26, file_number = $27, date_of_hospital_admission = $28, surgery_time = $29,
+	    updated_at = $30, 
+	WHERE id = $31`
 	_, err := m.DB.ExecContext(ctx, query, surgeriesInfo.PatientID, surgeriesInfo.SurgeryDate,
 		surgeriesInfo.SurgeryDay, surgeriesInfo.SurgeryType, surgeriesInfo.SurgeryArea,
 		surgeriesInfo.SurgeryDescription, surgeriesInfo.SurgeryResult, surgeriesInfo.SurgeonFirst,
@@ -223,7 +254,7 @@ func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesI
 		surgeriesInfo.OperatorSecond, surgeriesInfo.StartTime.Time, surgeriesInfo.StopTime.Time,
 		surgeriesInfo.EnterTime.Time, surgeriesInfo.ExitTime.Time, surgeriesInfo.PatientEnterTime.Time,
 		surgeriesInfo.HeadFixType, surgeriesInfo.CancellationReason, surgeriesInfo.FileNumber,
-		surgeriesInfo.DateOfHospitalAdmission, time.Now(), surgeriesInfo.ID, surgeriesInfo.SurgeryTime)
+		surgeriesInfo.DateOfHospitalAdmission, surgeriesInfo.SurgeryTime, time.Now(), surgeriesInfo.ID)
 	if err != nil {
 		log.Println(err)
 		return err

@@ -190,7 +190,7 @@ func GetAllFinancialInformation() []models.FinancialInformation {
 	for _, row := range excelCell {
 		receiptNumber, _ := strconv.Atoi(row[49])
 		financialInfo = append(financialInfo, models.FinancialInformation{
-			PaymentStatus:      row[5],
+			PaymentStatus:      ConvertPaymentStatusToInt(row[5]),
 			DateOfFirstContact: ConvertStringToDate(row[21]),
 			FirstCaller:        row[22],
 			DateOfPayment:      ConvertStringToDate(row[25]),
@@ -208,6 +208,22 @@ func GetAllFinancialInformation() []models.FinancialInformation {
 		})
 	}
 	return financialInfo
+}
+
+func ConvertPaymentStatusToInt(s string) int {
+	switch s {
+	case "پرداخت شد":
+		return 1
+	case "پرداخت نشد":
+		return 2
+	case "طرح سلامت":
+		return 3
+	case "رایگان":
+		return 4
+	case "توسط بیمارستان":
+		return 5
+	}
+	return 0
 }
 
 func ConvertCreditAmountToInt(s string) int {
