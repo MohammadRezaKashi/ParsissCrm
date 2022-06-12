@@ -7,7 +7,7 @@ create_table("PatientsInformation") {
   t.Column("national_id", "string", {default: ""})
   t.Column("address", "string", {default: ""})
   t.Column("email", "string", {default: ""})
-  t.Column("place_of_birthday", "string", {default: ""})
+  t.Column("place_of_birth", "string", {default: ""})
   t.Column("created_at", "TIMESTAMPTZ", {default: "NOW()"})
   t.Column("updated_at", "TIMESTAMPTZ", {default: "NOW()"})
   }

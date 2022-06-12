@@ -16,10 +16,12 @@ func (m *postgresDBRepo) AddPersonalInformation(personalInfo models.PersonalInfo
 
 	query := `
 	INSERT INTO public."PatientsInformation"(
-		name, phone, national_id, address, email)
-		VALUES ($1, $2, $3, $4, $5) RETURNING id`
-	err := m.DB.QueryRowContext(ctx, query, personalInfo.Name, personalInfo.PhoneNumber,
-		personalInfo.NationalID, personalInfo.Address, "").Scan(&personalInfo.ID)
+		name, family, age, phone, national_id, address, email, place_of_birth)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`
+
+	err := m.DB.QueryRowContext(ctx, query, personalInfo.Name, personalInfo.Family, personalInfo.Age,
+		personalInfo.PhoneNumber, personalInfo.NationalID, personalInfo.Address, personalInfo.Email,
+		personalInfo.PlaceOfBirth).Scan(&personalInfo.ID)
 	if err != nil {
 		log.Println(err)
 		return 0, err
@@ -183,7 +185,7 @@ func (m *postgresDBRepo) PutPersonalInformation(personalInfo models.PersonalInfo
 	query := `
 	UPDATE public."PatientsInformation"
 	SET name = $1, family = $2, age = $3, phone = $4, national_id = $5, address = $6, email = $7,
-	    place_of_birthday = $8, updated_at = $9
+	    place_of_birth = $8, updated_at = $9
 	WHERE id = $10`
 	_, err := m.DB.ExecContext(ctx, query, personalInfo.Name, personalInfo.Family, personalInfo.Age,
 		personalInfo.PhoneNumber, personalInfo.NationalID, personalInfo.Address, personalInfo.Email,
