@@ -201,6 +201,10 @@ func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesI
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
+	if surgeriesInfo.DateOfHospitalAdmission.Status == pgtype.Undefined {
+		surgeriesInfo.DateOfHospitalAdmission.Status = pgtype.Present
+	}
+
 	query := `
 	UPDATE public."SurgeriesInformation"
 	SET patient_id = $1, surgery_date = $2, surgery_day = $3, surgery_type = $4, surgery_area = $5,

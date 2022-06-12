@@ -11,6 +11,8 @@ import (
 	"path/filepath"
 	"time"
 
+	ptime "github.com/yaa110/go-persian-calendar"
+
 	"github.com/jackc/pgtype"
 	"github.com/justinas/nosurf"
 )
@@ -19,9 +21,10 @@ var app *config.AppConfig
 var pathToTemplates = "./templates"
 
 var functions = template.FuncMap{
-	"humanDate":       HumanDate,
-	"humanPgtypeDate": HumanPgtypeDate,
-	"timestampToTime": TimestampToTime,
+	"humanDate":              HumanDate,
+	"humanPgtypeDate":        HumanPgtypeDate,
+	"humanPgtypeDatePersian": HumanPgtypeDatePersian,
+	"timestampToTime":        TimestampToTime,
 }
 
 func HumanDate(t time.Time) string {
@@ -30,6 +33,19 @@ func HumanDate(t time.Time) string {
 
 func HumanPgtypeDate(t pgtype.Date) string {
 	return t.Time.Format("2006/01/02")
+}
+
+func HumanPgtypeDatePersian(t pgtype.Date) string {
+	if t.Status == pgtype.Undefined {
+		return ""
+	}
+
+	pt := ptime.New(t.Time)
+	if pt.Year() < 0 || pt.Month() < 0 || pt.Day() < 0 {
+		return ""
+	}
+	result := pt.Format("yyyy/MM/dd")
+	return result
 }
 
 func TimestampToTime(t pgtype.Timestamp) string {
