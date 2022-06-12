@@ -22,6 +22,9 @@ func routes(app *config.AppConfig) http.Handler {
 	fileServer := http.FileServer(http.Dir("./static/."))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
+	fileServer = http.FileServer(http.Dir("./node_modules/."))
+	mux.Handle("/node_modules/*", http.StripPrefix("/node_modules", fileServer))
+
 	mux.Get("/", handlers.Repo.Home)
 
 	mux.Get("/report", handlers.Repo.Report)
