@@ -168,7 +168,12 @@ Add new report
                             <input class="usage form-control {{with .Form.Errors.Get " date_of_hospital_admission"}}
                                 is-invalid {{end}}" type="text" name="date_of_hospital_admission"
                                 id="date_of_hospital_admission" autocomplete="off"
-                                value="{{humanPgtypeDate $surgery.DateOfHospitalAdmission}}" required>
+                                value="
+                                {{if $surgery.DateOfHospitalAdmission}}
+                                {{humanPgtypeDate $surgery.DateOfHospitalAdmission}}
+                                {{else}}
+                                {{end}}" 
+                                required>
                         </div>
                         
                         <div class="form-group mt-3">
@@ -177,7 +182,12 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="usage form-control {{with .Form.Errors.Get " surgery_date"}} is-invalid {{end}}" type="text"
-                                name="surgery_date" id="surgery_date" autocomplete="off" value="{{humanPgtypeDate $surgery.SurgeryDate}}"
+                                name="surgery_date" id="surgery_date" autocomplete="off" 
+                                value="
+                                {{if $surgery.SurgeryDate}}
+                                {{humanPgtypeDate $surgery.SurgeryDate}}
+                                {{else}}
+                                {{end}}"
                                 required>
                         </div>
 
@@ -430,7 +440,12 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " start_time"}} is-invalid {{end}}"
                                 type="time" name="start_time" id="start_time" autocomplete="off"
-                                value="{{timestampToTime $surgery.StartTime}}" required>
+                                value="
+                                {{if $surgery.StartTime}}
+                                {{humanPgtypeDate $surgery.StartTime}}
+                                {{else}}
+                                {{end}}"
+                                required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -439,7 +454,12 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " stop_time"}} is-invalid {{end}}"
-                                type="time" name="stop_time" id="stop_time" autocomplete="off" value="{{timestampToTime $surgery.StopTime}}"
+                                type="time" name="stop_time" id="stop_time" autocomplete="off" 
+                                value="
+                                {{if $surgery.StopTime}}
+                                {{humanPgtypeDate $surgery.StopTime}}
+                                {{else}}
+                                {{end}}"
                                 required>
                         </div>
 
@@ -450,7 +470,12 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " enter_time"}} is-invalid {{end}}"
                                 type="time" name="enter_time" id="enter_time" autocomplete="off"
-                                value="{{timestampToTime $surgery.EnterTime}}" required>
+                                value="
+                                {{if $surgery.EnterTime}}
+                                {{humanPgtypeDate $surgery.EnterTime}}
+                                {{else}}
+                                {{end}}" 
+                                required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -459,7 +484,12 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " exit_time"}} is-invalid {{end}}"
-                                type="time" name="exit_time" id="exit_time" autocomplete="off" value="{{timestampToTime $surgery.ExitTime}}"
+                                type="time" name="exit_time" id="exit_time" autocomplete="off" 
+                                value="
+                                {{if $surgery.ExitTime}}
+                                {{humanPgtypeDate $surgery.ExitTime}}
+                                {{else}}
+                                {{end}}"
                                 required>
                         </div>
 
@@ -470,7 +500,13 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " patient_enter_time"}} is-invalid
                                 {{end}}" type="time" name="patient_enter_time" id="patient_enter_time"
-                                autocomplete="off" value="{{timestampToTime $surgery.PatientEnterTime}}" required>
+                                autocomplete="off" 
+                                value="
+                                {{if $surgery.PatientEnterTime}}
+                                {{humanPgtypeDate $surgery.PatientEnterTime}}
+                                {{else}}
+                                {{end}}" 
+                                required>
                         </div>
 
                         <div class="form-group mt-3">

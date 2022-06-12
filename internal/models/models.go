@@ -19,7 +19,7 @@ type PersonalInformation struct {
 type SurgeriesInformation struct {
 	ID                      int
 	PatientID               int
-	SurgeryDate             pgtype.Date
+	SurgeryDate             *pgtype.Date
 	SurgeryDay              int
 	SurgeryTime             int
 	SurgeryType             string
@@ -38,24 +38,24 @@ type SurgeriesInformation struct {
 	DTI                     int
 	OperatorFirst           string
 	OperatorSecond          string
-	StartTime               pgtype.Timestamp
-	StopTime                pgtype.Timestamp
-	EnterTime               pgtype.Timestamp
-	ExitTime                pgtype.Timestamp
-	PatientEnterTime        pgtype.Timestamp
+	StartTime               *pgtype.Timestamp
+	StopTime                *pgtype.Timestamp
+	EnterTime               *pgtype.Timestamp
+	ExitTime                *pgtype.Timestamp
+	PatientEnterTime        *pgtype.Timestamp
 	HeadFixType             int
 	CancellationReason      string
 	FileNumber              string
-	DateOfHospitalAdmission pgtype.Date
+	DateOfHospitalAdmission *pgtype.Date
 }
 
 type FinancialInformation struct {
 	ID                 int
 	PatientID          int
 	PaymentStatus      string
-	DateOfFirstContact pgtype.Date
+	DateOfFirstContact *pgtype.Date
 	FirstCaller        string
-	DateOfPayment      pgtype.Date
+	DateOfPayment      *pgtype.Date
 	LastFourDigitsCard string
 	CashAmount         string
 	Bank               string
@@ -65,7 +65,7 @@ type FinancialInformation struct {
 	TypeOfInsurance    string
 	FinancialVerifier  string
 	ReceiptNumber      int
-	ReceiptDate        pgtype.Date
+	ReceiptDate        *pgtype.Date
 	ReceiptReceiver    string
 }
 

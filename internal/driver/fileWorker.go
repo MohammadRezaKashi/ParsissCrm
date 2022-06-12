@@ -258,7 +258,7 @@ func ConvertSurgeryAreaToInt(s string) int {
 	return 0
 }
 
-func ConvertStringToDate(date string) pgtype.Date {
+func ConvertStringToDate(date string) *pgtype.Date {
 	d := strings.FieldsFunc(date, func(r rune) bool {
 		return r == '-' || r == '/'
 	})
@@ -274,20 +274,20 @@ func ConvertStringToDate(date string) pgtype.Date {
 			Status:           2,
 			InfinityModifier: 0,
 		}
-		return pgDate
+		return &pgDate
 	} else {
-		return pgtype.Date{}
+		return &pgtype.Date{}
 	}
 }
 
-func ConvertStringToTimestamp(ts string) pgtype.Timestamp {
+func ConvertStringToTimestamp(ts string) *pgtype.Timestamp {
 	t, _ := time.Parse("2006-01-02 15:04", "2006-01-02 "+ts)
 	var pgTime = pgtype.Timestamp{
 		Time:             t,
 		Status:           2,
 		InfinityModifier: 0,
 	}
-	return pgTime
+	return &pgTime
 }
 
 func ConvertHospitalTypeToInt(s string) int {
