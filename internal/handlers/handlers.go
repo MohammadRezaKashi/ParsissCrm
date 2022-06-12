@@ -84,7 +84,40 @@ func (m *Repository) AddNewReport(rw http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
+	var patient models.PersonalInformation
 
+	patient.Name = r.Form.Get("name")
+	patient.Family = r.Form.Get("family")
+	age, err := strconv.Atoi(r.Form.Get("age"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse age!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
+	patient.Age = age
+	patient.Address = r.Form.Get("address")
+	patient.Email = r.Form.Get("email")
+	patient.NationalID = r.Form.Get("national_id")
+	patient.PhoneNumber = r.Form.Get("phone_number")
+	patient.PlaceOfBirth = r.Form.Get("place_of_birth")
+
+	id, err := m.DB.AddPersonalInformation(patient)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't add personal information!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
+
+	var surgeryinfo models.SurgeriesInformation
+
+	err = m.DB.AddSurgeriesInformation(surgeryinfo, id)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't add surgeries information!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
+
+	http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
 }
 
 func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
