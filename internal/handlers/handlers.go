@@ -9,6 +9,7 @@ import (
 	"ParsissCrm/internal/render"
 	"ParsissCrm/internal/repository"
 	"ParsissCrm/internal/repository/dbrepo"
+	"github.com/jackc/pgtype"
 	"net/http"
 	"strconv"
 
@@ -108,7 +109,57 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var surgeryinfo models.SurgeriesInformation
+	surgeryTime, _ := strconv.Atoi(r.Form.Get("surgery_time"))
+	surgeryArea, _ := strconv.Atoi(r.Form.Get("surgery_area"))
+	surgeryResult, _ := strconv.Atoi(r.Form.Get("surgery_result"))
+	hospitalType, _ := strconv.Atoi(r.Form.Get("hospital_type"))
+	ct, _ := strconv.Atoi(r.Form.Get("ct"))
+	mr, _ := strconv.Atoi(r.Form.Get("mr"))
+	fmri, _ := strconv.Atoi(r.Form.Get("fmri"))
+	dti, _ := strconv.Atoi(r.Form.Get("dti"))
+	headFixType, _ := strconv.Atoi(r.Form.Get("head_fix_type"))
+	var surgeryinfo = models.SurgeriesInformation{
+		FileNumber:              r.Form.Get("file_number"),
+		DateOfHospitalAdmission: driver.ConvertStringToDate(r.Form.Get("date_of_hospital_admission")),
+		SurgeryDate: pgtype.Date{
+			Time:   driver.ConvertStringToDate(r.Form.Get("surgery_date")).Time,
+			Status: 2,
+		},
+		SurgeryTime:        surgeryTime,
+		SurgeryType:        r.Form.Get("surgery_type"),
+		SurgeryArea:        surgeryArea,
+		SurgeryDescription: r.Form.Get("surgery_description"),
+		SurgeryResult:      surgeryResult,
+		SurgeonFirst:       r.Form.Get("surgeon_first"),
+		SurgeonSecond:      r.Form.Get("surgeon_second"),
+		Resident:           r.Form.Get("resident"),
+		Hospital:           r.Form.Get("hospital"),
+		HospitalType:       hospitalType,
+		HospitalAddress:    r.Form.Get("hospital_address"),
+		CT:                 ct,
+		MR:                 mr,
+		FMRI:               fmri,
+		DTI:                dti,
+		OperatorFirst:      r.Form.Get("operator_first"),
+		OperatorSecond:     r.Form.Get("operator_second"),
+		HeadFixType:        headFixType,
+		CancellationReason: r.Form.Get("cancelation_reason"),
+		StartTime: pgtype.Timestamp{
+			Status: 2,
+		},
+		StopTime: pgtype.Timestamp{
+			Status: 2,
+		},
+		EnterTime: pgtype.Timestamp{
+			Status: 2,
+		},
+		ExitTime: pgtype.Timestamp{
+			Status: 2,
+		},
+		PatientEnterTime: pgtype.Timestamp{
+			Status: 2,
+		},
+	}
 
 	err = m.DB.AddSurgeriesInformation(surgeryinfo, id)
 	if err != nil {
@@ -117,7 +168,7 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+	http.Redirect(rw, r, "/report", http.StatusSeeOther)
 }
 
 func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
@@ -184,7 +235,7 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 	surgery.OperatorFirst = r.Form.Get("operator_first")
 	surgery.OperatorSecond = r.Form.Get("operator_second")
 	surgery.HeadFixType, _ = strconv.Atoi(r.Form.Get("head_fix_type"))
-	surgery.OperatorSecond = r.Form.Get("cancelation_reason")
+	surgery.CancellationReason = r.Form.Get("cancelation_reason")
 
 	err = m.DB.PutSurgeriesInformation(surgery)
 	if err != nil {
