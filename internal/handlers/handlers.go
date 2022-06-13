@@ -346,6 +346,49 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	financial, ok := m.App.Session.Get(r.Context(), "financialinfo").(models.FinancialInformation)
+	if !ok {
+		m.App.Session.Put(r.Context(), "error", "can't get financial information data!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+	}
+	financial.PaymentStatus, _ = strconv.Atoi(r.Form.Get("payment_status"))
+	date = driver.ConvertStringToDate(r.Form.Get("first_contact"))
+	if date.Status == 2 {
+		financial.DateOfFirstContact = date
+	}
+	date = driver.ConvertStringToDate(r.Form.Get("payment_date"))
+	if date.Status == 2 {
+		financial.DateOfPayment = date
+	}
+	financial.FirstCaller = r.Form.Get("first_caller")
+	financial.LastFourDigitsCard = r.Form.Get("payment_card_number")
+	financial.CashAmount = r.Form.Get("payment_receipt_amount")
+	financial.Bank = r.Form.Get("bank")
+	financial.ReasonForDiscount = r.Form.Get("discount_reason")
+	financial.TypeOfInsurance = r.Form.Get("insurance_type")
+	financial.FinancialVerifier = r.Form.Get("financial_verifier")
+	financial.ReceiptNumber, _ = strconv.Atoi(r.Form.Get("receipt_number"))
+	financial.DiscountPercent, _ = strconv.ParseFloat(r.Form.Get("discount_percentage"), 32)
+	date = driver.ConvertStringToDate(r.Form.Get("receipt_received_date"))
+	if date.Status == 2 {
+		financial.ReceiptDate = date
+	}
+	financial.ReceiptReceiver = r.Form.Get("receipt_receiver")
+
+	err = m.DB.PutFinancialInformation(financial)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't update surgery information!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
+
+	err = m.DB.PutFinancialInformation(financial)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't update surgery information!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
+
 	m.App.Session.Put(r.Context(), "flash", "Saved successfully")
 	http.Redirect(rw, r, "/report/detail/"+strconv.Itoa(patient.ID)+"/show", http.StatusSeeOther)
 }
