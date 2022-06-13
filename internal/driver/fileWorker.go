@@ -143,6 +143,7 @@ func GetAllSurgeriesInformation() []models.SurgeriesInformation {
 			Resident:           row[9],
 			Hospital:           row[10],
 			HospitalType:       ConvertHospitalTypeToInt(row[11]),
+			SurgeryTime:        ConvertSurgeryTimeToInt(row[12]),
 			SurgeryResult:      ConvertSurgeryResultToInt(row[13]),
 			CT:                 ConvertImageValidityToInt(row[15]),
 			MR:                 ConvertImageValidityToInt(row[16]),
@@ -156,23 +157,35 @@ func GetAllSurgeriesInformation() []models.SurgeriesInformation {
 			ExitTime:           ConvertStringToTimestamp(row[37]),
 			PatientEnterTime:   ConvertStringToTimestamp(row[38]),
 			HeadFixType:        ConvertHeadFixTypeToInt(row[39]),
-			CancellationReason: row[40],
+			CancellationReason: row[48],
 		})
 	}
 	return surgeryInfo
+}
+
+func ConvertSurgeryTimeToInt(s string) int {
+	switch s {
+	case "صبح ", "صبح":
+		return 1
+	case "ظهر ", "ظهر":
+		return 2
+	case "عصر ", "عصر":
+		return 3
+	}
+	return 0
 }
 
 func ConvertSurgeryDayToInt(s string) int {
 	switch s {
 	case "شنبه":
 		return 1
-	case "یکشنبه":
+	case "یک شنبه":
 		return 2
-	case "دوشنبه":
+	case "دو شنبه":
 		return 3
 	case "سه شنبه":
 		return 4
-	case "چهارشنبه":
+	case "چهار شنبه":
 		return 5
 	case "پنج شنبه":
 		return 6
@@ -212,15 +225,15 @@ func GetAllFinancialInformation() []models.FinancialInformation {
 
 func ConvertPaymentStatusToInt(s string) int {
 	switch s {
-	case "پرداخت شد":
+	case "پرداخت شد", "پرداخت شد ":
 		return 1
-	case "پرداخت نشد":
+	case "پرداخت نشد", "پرداخت نشد ":
 		return 2
-	case "طرح سلامت":
+	case "رایگان", "رایگان ":
 		return 3
-	case "رایگان":
+	case "طرح سلامت", "طرح سلامت ":
 		return 4
-	case "توسط بیمارستان":
+	case "توسط بیمارستان", "توسط بیمارستان ":
 		return 5
 	}
 	return 0
@@ -236,13 +249,13 @@ func ConvertDiscountPercentToFloat64(s string) float64 {
 
 func ConvertImageValidityToInt(s string) int {
 	switch s {
-	case "چک نشده ":
+	case "چک نشده ", "چک نشده":
 		return 1
-	case "ندارد":
+	case "ندارد", "ندارد ":
 		return 2
-	case "چک شد / تحویل بیمار ":
+	case "چک شد / تحویل بیمار ", "چک شد / تحویل بیمار":
 		return 3
-	case "نامعتبر":
+	case "نامعتبر", "نامعتبر ":
 		return 4
 	}
 	return 0
@@ -273,6 +286,11 @@ func ConvertStringToDate(date string) pgtype.Date {
 	if len(d) == 3 {
 		t := ptime.Time{}
 		year, _ := strconv.Atoi(d[0])
+		if year >= 0 && year <= 80 {
+			year += 1400
+		} else if year >= 81 && year <= 99 {
+			year += 1300
+		}
 		month, _ := strconv.Atoi(d[1])
 		day, _ := strconv.Atoi(d[2])
 		t.Set(year, ptime.Month(month), day, 0, 0, 0, 0, ptime.Iran())
@@ -300,9 +318,9 @@ func ConvertStringToTimestamp(ts string) pgtype.Timestamp {
 
 func ConvertHospitalTypeToInt(s string) int {
 	switch s {
-	case "خصوصی":
+	case "خصوصی", "خصوصی ":
 		return 1
-	case "دولتی":
+	case "دولتی", "دولتی ":
 		return 2
 	}
 	return 0
@@ -310,9 +328,9 @@ func ConvertHospitalTypeToInt(s string) int {
 
 func ConvertSurgeryResultToInt(s string) int {
 	switch s {
-	case "برگزار شد":
+	case "برگزار شد ", "برگزار شد":
 		return 1
-	case "کنسل شد":
+	case "کنسل شد ", "کنسل شد":
 		return 2
 	}
 	return 0
@@ -320,10 +338,12 @@ func ConvertSurgeryResultToInt(s string) int {
 
 func ConvertHeadFixTypeToInt(s string) int {
 	switch s {
-	case "میفیلد":
+	case "هدبند", "هدبند ":
 		return 1
-	case "هدبند":
+	case "میفیلد", "میفیلد ":
 		return 2
+	case "هیچکدام", "هیچکدام ":
+		return 3
 	}
 	return 0
 }
