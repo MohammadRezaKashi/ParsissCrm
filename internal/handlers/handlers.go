@@ -135,6 +135,7 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 	surgeryinfo.SurgeryType = r.Form.Get("surgery_type")
 	surgeryinfo.SurgeryArea = surgeryArea
 	surgeryinfo.SurgeryDescription = r.Form.Get("surgery_description")
+	surgeryinfo.FailReason = r.Form.Get("fail_reason")
 	surgeryinfo.SurgeryResult = surgeryResult
 	surgeryinfo.SurgeonFirst = r.Form.Get("surgeon_first")
 	surgeryinfo.SurgeonSecond = r.Form.Get("surgeon_second")
@@ -217,6 +218,7 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 	surgery.SurgeryType = r.Form.Get("surgery_type")
 	surgery.SurgeryArea, _ = strconv.Atoi(r.Form.Get("surgery_area"))
 	surgery.SurgeryDescription = r.Form.Get("surgery_description")
+	surgery.FailReason = r.Form.Get("fail_reason")
 	surgery.SurgeryResult, _ = strconv.Atoi(r.Form.Get("surgery_result"))
 	surgery.SurgeonFirst = r.Form.Get("surgeon_first")
 	surgery.SurgeonSecond = r.Form.Get("surgeon_second")

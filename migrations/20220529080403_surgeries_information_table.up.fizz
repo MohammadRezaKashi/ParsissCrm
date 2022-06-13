@@ -7,6 +7,7 @@ create_table("SurgeriesInformation") {
   t.Column("surgery_type", "text", {})
   t.Column("surgery_area", "integer", {})
   t.Column("surgery_description", "text", {})
+  t.Column("fail_reason", "text", {})
   t.Column("surgery_result", "integer", {})
   t.Column("surgeon_first", "text", {})
   t.Column("surgeon_second", "text", {})

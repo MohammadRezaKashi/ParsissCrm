@@ -27,6 +27,7 @@ type SurgeriesInformation struct {
 	SurgeryType             string
 	SurgeryArea             int
 	SurgeryDescription      string
+	FailReason              string
 	SurgeryResult           int
 	SurgeonFirst            string
 	SurgeonSecond           string
