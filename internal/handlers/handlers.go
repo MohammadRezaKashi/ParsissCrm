@@ -9,9 +9,11 @@ import (
 	"ParsissCrm/internal/render"
 	"ParsissCrm/internal/repository"
 	"ParsissCrm/internal/repository/dbrepo"
-	"github.com/jackc/pgtype"
 	"net/http"
 	"strconv"
+	"time"
+
+	"github.com/jackc/pgtype"
 
 	"github.com/go-chi/chi"
 	"github.com/jinzhu/copier"
@@ -109,6 +111,9 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	surgeryinfo := models.SurgeriesInformation{}
+	surgeryinfo.FillDefaults()
+
 	surgeryTime, _ := strconv.Atoi(r.Form.Get("surgery_time"))
 	surgeryArea, _ := strconv.Atoi(r.Form.Get("surgery_area"))
 	surgeryResult, _ := strconv.Atoi(r.Form.Get("surgery_result"))
@@ -118,48 +123,66 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 	fmri, _ := strconv.Atoi(r.Form.Get("fmri"))
 	dti, _ := strconv.Atoi(r.Form.Get("dti"))
 	headFixType, _ := strconv.Atoi(r.Form.Get("head_fix_type"))
-	var surgeryinfo = models.SurgeriesInformation{
-		FileNumber:              r.Form.Get("file_number"),
-		DateOfHospitalAdmission: driver.ConvertStringToDate(r.Form.Get("date_of_hospital_admission")),
-		SurgeryDate: pgtype.Date{
-			Time:   driver.ConvertStringToDate(r.Form.Get("surgery_date")).Time,
-			Status: 2,
-		},
-		SurgeryTime:        surgeryTime,
-		SurgeryType:        r.Form.Get("surgery_type"),
-		SurgeryArea:        surgeryArea,
-		SurgeryDescription: r.Form.Get("surgery_description"),
-		SurgeryResult:      surgeryResult,
-		SurgeonFirst:       r.Form.Get("surgeon_first"),
-		SurgeonSecond:      r.Form.Get("surgeon_second"),
-		Resident:           r.Form.Get("resident"),
-		Hospital:           r.Form.Get("hospital"),
-		HospitalType:       hospitalType,
-		HospitalAddress:    r.Form.Get("hospital_address"),
-		CT:                 ct,
-		MR:                 mr,
-		FMRI:               fmri,
-		DTI:                dti,
-		OperatorFirst:      r.Form.Get("operator_first"),
-		OperatorSecond:     r.Form.Get("operator_second"),
-		HeadFixType:        headFixType,
-		CancellationReason: r.Form.Get("cancelation_reason"),
-		StartTime: pgtype.Timestamp{
-			Status: 2,
-		},
-		StopTime: pgtype.Timestamp{
-			Status: 2,
-		},
-		EnterTime: pgtype.Timestamp{
-			Status: 2,
-		},
-		ExitTime: pgtype.Timestamp{
-			Status: 2,
-		},
-		PatientEnterTime: pgtype.Timestamp{
-			Status: 2,
-		},
+
+	surgeryinfo.FileNumber = r.Form.Get("file_number")
+	if driver.ConvertStringToDate(r.Form.Get("date_of_hospital_admission")).Status != pgtype.Undefined {
+		surgeryinfo.DateOfHospitalAdmission = driver.ConvertStringToDate(r.Form.Get("date_of_hospital_admission"))
 	}
+
+	if driver.ConvertStringToDate(r.Form.Get("date_of_surgery")).Status != pgtype.Undefined {
+		surgeryinfo.SurgeryDate = driver.ConvertStringToDate(r.Form.Get("date_of_surgery"))
+	}
+	surgeryinfo.SurgeryTime = surgeryTime
+	surgeryinfo.SurgeryType = r.Form.Get("surgery_type")
+	surgeryinfo.SurgeryArea = surgeryArea
+	surgeryinfo.SurgeryDescription = r.Form.Get("surgery_description")
+	surgeryinfo.FailReason = r.Form.Get("fail_reason")
+	surgeryinfo.SurgeryResult = surgeryResult
+	surgeryinfo.SurgeonFirst = r.Form.Get("surgeon_first")
+	surgeryinfo.SurgeonSecond = r.Form.Get("surgeon_second")
+	surgeryinfo.Resident = r.Form.Get("resident")
+	surgeryinfo.Hospital = r.Form.Get("hospital")
+	surgeryinfo.HospitalType = hospitalType
+	surgeryinfo.HospitalAddress = r.Form.Get("hospital_address")
+	surgeryinfo.CT = ct
+	surgeryinfo.MR = mr
+	surgeryinfo.FMRI = fmri
+	surgeryinfo.DTI = dti
+	surgeryinfo.OperatorFirst = r.Form.Get("operator_first")
+	surgeryinfo.OperatorSecond = r.Form.Get("operator_second")
+	surgeryinfo.HeadFixType = headFixType
+	surgeryinfo.CancellationReason = r.Form.Get("cancelation_reason")
+
+	layout := "15:04"
+	t, err := time.Parse(layout, r.Form.Get("start_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse start time!")
+	}
+	surgeryinfo.StartTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("stop_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse stop time!")
+	}
+	surgeryinfo.StopTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("enter_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse enter time!")
+	}
+	surgeryinfo.EnterTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("exit_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse exit time!")
+	}
+	surgeryinfo.ExitTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("patient_enter_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse patient enter time!")
+	}
+	surgeryinfo.PatientEnterTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
 
 	err = m.DB.AddSurgeriesInformation(surgeryinfo, id)
 	if err != nil {
@@ -250,13 +273,20 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	surgery.FileNumber = r.Form.Get("file_number")
-	surgery.DateOfHospitalAdmission = driver.ConvertStringToDate(r.Form.Get("date_of_hospital_admission"))
-	surgery.SurgeryDate = driver.ConvertStringToDate(r.Form.Get("surgery_date"))
+	date := driver.ConvertStringToDate(r.Form.Get("date_of_hospital_admission"))
+	if date.Status == 2 {
+		surgery.DateOfHospitalAdmission = date
+	}
+	date = driver.ConvertStringToDate(r.Form.Get("surgery_date"))
+	if date.Status == 2 {
+		surgery.SurgeryDate = date
+	}
 	surgery.SurgeryDay, _ = strconv.Atoi(r.Form.Get("surgery_day"))
 	surgery.SurgeryTime, _ = strconv.Atoi(r.Form.Get("surgery_time"))
 	surgery.SurgeryType = r.Form.Get("surgery_type")
 	surgery.SurgeryArea, _ = strconv.Atoi(r.Form.Get("surgery_area"))
 	surgery.SurgeryDescription = r.Form.Get("surgery_description")
+	surgery.FailReason = r.Form.Get("fail_reason")
 	surgery.SurgeryResult, _ = strconv.Atoi(r.Form.Get("surgery_result"))
 	surgery.SurgeonFirst = r.Form.Get("surgeon_first")
 	surgery.SurgeonSecond = r.Form.Get("surgeon_second")
@@ -272,6 +302,37 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 	surgery.OperatorSecond = r.Form.Get("operator_second")
 	surgery.HeadFixType, _ = strconv.Atoi(r.Form.Get("head_fix_type"))
 	surgery.CancellationReason = r.Form.Get("cancelation_reason")
+
+	layout := "15:04"
+	t, err := time.Parse(layout, r.Form.Get("start_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse start time!")
+	}
+	surgery.StartTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("stop_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse stop time!")
+	}
+	surgery.StopTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("enter_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse enter time!")
+	}
+	surgery.EnterTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("exit_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse exit time!")
+	}
+	surgery.ExitTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("patient_enter_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse patient enter time!")
+	}
+	surgery.PatientEnterTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
 
 	err = m.DB.PutSurgeriesInformation(surgery)
 	if err != nil {

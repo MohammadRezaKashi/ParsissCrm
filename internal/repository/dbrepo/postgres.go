@@ -39,9 +39,9 @@ func (m *postgresDBRepo) AddSurgeriesInformation(surgeriesInformation models.Sur
 	                                          surgery_result, surgeon_first, surgeon_second, resident, hospital,
 	                                          hospital_type, hospital_address, ct, mr, fmri, dti, operator_first, operator_second,
 	                                          start_time, stop_time, enter_time, exit_time, patient_enter_time,
-	                                          head_fix_type, cancellation_reason, file_number, date_of_hospital_admission, surgery_time)
+	                                          head_fix_type, cancellation_reason, file_number, date_of_hospital_admission, surgery_time, fail_reason)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22,
-		        $23, $24, $25, $26, $27, $28, $29)`
+		        $23, $24, $25, $26, $27, $28, $29, $30)`
 
 	_, err := m.DB.ExecContext(ctx, query, patientID, surgeriesInformation.SurgeryDate, surgeriesInformation.SurgeryDay,
 		surgeriesInformation.SurgeryType, surgeriesInformation.SurgeryArea, surgeriesInformation.SurgeryDescription,
@@ -52,7 +52,7 @@ func (m *postgresDBRepo) AddSurgeriesInformation(surgeriesInformation models.Sur
 		surgeriesInformation.StartTime.Time, surgeriesInformation.StopTime.Time, surgeriesInformation.EnterTime.Time,
 		surgeriesInformation.ExitTime.Time, surgeriesInformation.PatientEnterTime.Time, surgeriesInformation.HeadFixType,
 		surgeriesInformation.CancellationReason, surgeriesInformation.FileNumber, surgeriesInformation.DateOfHospitalAdmission.Time,
-		surgeriesInformation.SurgeryTime)
+		surgeriesInformation.SurgeryTime, surgeriesInformation.FailReason)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -151,7 +151,7 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 		var surgery models.SurgeriesInformation
 
 		err := rows.Scan(&surgery.ID, &surgery.PatientID, &surgery.SurgeryDate, &surgery.SurgeryDay, &surgery.SurgeryTime,
-			&surgery.SurgeryType, &surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.SurgeryResult,
+			&surgery.SurgeryType, &surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.FailReason, &surgery.SurgeryResult,
 			&surgery.SurgeonFirst, &surgery.SurgeonSecond, &surgery.Resident, &surgery.Hospital,
 			&surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.FMRI, &surgery.DTI,
 			&surgery.OperatorFirst, &surgery.OperatorSecond, &startTime, &stopTime, &enterTime, &exitTime,
@@ -235,6 +235,10 @@ func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesI
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
+	if surgeriesInfo.DateOfHospitalAdmission.Status == pgtype.Undefined {
+		surgeriesInfo.DateOfHospitalAdmission.Status = pgtype.Present
+	}
+
 	query := `
 	UPDATE public."SurgeriesInformation"
 	SET patient_id = $1, surgery_date = $2, surgery_day = $3, surgery_type = $4, surgery_area = $5,
@@ -242,9 +246,8 @@ func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesI
 	    resident = $10, hospital = $11, hospital_type = $12, hospital_address = $13, ct = $14,
 	    mr = $15, fmri = $16, dti = $17, operator_first = $18, operator_second = $19, start_time = $20,
 	    stop_time = $21, enter_time = $22, exit_time = $23, patient_enter_time = $24, head_fix_type = $25,
-	    cancellation_reason = $26, file_number = $27, date_of_hospital_admission = $28, surgery_time = $29,
-	    updated_at = $30, 
-	WHERE id = $31`
+	    cancellation_reason = $26, file_number = $27, date_of_hospital_admission = $28, updated_at = $29, surgery_time = $31
+	WHERE id = $30`
 	_, err := m.DB.ExecContext(ctx, query, surgeriesInfo.PatientID, surgeriesInfo.SurgeryDate,
 		surgeriesInfo.SurgeryDay, surgeriesInfo.SurgeryType, surgeriesInfo.SurgeryArea,
 		surgeriesInfo.SurgeryDescription, surgeriesInfo.SurgeryResult, surgeriesInfo.SurgeonFirst,
@@ -254,7 +257,7 @@ func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesI
 		surgeriesInfo.OperatorSecond, surgeriesInfo.StartTime.Time, surgeriesInfo.StopTime.Time,
 		surgeriesInfo.EnterTime.Time, surgeriesInfo.ExitTime.Time, surgeriesInfo.PatientEnterTime.Time,
 		surgeriesInfo.HeadFixType, surgeriesInfo.CancellationReason, surgeriesInfo.FileNumber,
-		surgeriesInfo.DateOfHospitalAdmission, surgeriesInfo.SurgeryTime, time.Now(), surgeriesInfo.ID)
+		surgeriesInfo.DateOfHospitalAdmission, time.Now(), surgeriesInfo.ID, surgeriesInfo.SurgeryTime)
 	if err != nil {
 		log.Println(err)
 		return err

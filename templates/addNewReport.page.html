@@ -255,8 +255,8 @@ Add new report
                             {{end}}
                             <textarea style="height: 150px; width: 100%;" class="wpcf7-form-control wpcf7-textarea"
                                 aria-invalid="false" class="form-control {{with .Form.Errors.Get "surgery_description"}} is-invalid {{end}}" 
-                                name="surgery_description" id="surgery_description" autocomplete="off" value="{{$rep.SurgeryDescription}}"
-                                required></textarea>
+                                name="surgery_description" id="surgery_description" autocomplete="off" value="{{$surgery.SurgeryDescription}}"
+                                required>{{$surgery.SurgeryDescription}}</textarea>
                         </div>
 
                         <div class="form-group mt-3">
@@ -283,7 +283,7 @@ Add new report
                             <textarea style="height: 150px; width: 100%;" class="wpcf7-form-control wpcf7-textarea"
                                 aria-invalid="false" class="form-control {{with .Form.Errors.Get " fail_reason"}}
                                 is-invalid {{end}}" name="fail_reason" id="fail_reason" autocomplete="off"
-                                value="{{$rep.Fail_Reason}}" required></textarea>
+                                value="{{$surgery.FailReason}}" required>{{$surgery.FailReason}}</textarea>
                         </div>
 
                         <div class="form-group mt-3">
@@ -441,11 +441,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " start_time"}} is-invalid {{end}}"
                                 type="time" name="start_time" id="start_time" autocomplete="off"
-                                value="
-                                {{if $surgery.StartTime}}
-                                {{timestampToTime $surgery.StartTime}}
-                                {{else}}
-                                {{end}}"
+                                value="{{if $surgery.StartTime}}{{timestampToTime $surgery.StartTime}}{{else}}{{end}}"
                                 required>
                         </div>
 
@@ -456,11 +452,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " stop_time"}} is-invalid {{end}}"
                                 type="time" name="stop_time" id="stop_time" autocomplete="off" 
-                                value="
-                                {{if $surgery.StopTime}}
-                                {{timestampToTime $surgery.StopTime}}
-                                {{else}}
-                                {{end}}"
+                                value="{{if $surgery.StopTime}}{{timestampToTime $surgery.StopTime}}{{else}}{{end}}"
                                 required>
                         </div>
 
@@ -471,11 +463,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " enter_time"}} is-invalid {{end}}"
                                 type="time" name="enter_time" id="enter_time" autocomplete="off"
-                                value="
-                                {{if $surgery.EnterTime}}
-                                {{timestampToTime $surgery.EnterTime}}
-                                {{else}}
-                                {{end}}" 
+                                value="{{if $surgery.EnterTime}}{{timestampToTime $surgery.EnterTime}}{{else}}{{end}}" 
                                 required>
                         </div>
 
@@ -486,11 +474,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " exit_time"}} is-invalid {{end}}"
                                 type="time" name="exit_time" id="exit_time" autocomplete="off" 
-                                value="
-                                {{if $surgery.ExitTime}}
-                                {{timestampToTime $surgery.ExitTime}}
-                                {{else}}
-                                {{end}}"
+                                value="{{if $surgery.ExitTime}}{{timestampToTime $surgery.ExitTime}}{{else}}{{end}}"
                                 required>
                         </div>
 
@@ -502,11 +486,7 @@ Add new report
                             <input class="form-control {{with .Form.Errors.Get " patient_enter_time"}} is-invalid
                                 {{end}}" type="time" name="patient_enter_time" id="patient_enter_time"
                                 autocomplete="off" 
-                                value="
-                                {{if $surgery.PatientEnterTime}}
-                                {{timestampToTime $surgery.PatientEnterTime}}
-                                {{else}}
-                                {{end}}" 
+                                value="{{if $surgery.PatientEnterTime}}{{timestampToTime $surgery.PatientEnterTime}}{{else}}{{end}}" 
                                 required>
                         </div>
 
