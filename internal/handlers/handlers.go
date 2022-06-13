@@ -11,6 +11,7 @@ import (
 	"ParsissCrm/internal/repository/dbrepo"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/jackc/pgtype"
 
@@ -152,6 +153,37 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 	surgeryinfo.HeadFixType = headFixType
 	surgeryinfo.CancellationReason = r.Form.Get("cancelation_reason")
 
+	layout := "15:04"
+	t, err := time.Parse(layout, r.Form.Get("start_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse start time!")
+	}
+	surgeryinfo.StartTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("stop_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse stop time!")
+	}
+	surgeryinfo.StopTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("enter_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse enter time!")
+	}
+	surgeryinfo.EnterTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("exit_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse exit time!")
+	}
+	surgeryinfo.ExitTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("patient_enter_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse patient enter time!")
+	}
+	surgeryinfo.PatientEnterTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
 	err = m.DB.AddSurgeriesInformation(surgeryinfo, id)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't add surgeries information!")
@@ -234,6 +266,37 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 	surgery.OperatorSecond = r.Form.Get("operator_second")
 	surgery.HeadFixType, _ = strconv.Atoi(r.Form.Get("head_fix_type"))
 	surgery.CancellationReason = r.Form.Get("cancelation_reason")
+
+	layout := "15:04"
+	t, err := time.Parse(layout, r.Form.Get("start_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse start time!")
+	}
+	surgery.StartTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("stop_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse stop time!")
+	}
+	surgery.StopTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("enter_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse enter time!")
+	}
+	surgery.EnterTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("exit_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse exit time!")
+	}
+	surgery.ExitTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
+
+	t, err = time.Parse(layout, r.Form.Get("patient_enter_time"))
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse patient enter time!")
+	}
+	surgery.PatientEnterTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
 
 	err = m.DB.PutSurgeriesInformation(surgery)
 	if err != nil {

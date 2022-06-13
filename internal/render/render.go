@@ -49,7 +49,8 @@ func HumanPgtypeDatePersian(t pgtype.Date) string {
 }
 
 func TimestampToTime(t pgtype.Timestamp) string {
-	return t.Time.Format("15:04")
+	time := t.Time.Format("15:04")
+	return time
 }
 
 func NewRenderer(a *config.AppConfig) {
