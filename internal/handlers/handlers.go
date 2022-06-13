@@ -199,15 +199,17 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 	financial.FillDefaults()
 
 	financial.PaymentStatus = paymentStatus
-	financial.DateOfFirstContact = pgtype.Date{
-		Time:   driver.ConvertStringToDate(r.Form.Get("first_contact")).Time,
-		Status: 2,
+
+	if driver.ConvertStringToDate(r.Form.Get("first_contact")).Status != pgtype.Undefined {
+		financial.DateOfFirstContact = driver.ConvertStringToDate(r.Form.Get("first_contact"))
 	}
+
 	financial.FirstCaller = r.Form.Get("first_caller")
-	financial.DateOfPayment = pgtype.Date{
-		Time:   driver.ConvertStringToDate(r.Form.Get("payment_date")).Time,
-		Status: 2,
+
+	if driver.ConvertStringToDate(r.Form.Get("payment_date")).Status != pgtype.Undefined {
+		financial.DateOfPayment = driver.ConvertStringToDate(r.Form.Get("payment_date"))
 	}
+
 	financial.LastFourDigitsCard = r.Form.Get("payment_card_number")
 	financial.CashAmount = r.Form.Get("payment_receipt_amount")
 	financial.Bank = r.Form.Get("bank")
@@ -216,10 +218,11 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 	financial.TypeOfInsurance = r.Form.Get("insurance_type")
 	financial.FinancialVerifier = r.Form.Get("financial_verifier")
 	financial.ReceiptNumber = receiptNumber
-	financial.ReceiptDate = pgtype.Date{
-		Time:   driver.ConvertStringToDate(r.Form.Get("receipt_received_date")).Time,
-		Status: 2,
+
+	if driver.ConvertStringToDate(r.Form.Get("receipt_received_date")).Status != pgtype.Undefined {
+		financial.ReceiptDate = driver.ConvertStringToDate(r.Form.Get("receipt_received_date"))
 	}
+
 	financial.ReceiptReceiver = r.Form.Get("receipt_receiver")
 
 	err = m.DB.AddFinancialInformation(financial, id)

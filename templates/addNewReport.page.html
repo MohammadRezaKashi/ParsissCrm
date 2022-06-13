@@ -171,7 +171,7 @@ Add new report
                                 id="date_of_hospital_admission" autocomplete="off"
                                 value="
                                 {{if $surgery.DateOfHospitalAdmission}}
-                                {{humanPgtypeDate $surgery.DateOfHospitalAdmission}}
+                                {{humanPgtypeDatePersian $surgery.DateOfHospitalAdmission}}
                                 {{else}}
                                 {{end}}" 
                                 required>
@@ -186,7 +186,7 @@ Add new report
                                 name="surgery_date" id="surgery_date" autocomplete="off" 
                                 value="
                                 {{if $surgery.SurgeryDate}}
-                                {{humanPgtypeDate $surgery.SurgeryDate}}
+                                {{humanPgtypeDatePersian $surgery.SurgeryDate}}
                                 {{else}}
                                 {{end}}"
                                 required>
@@ -549,8 +549,8 @@ Add new report
                             <input class="usage form-control {{with .Form.Errors.Get " payment_date"}} is-invalid
                                 {{end}}" type="text" name="payment_date" id="payment_date" autocomplete="off"
                                 value="
-                                {{if $financial.PaymentDate}}
-                                {{humanPgtypeDate $financial.PaymentDate}}
+                                {{if $financial.DateOfPayment}}
+                                {{humanPgtypeDatePersian $financial.DateOfPayment}}
                                 {{else}}
                                 {{end}}" required>
                         </div>
@@ -572,7 +572,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " payment_receipt_amount"}} is-invalid
                                 {{end}}" type="number" name="payment_receipt_amount" id="payment_receipt_amount"
-                                autocomplete="off" value="{{$financial.PaymentReceiptAmount}}" required>
+                                autocomplete="off" value="{{$financial.CashAmount}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -583,8 +583,8 @@ Add new report
                             <input class="usage form-control {{with .Form.Errors.Get " first_contact"}} is-invalid
                                 {{end}}" type="text" name="first_contact" id="first_contact" autocomplete="off"
                                 value="
-                                {{if $financial.FirstContact}}
-                                {{humanPgtypeDate $financial.FirstContact}}
+                                {{if $financial.DateOfFirstContact}}
+                                {{humanPgtypeDatePersian $financial.DateOfFirstContact}}
                                 {{else}}
                                 {{end}}" required>
                         </div>
@@ -606,7 +606,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " payment_card_number"}} is-invalid
                                 {{end}}" type="text" name="payment_card_number" id="payment_card_number"
-                                autocomplete="off" value="{{$financial.PaymentCardNumber}}" required>
+                                autocomplete="off" value="{{$financial.LastFourDigitsCard}}" required>
                         </div>
                         
 
@@ -630,7 +630,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " discount_percentage"}} is-invalid
                                 {{end}}" type="number" name="discount_percentage" id="discount_percentage"
-                                autocomplete="off" value="{{$financial.DiscountPercentage}}" required>
+                                autocomplete="off" value="{{$financial.DiscountPercent}}" required>
                         </div>
 
 
@@ -641,7 +641,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " discount_reason"}} is-invalid {{end}}"
                                 type="text" name="discount_reason" id="discount_reason" autocomplete="off"
-                                value="{{$financial.DiscountReason}}" required>
+                                value="{{$financial.ReasonForDiscount}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -651,7 +651,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " insurance_type"}} is-invalid {{end}}"
                                 type="text" name="insurance_type" id="insurance_type" autocomplete="off"
-                                value="{{$financial.InsuranceType}}" required>
+                                value="{{$financial.TypeOfInsurance}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -673,8 +673,8 @@ Add new report
                                 is-invalid {{end}}" type="text" name="receipt_received_date" id="receipt_received_date"
                                 autocomplete="off"
                                 value="
-                                {{if $financial.ReceiptReceivedDate}}
-                                {{humanPgtypeDate $financial.ReceiptReceivedDate}}
+                                {{if $financial.ReceiptDate}}
+                                {{humanPgtypeDatePersian $financial.ReceiptDate}}
                                 {{else}}
                                 {{end}}" required>
                         </div>
