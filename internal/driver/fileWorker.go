@@ -199,7 +199,7 @@ func GetAllFinancialInformation() []models.FinancialInformation {
 			Bank:               row[28],
 			DiscountPercent:    ConvertDiscountPercentToFloat64(row[29]),
 			ReasonForDiscount:  row[30],
-			CreditAmount:       ConvertCreditAmountToInt(row[31]),
+			CreditAmount:       row[31],
 			TypeOfInsurance:    row[32],
 			FinancialVerifier:  row[33],
 			ReceiptNumber:      receiptNumber,
@@ -224,14 +224,6 @@ func ConvertPaymentStatusToInt(s string) int {
 		return 5
 	}
 	return 0
-}
-
-func ConvertCreditAmountToInt(s string) int {
-	if s == "**" {
-		return 0
-	}
-	i, _ := strconv.Atoi(s)
-	return i
 }
 
 func ConvertDiscountPercentToFloat64(s string) float64 {

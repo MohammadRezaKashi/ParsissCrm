@@ -460,6 +460,7 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 
 	m.App.Session.Put(r.Context(), "surgeryinfo", surgeryInfo[0])
 	m.App.Session.Put(r.Context(), "patient", patient)
+	m.App.Session.Put(r.Context(), "financialinfo", financialInfo[0])
 
 	render.Template(rw, r, "addNewReport.page.html", &models.TemplateData{
 		Form: forms.New(nil),

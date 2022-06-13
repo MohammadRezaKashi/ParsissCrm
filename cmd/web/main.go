@@ -46,6 +46,7 @@ func Run() (*driver.DB, error) {
 
 	gob.Register(models.SurgeriesInformation{})
 	gob.Register(models.PersonalInformation{})
+	gob.Register(models.FinancialInformation{})
 
 	inProduction := flag.Bool("production", true, "Application is in production")
 	useCache := flag.Bool("cache", true, "Use template cache")

@@ -54,6 +54,7 @@ type FinancialInformation struct {
 	PatientID          int
 	PaymentStatus      int
 	DateOfFirstContact pgtype.Date
+	PaymentNote        string
 	FirstCaller        string
 	DateOfPayment      pgtype.Date
 	LastFourDigitsCard string
@@ -61,7 +62,7 @@ type FinancialInformation struct {
 	Bank               string
 	DiscountPercent    float64
 	ReasonForDiscount  string
-	CreditAmount       int
+	CreditAmount       string
 	TypeOfInsurance    string
 	FinancialVerifier  string
 	ReceiptNumber      int
