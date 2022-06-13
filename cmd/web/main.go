@@ -103,7 +103,7 @@ func Run() (*driver.DB, error) {
 	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 
-	ReadFromFile()
+	// ReadFromFile()
 	return db, nil
 }
 

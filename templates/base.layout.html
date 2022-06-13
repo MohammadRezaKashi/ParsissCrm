@@ -15,13 +15,19 @@
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 
     <style>
-        .my-footer {
-            height: 6em;
+        #footer {
+            height: 4em;
+            position: fixed;
+            padding: 10px 10px 0px 10px;
+            bottom: 0;
+            width: 100%;
             background-color: #163b65;
-            /* margin-top: 1em; */
-            padding: 1em;
             color: #FFFFFF;
             font-size: 80%;
+        }
+
+        .container {
+            margin-bottom: 4em;
         }
     </style>
 
@@ -76,9 +82,9 @@
     {{end}}
 
 
-    <footer class="row my-footer">
+    <footer id="footer">
         <div class="row">
-            <div class="col text-center" style="margin-top: 15px;">
+            <div class="col text-center" style="margin-top: 5px;">
                 <a style="color:white;" href="http://www.parsiss.com/">Parseh Intelligent Surgical Systems Co - Home</a>
             </div>
             <div class="col">
