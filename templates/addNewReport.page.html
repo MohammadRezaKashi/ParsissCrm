@@ -52,8 +52,8 @@ Add new report
     <div class="row">
         <div class="col">            
 
-            <h3 style="margin-top: 20px;"><img src="{{$baseurl}}/static/images/AddImageIcon.png"
-                    style="height: 70px; width: 70px;"> Add New Patient</h3>
+            <h3 style="margin-top: 20px;"><img src="{{if eq $patient.Name ""}}{{$baseurl}}/static/images/AddImageIcon.png{{else}}{{$baseurl}}/static/images/PatientIcon.jpg{{end}}"
+                    style="height: 70px; width: 70px;"> {{if eq $patient.Name ""}}Add New Patient{{else}}{{$patient.Name}}{{$patient.Family}}{{end}}</h3>
 
             <h4 class="mt-4">Patient Information</h4>
             
