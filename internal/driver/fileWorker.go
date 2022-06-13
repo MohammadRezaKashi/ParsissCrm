@@ -190,7 +190,7 @@ func GetAllFinancialInformation() []models.FinancialInformation {
 	for _, row := range excelCell {
 		receiptNumber, _ := strconv.Atoi(row[49])
 		financialInfo = append(financialInfo, models.FinancialInformation{
-			PaymentStatus:      row[5],
+			PaymentStatus:      ConvertPaymentStatusToInt(row[5]),
 			DateOfFirstContact: ConvertStringToDate(row[21]),
 			FirstCaller:        row[22],
 			DateOfPayment:      ConvertStringToDate(row[25]),
@@ -199,7 +199,7 @@ func GetAllFinancialInformation() []models.FinancialInformation {
 			Bank:               row[28],
 			DiscountPercent:    ConvertDiscountPercentToFloat64(row[29]),
 			ReasonForDiscount:  row[30],
-			CreditAmount:       ConvertCreditAmountToInt(row[31]),
+			CreditAmount:       row[31],
 			TypeOfInsurance:    row[32],
 			FinancialVerifier:  row[33],
 			ReceiptNumber:      receiptNumber,
@@ -210,12 +210,20 @@ func GetAllFinancialInformation() []models.FinancialInformation {
 	return financialInfo
 }
 
-func ConvertCreditAmountToInt(s string) int {
-	if s == "**" {
-		return 0
+func ConvertPaymentStatusToInt(s string) int {
+	switch s {
+	case "پرداخت شد":
+		return 1
+	case "پرداخت نشد":
+		return 2
+	case "طرح سلامت":
+		return 3
+	case "رایگان":
+		return 4
+	case "توسط بیمارستان":
+		return 5
 	}
-	i, _ := strconv.Atoi(s)
-	return i
+	return 0
 }
 
 func ConvertDiscountPercentToFloat64(s string) float64 {

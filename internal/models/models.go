@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"github.com/jackc/pgtype"
 )
 
@@ -52,21 +50,12 @@ type SurgeriesInformation struct {
 	DateOfHospitalAdmission pgtype.Date
 }
 
-func (s *SurgeriesInformation) FillDefaults() {
-	s.SurgeryDate = pgtype.Date{Time: time.Time{}, Status: pgtype.Present}
-	s.StartTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
-	s.StopTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
-	s.EnterTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
-	s.ExitTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
-	s.PatientEnterTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
-	s.DateOfHospitalAdmission = pgtype.Date{Time: time.Time{}, Status: pgtype.Present}
-}
-
 type FinancialInformation struct {
 	ID                 int
 	PatientID          int
-	PaymentStatus      string
+	PaymentStatus      int
 	DateOfFirstContact pgtype.Date
+	PaymentNote        string
 	FirstCaller        string
 	DateOfPayment      pgtype.Date
 	LastFourDigitsCard string
@@ -74,7 +63,7 @@ type FinancialInformation struct {
 	Bank               string
 	DiscountPercent    float64
 	ReasonForDiscount  string
-	CreditAmount       int
+	CreditAmount       string
 	TypeOfInsurance    string
 	FinancialVerifier  string
 	ReceiptNumber      int

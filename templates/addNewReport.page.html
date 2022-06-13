@@ -34,6 +34,7 @@ Add new report
 {{$rep := index .Data "report"}}
 {{$patient := index .Data "patient"}}
 {{$surgery := index .Data "surgeryinfo"}}
+{{$financial := index .Data "financialinfo"}}
 {{$surgeryday := index .Data "surgeryday"}}
 {{$surgerytime := index .Data "surgerytime"}}
 {{$surgeryarea := index .Data "surgeryarea"}}
@@ -537,7 +538,7 @@ Add new report
                             </datalist>
                             <input class="form-control {{with .Form.Errors.Get " payment_status"}} is-invalid {{end}}"
                                 type="hidden" name="payment_status" id="payment_status" autocomplete="off"
-                                value="{{$rep.PaymentStatus}}" required>
+                                value="{{$financial.PaymentStatus}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -547,7 +548,11 @@ Add new report
                             {{end}}
                             <input class="usage form-control {{with .Form.Errors.Get " payment_date"}} is-invalid
                                 {{end}}" type="text" name="payment_date" id="payment_date" autocomplete="off"
-                                value="{{$rep.PaymentDate}}" required>
+                                value="
+                                {{if $financial.PaymentDate}}
+                                {{humanPgtypeDate $financial.PaymentDate}}
+                                {{else}}
+                                {{end}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -557,7 +562,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " receipt_number"}} is-invalid {{end}}"
                                 type="text" name="receipt_number" id="receipt_number" autocomplete="off"
-                                value="{{$rep.ReceiptNumber}}" required>
+                                value="{{$financial.ReceiptNumber}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -567,7 +572,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " payment_receipt_amount"}} is-invalid
                                 {{end}}" type="number" name="payment_receipt_amount" id="payment_receipt_amount"
-                                autocomplete="off" value="{{$rep.PaymentReceiptAmount}}" required>
+                                autocomplete="off" value="{{$financial.PaymentReceiptAmount}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -577,7 +582,11 @@ Add new report
                             {{end}}
                             <input class="usage form-control {{with .Form.Errors.Get " first_contact"}} is-invalid
                                 {{end}}" type="text" name="first_contact" id="first_contact" autocomplete="off"
-                                value="{{$rep.FirstContact}}" required>
+                                value="
+                                {{if $financial.FirstContact}}
+                                {{humanPgtypeDate $financial.FirstContact}}
+                                {{else}}
+                                {{end}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -587,7 +596,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " first_caller"}} is-invalid {{end}}"
                                 type="text" name="first_caller" id="first_caller" autocomplete="off"
-                                value="{{$rep.FirstCaller}}" required>
+                                value="{{$financial.FirstCaller}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -597,7 +606,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " payment_card_number"}} is-invalid
                                 {{end}}" type="text" name="payment_card_number" id="payment_card_number"
-                                autocomplete="off" value="{{$rep.PaymentCardNumber}}" required>
+                                autocomplete="off" value="{{$financial.PaymentCardNumber}}" required>
                         </div>
                         
 
@@ -610,7 +619,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " bank"}} is-invalid {{end}}" type="text"
-                                name="bank" id="bank" autocomplete="off" value="{{$rep.Bank}}" required>
+                                name="bank" id="bank" autocomplete="off" value="{{$financial.Bank}}" required>
                         </div>
 
 
@@ -621,7 +630,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " discount_percentage"}} is-invalid
                                 {{end}}" type="number" name="discount_percentage" id="discount_percentage"
-                                autocomplete="off" value="{{$rep.DiscountPercentage}}" required>
+                                autocomplete="off" value="{{$financial.DiscountPercentage}}" required>
                         </div>
 
 
@@ -632,7 +641,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " discount_reason"}} is-invalid {{end}}"
                                 type="text" name="discount_reason" id="discount_reason" autocomplete="off"
-                                value="{{$rep.DiscountReason}}" required>
+                                value="{{$financial.DiscountReason}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -642,7 +651,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " insurance_type"}} is-invalid {{end}}"
                                 type="text" name="insurance_type" id="insurance_type" autocomplete="off"
-                                value="{{$rep.InsuranceType}}" required>
+                                value="{{$financial.InsuranceType}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -652,7 +661,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " financial_verifier"}} is-invalid
                                 {{end}}" type="text" name="financial_verifier" id="financial_verifier"
-                                autocomplete="off" value="{{$rep.FinancialVerifier}}" required>
+                                autocomplete="off" value="{{$financial.FinancialVerifier}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -662,7 +671,12 @@ Add new report
                             {{end}}
                             <input class="usage form-control {{with .Form.Errors.Get " receipt_received_date"}}
                                 is-invalid {{end}}" type="text" name="receipt_received_date" id="receipt_received_date"
-                                autocomplete="off" value="{{$rep.ReceiptReceivedDate}}" required>
+                                autocomplete="off"
+                                value="
+                                {{if $financial.ReceiptReceivedDate}}
+                                {{humanPgtypeDate $financial.ReceiptReceivedDate}}
+                                {{else}}
+                                {{end}}" required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -672,7 +686,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " receipt_receiver"}} is-invalid {{end}}"
                                 type="text" name="receipt_receiver" id="receipt_receiver" autocomplete="off"
-                                value="{{$rep.ReceiptReceiver}}" required>
+                                value="{{$financial.ReceiptReceiver}}" required>
                         </div>
 
                     </div>

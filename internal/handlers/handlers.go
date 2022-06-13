@@ -191,6 +191,42 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	paymentStatus, _ := strconv.Atoi(r.Form.Get("payment_status"))
+	discountPercent, _ := strconv.ParseFloat(r.Form.Get("discount_percentage"), 32)
+	receiptNumber, _ := strconv.Atoi(r.Form.Get("receipt_number"))
+	var financial = models.FinancialInformation{
+		PaymentStatus: paymentStatus,
+		DateOfFirstContact: pgtype.Date{
+			Time:   driver.ConvertStringToDate(r.Form.Get("first_contact")).Time,
+			Status: 2,
+		},
+		FirstCaller: r.Form.Get("first_caller"),
+		DateOfPayment: pgtype.Date{
+			Time:   driver.ConvertStringToDate(r.Form.Get("payment_date")).Time,
+			Status: 2,
+		},
+		LastFourDigitsCard: r.Form.Get("payment_card_number"),
+		CashAmount:         r.Form.Get("payment_receipt_amount"),
+		Bank:               r.Form.Get("bank"),
+		DiscountPercent:    discountPercent,
+		ReasonForDiscount:  r.Form.Get("discount_reason"),
+		TypeOfInsurance:    r.Form.Get("insurance_type"),
+		FinancialVerifier:  r.Form.Get("financial_verifier"),
+		ReceiptNumber:      receiptNumber,
+		ReceiptDate: pgtype.Date{
+			Time:   driver.ConvertStringToDate(r.Form.Get("receipt_received_date")).Time,
+			Status: 2,
+		},
+		ReceiptReceiver: r.Form.Get("receipt_receiver"),
+	}
+
+	err = m.DB.AddFinancialInformation(financial, id)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't add financial information!")
+		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
+		return
+	}
+
 	http.Redirect(rw, r, "/report", http.StatusSeeOther)
 }
 
@@ -328,6 +364,12 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	financialInfo, err := m.DB.GetFinancialInformationByPatientID(id)
+	if err != nil {
+		helpers.ServerError(rw, err)
+		return
+	}
+
 	data := make(map[string]interface{})
 
 	surgeryDay, surgerytime, surgeryarea, surgeryresult, hospitaltype, paymentstatus, headfixtype, imagevalidity := GetAllSelectOptions()
@@ -398,6 +440,16 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	for index, item := range paymentstatus {
+		val, err := strconv.Atoi(item.Value)
+		if err != nil {
+			continue
+		}
+		if val == financialInfo[0].PaymentStatus {
+			paymentstatus[index].Selected = "selected"
+		}
+	}
+
 	var ct []models.Option
 	copier.Copy(&ct, &imagevalidity)
 
@@ -453,6 +505,7 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 
 	data["patient"] = patient
 	data["surgeryinfo"] = surgeryInfo[0]
+	data["financialinfo"] = financialInfo[0]
 	data["surgeryday"] = surgeryDay
 	data["surgerytime"] = surgerytime
 	data["surgeryarea"] = surgeryarea
@@ -468,6 +521,7 @@ func (m *Repository) ShowDetail(rw http.ResponseWriter, r *http.Request) {
 
 	m.App.Session.Put(r.Context(), "surgeryinfo", surgeryInfo[0])
 	m.App.Session.Put(r.Context(), "patient", patient)
+	m.App.Session.Put(r.Context(), "financialinfo", financialInfo[0])
 
 	render.Template(rw, r, "addNewReport.page.html", &models.TemplateData{
 		Form: forms.New(nil),

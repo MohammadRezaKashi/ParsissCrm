@@ -66,13 +66,13 @@ func (m *postgresDBRepo) AddFinancialInformation(financialInfo models.FinancialI
 
 	query := `
 	INSERT INTO public."FinancialInformation"(
-		patient_id, payment_status, payment_date, payment_amount, payment_type, payment_notes, receipt_number,
+		patient_id, payment_status, payment_date, payment_amount, payment_notes, receipt_number,
 	                                          first_contact, first_caller, last_four_card_number, bank,
 	                                          discount_percentage, discount_reason, credit_amount, insurance_type,
 	                                          financial_verifier, receipt_received_date, receipt_receiver)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`
 	_, err := m.DB.ExecContext(ctx, query, patientID, financialInfo.PaymentStatus, financialInfo.DateOfPayment.Time,
-		financialInfo.CashAmount, 0, "", financialInfo.ReceiptNumber, financialInfo.DateOfFirstContact.Time,
+		financialInfo.CashAmount, financialInfo.PaymentNote, financialInfo.ReceiptNumber, financialInfo.DateOfFirstContact.Time,
 		financialInfo.FirstCaller, financialInfo.LastFourDigitsCard, financialInfo.Bank, financialInfo.DiscountPercent,
 		financialInfo.ReasonForDiscount, financialInfo.CreditAmount, financialInfo.TypeOfInsurance,
 		financialInfo.FinancialVerifier, financialInfo.ReceiptDate.Time, financialInfo.ReceiptReceiver)
@@ -178,6 +178,40 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 	return surgeries, nil
 }
 
+func (m *postgresDBRepo) GetFinancialInformationByPatientID(id int) ([]models.FinancialInformation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `SELECT * FROM public."FinancialInformation"
+	WHERE patient_id = $1
+	ORDER BY id ASC`
+
+	var financials []models.FinancialInformation
+
+	rows, err := m.DB.QueryContext(ctx, query, id)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var financial models.FinancialInformation
+
+		err := rows.Scan(&financial.ID, &financial.PatientID, &financial.PaymentStatus, &financial.DateOfPayment,
+			&financial.CashAmount, &financial.PaymentNote, &financial.ReceiptNumber, &financial.DateOfFirstContact,
+			&financial.FirstCaller, &financial.LastFourDigitsCard, &financial.Bank, &financial.DiscountPercent,
+			&financial.ReasonForDiscount, &financial.CreditAmount, &financial.TypeOfInsurance, &financial.FinancialVerifier,
+			&financial.ReceiptDate, &financial.ReceiptReceiver, new(time.Time), new(time.Time))
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		financials = append(financials, financial)
+	}
+	return financials, nil
+}
+
 func (m *postgresDBRepo) PutPersonalInformation(personalInfo models.PersonalInformation) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -212,7 +246,7 @@ func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesI
 	    resident = $10, hospital = $11, hospital_type = $12, hospital_address = $13, ct = $14,
 	    mr = $15, fmri = $16, dti = $17, operator_first = $18, operator_second = $19, start_time = $20,
 	    stop_time = $21, enter_time = $22, exit_time = $23, patient_enter_time = $24, head_fix_type = $25,
-	    cancellation_reason = $26, file_number = $27, date_of_hospital_admission = $28, updated_at = $29, surgery_time = $31, fail_reason = $32
+	    cancellation_reason = $26, file_number = $27, date_of_hospital_admission = $28, updated_at = $29, surgery_time = $31
 	WHERE id = $30`
 	_, err := m.DB.ExecContext(ctx, query, surgeriesInfo.PatientID, surgeriesInfo.SurgeryDate,
 		surgeriesInfo.SurgeryDay, surgeriesInfo.SurgeryType, surgeriesInfo.SurgeryArea,
@@ -223,7 +257,7 @@ func (m *postgresDBRepo) PutSurgeriesInformation(surgeriesInfo models.SurgeriesI
 		surgeriesInfo.OperatorSecond, surgeriesInfo.StartTime.Time, surgeriesInfo.StopTime.Time,
 		surgeriesInfo.EnterTime.Time, surgeriesInfo.ExitTime.Time, surgeriesInfo.PatientEnterTime.Time,
 		surgeriesInfo.HeadFixType, surgeriesInfo.CancellationReason, surgeriesInfo.FileNumber,
-		surgeriesInfo.DateOfHospitalAdmission, time.Now(), surgeriesInfo.ID, surgeriesInfo.SurgeryTime, surgeriesInfo.FailReason)
+		surgeriesInfo.DateOfHospitalAdmission, time.Now(), surgeriesInfo.ID, surgeriesInfo.SurgeryTime)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -237,13 +271,13 @@ func (m *postgresDBRepo) PutFinancialInformation(financialInfo models.FinancialI
 
 	query := `
 	UPDATE public."FinancialInformation"
-	SET patient_id = $1, payment_status = $2, payment_date = $3, payment_amount = $4, payment_type = $5,
-	    payment_notes = $6, receipt_number = $7, first_contact = $8, first_caller = $9, last_four_card_number = $10,
-	    bank = $11, discount_percentage = $12, discount_reason = $13, credit_amount = $14, insurance_type = $15,
-	    financial_verifier = $16, receipt_received_date = $17, receipt_receiver = $18, updated_at = $19
-	WHERE id = $27`
+	SET patient_id = $1, payment_status = $2, payment_date = $3, payment_amount = $4, payment_notes = $5,
+	    receipt_number = $6, first_contact = $7, first_caller = $8, last_four_card_number = $9,
+	    bank = $10, discount_percentage = $11, discount_reason = $12, credit_amount = $13, insurance_type = $14,
+	    financial_verifier = $15, receipt_received_date = $16, receipt_receiver = $17, updated_at = $18
+	WHERE id = $19`
 	_, err := m.DB.ExecContext(ctx, query, financialInfo.PatientID, financialInfo.PaymentStatus,
-		financialInfo.DateOfPayment, financialInfo.CashAmount, 0, "", financialInfo.ReceiptNumber,
+		financialInfo.DateOfPayment, financialInfo.CashAmount, financialInfo.PaymentNote, financialInfo.ReceiptNumber,
 		financialInfo.DateOfFirstContact, financialInfo.FirstCaller, financialInfo.LastFourDigitsCard,
 		financialInfo.Bank, financialInfo.DiscountPercent, financialInfo.ReasonForDiscount, financialInfo.CreditAmount,
 		financialInfo.TypeOfInsurance, financialInfo.FinancialVerifier, financialInfo.ReceiptDate,
