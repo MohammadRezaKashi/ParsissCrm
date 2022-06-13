@@ -194,31 +194,33 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 	paymentStatus, _ := strconv.Atoi(r.Form.Get("payment_status"))
 	discountPercent, _ := strconv.ParseFloat(r.Form.Get("discount_percentage"), 32)
 	receiptNumber, _ := strconv.Atoi(r.Form.Get("receipt_number"))
-	var financial = models.FinancialInformation{
-		PaymentStatus: paymentStatus,
-		DateOfFirstContact: pgtype.Date{
-			Time:   driver.ConvertStringToDate(r.Form.Get("first_contact")).Time,
-			Status: 2,
-		},
-		FirstCaller: r.Form.Get("first_caller"),
-		DateOfPayment: pgtype.Date{
-			Time:   driver.ConvertStringToDate(r.Form.Get("payment_date")).Time,
-			Status: 2,
-		},
-		LastFourDigitsCard: r.Form.Get("payment_card_number"),
-		CashAmount:         r.Form.Get("payment_receipt_amount"),
-		Bank:               r.Form.Get("bank"),
-		DiscountPercent:    discountPercent,
-		ReasonForDiscount:  r.Form.Get("discount_reason"),
-		TypeOfInsurance:    r.Form.Get("insurance_type"),
-		FinancialVerifier:  r.Form.Get("financial_verifier"),
-		ReceiptNumber:      receiptNumber,
-		ReceiptDate: pgtype.Date{
-			Time:   driver.ConvertStringToDate(r.Form.Get("receipt_received_date")).Time,
-			Status: 2,
-		},
-		ReceiptReceiver: r.Form.Get("receipt_receiver"),
+
+	financial := models.FinancialInformation{}
+	financial.FillDefaults()
+
+	financial.PaymentStatus = paymentStatus
+	financial.DateOfFirstContact = pgtype.Date{
+		Time:   driver.ConvertStringToDate(r.Form.Get("first_contact")).Time,
+		Status: 2,
 	}
+	financial.FirstCaller = r.Form.Get("first_caller")
+	financial.DateOfPayment = pgtype.Date{
+		Time:   driver.ConvertStringToDate(r.Form.Get("payment_date")).Time,
+		Status: 2,
+	}
+	financial.LastFourDigitsCard = r.Form.Get("payment_card_number")
+	financial.CashAmount = r.Form.Get("payment_receipt_amount")
+	financial.Bank = r.Form.Get("bank")
+	financial.DiscountPercent = discountPercent
+	financial.ReasonForDiscount = r.Form.Get("discount_reason")
+	financial.TypeOfInsurance = r.Form.Get("insurance_type")
+	financial.FinancialVerifier = r.Form.Get("financial_verifier")
+	financial.ReceiptNumber = receiptNumber
+	financial.ReceiptDate = pgtype.Date{
+		Time:   driver.ConvertStringToDate(r.Form.Get("receipt_received_date")).Time,
+		Status: 2,
+	}
+	financial.ReceiptReceiver = r.Form.Get("receipt_receiver")
 
 	err = m.DB.AddFinancialInformation(financial, id)
 	if err != nil {

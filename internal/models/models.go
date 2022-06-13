@@ -83,6 +83,12 @@ type FinancialInformation struct {
 	ReceiptReceiver    string
 }
 
+func (f *FinancialInformation) FillDefaults() {
+	f.DateOfFirstContact = pgtype.Date{Time: time.Time{}, Status: pgtype.Present}
+	f.DateOfPayment = pgtype.Date{Time: time.Time{}, Status: pgtype.Present}
+	f.ReceiptDate = pgtype.Date{Time: time.Time{}, Status: pgtype.Present}
+}
+
 type SoftwareInformation struct {
 	FRE                     float64
 	RegistrationTime        int
