@@ -39,9 +39,9 @@ func (m *postgresDBRepo) AddSurgeriesInformation(surgeriesInformation models.Sur
 	                                          surgery_result, surgeon_first, surgeon_second, resident, hospital,
 	                                          hospital_type, hospital_address, ct, mr, fmri, dti, operator_first, operator_second,
 	                                          start_time, stop_time, enter_time, exit_time, patient_enter_time,
-	                                          head_fix_type, cancellation_reason, file_number, date_of_hospital_admission, surgery_time, fail_reason)
+	                                          head_fix_type, cancellation_reason, file_number, date_of_hospital_admission, surgery_time)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22,
-		        $23, $24, $25, $26, $27, $28, $29, $30)`
+		        $23, $24, $25, $26, $27, $28, $29)`
 
 	_, err := m.DB.ExecContext(ctx, query, patientID, surgeriesInformation.SurgeryDate, surgeriesInformation.SurgeryDay,
 		surgeriesInformation.SurgeryType, surgeriesInformation.SurgeryArea, surgeriesInformation.SurgeryDescription,
@@ -52,7 +52,7 @@ func (m *postgresDBRepo) AddSurgeriesInformation(surgeriesInformation models.Sur
 		surgeriesInformation.StartTime.Time, surgeriesInformation.StopTime.Time, surgeriesInformation.EnterTime.Time,
 		surgeriesInformation.ExitTime.Time, surgeriesInformation.PatientEnterTime.Time, surgeriesInformation.HeadFixType,
 		surgeriesInformation.CancellationReason, surgeriesInformation.FileNumber, surgeriesInformation.DateOfHospitalAdmission.Time,
-		surgeriesInformation.SurgeryTime, surgeriesInformation.FailReason)
+		surgeriesInformation.SurgeryTime)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -151,7 +151,7 @@ func (m *postgresDBRepo) GetSurgicalInformationByPatientID(id int) ([]models.Sur
 		var surgery models.SurgeriesInformation
 
 		err := rows.Scan(&surgery.ID, &surgery.PatientID, &surgery.SurgeryDate, &surgery.SurgeryDay, &surgery.SurgeryTime,
-			&surgery.SurgeryType, &surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.FailReason, &surgery.SurgeryResult,
+			&surgery.SurgeryType, &surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.SurgeryResult,
 			&surgery.SurgeonFirst, &surgery.SurgeonSecond, &surgery.Resident, &surgery.Hospital,
 			&surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.FMRI, &surgery.DTI,
 			&surgery.OperatorFirst, &surgery.OperatorSecond, &startTime, &stopTime, &enterTime, &exitTime,

@@ -276,17 +276,6 @@ Add new report
                         </div>
 
                         <div class="form-group mt-3">
-                            <label for="fail_reason">Fail Reason:</label>
-                            {{ with .Form.Errors.Get "fail_reason"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <textarea style="height: 150px; width: 100%;" class="wpcf7-form-control wpcf7-textarea"
-                                aria-invalid="false" class="form-control {{with .Form.Errors.Get " fail_reason"}}
-                                is-invalid {{end}}" name="fail_reason" id="fail_reason" autocomplete="off"
-                                value="{{$surgery.FailReason}}" required>{{$surgery.FailReason}}</textarea>
-                        </div>
-
-                        <div class="form-group mt-3">
                             <label for="surgeon_first">Surgeon First:</label>
                             {{ with .Form.Errors.Get "surgeon_first"}}
                             <label class="text-danger">{{.}}</label>
