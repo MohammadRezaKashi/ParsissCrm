@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	"github.com/jackc/pgtype"
 )
 
@@ -48,6 +50,16 @@ type SurgeriesInformation struct {
 	CancellationReason      string
 	FileNumber              string
 	DateOfHospitalAdmission pgtype.Date
+}
+
+func (s *SurgeriesInformation) FillDefaults() {
+	s.SurgeryDate = pgtype.Date{Time: time.Time{}, Status: pgtype.Present}
+	s.StartTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
+	s.StopTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
+	s.EnterTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
+	s.ExitTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
+	s.PatientEnterTime = pgtype.Timestamp{Time: time.Time{}, Status: pgtype.Present}
+	s.DateOfHospitalAdmission = pgtype.Date{Time: time.Time{}, Status: pgtype.Present}
 }
 
 type FinancialInformation struct {
