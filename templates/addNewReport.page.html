@@ -169,11 +169,7 @@ Add new report
                             <input class="usage form-control {{with .Form.Errors.Get " date_of_hospital_admission"}}
                                 is-invalid {{end}}" type="text" name="date_of_hospital_admission"
                                 id="date_of_hospital_admission" autocomplete="off"
-                                value="
-                                {{if $surgery.DateOfHospitalAdmission}}
-                                {{humanPgtypeDatePersian $surgery.DateOfHospitalAdmission}}
-                                {{else}}
-                                {{end}}" 
+                                value="{{if $surgery.DateOfHospitalAdmission}}{{humanPgtypeDate $surgery.DateOfHospitalAdmission}}{{else}}{{end}}" 
                                 required>
                         </div>
                         
@@ -186,7 +182,7 @@ Add new report
                                 name="surgery_date" id="surgery_date" autocomplete="off" 
                                 value="
                                 {{if $surgery.SurgeryDate}}
-                                {{humanPgtypeDatePersian $surgery.SurgeryDate}}
+                                {{humanPgtypeDate $surgery.SurgeryDate}}
                                 {{else}}
                                 {{end}}"
                                 required>
@@ -539,7 +535,7 @@ Add new report
                                 {{end}}" type="text" name="payment_date" id="payment_date" autocomplete="off"
                                 value="
                                 {{if $financial.DateOfPayment}}
-                                {{humanPgtypeDatePersian $financial.DateOfPayment}}
+                                {{humanPgtypeDate $financial.DateOfPayment}}
                                 {{else}}
                                 {{end}}" required>
                         </div>
@@ -573,7 +569,7 @@ Add new report
                                 {{end}}" type="text" name="first_contact" id="first_contact" autocomplete="off"
                                 value="
                                 {{if $financial.DateOfFirstContact}}
-                                {{humanPgtypeDatePersian $financial.DateOfFirstContact}}
+                                {{humanPgtypeDate $financial.DateOfFirstContact}}
                                 {{else}}
                                 {{end}}" required>
                         </div>
@@ -663,7 +659,7 @@ Add new report
                                 autocomplete="off"
                                 value="
                                 {{if $financial.ReceiptDate}}
-                                {{humanPgtypeDatePersian $financial.ReceiptDate}}
+                                {{humanPgtypeDate $financial.ReceiptDate}}
                                 {{else}}
                                 {{end}}" required>
                         </div>
@@ -710,7 +706,7 @@ Add new report
             persian: {
                 locale: 'en'
             }
-        }
+        },
     });
 
     
