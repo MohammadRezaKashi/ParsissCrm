@@ -13,4 +13,5 @@ type DatabaseRepo interface {
 	PutPersonalInformation(personalInfo models.PersonalInformation) error
 	PutSurgeriesInformation(surgeriesInfo models.SurgeriesInformation) error
 	PutFinancialInformation(surgeriesInfo models.FinancialInformation) error
+	GetDistinctList(tableName string, columnName string) ([]interface{}, error)
 }
