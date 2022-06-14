@@ -288,3 +288,27 @@ func (m *postgresDBRepo) PutFinancialInformation(financialInfo models.FinancialI
 	}
 	return nil
 }
+
+func (m *postgresDBRepo) GetDistinctList(tableName string, columnName string) ([]interface{}, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+	SELECT DISTINCT $1 FROM public.$2`
+	rows, err := m.DB.QueryContext(ctx, query, columnName, tableName)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	var list []interface{}
+	for rows.Next() {
+		var value interface{}
+		err := rows.Scan(&value)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		list = append(list, value)
+	}
+	return list, nil
+}

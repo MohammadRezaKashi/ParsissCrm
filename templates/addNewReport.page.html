@@ -299,11 +299,8 @@ Add new report
                             <input class="form-control {{with .Form.Errors.Get " resident"}} is-invalid {{end}}"
                                 type="text" name="resident" id="resident" autocomplete="off" value="{{$surgery.Resident}}"
                                 required>
-                        </div>                        
-
-                    </div>
-                    <div class="col">
-
+                        </div>       
+                        
                         <div class="form-group mt-3">
                             <label for="hospital">Hospital:</label>
                             {{ with .Form.Errors.Get "hospital"}}
@@ -329,6 +326,9 @@ Add new report
                                 type="hidden" name="hospital_type" id="hospital_type" autocomplete="off"
                                 value="{{$surgery.HospitalType}}" required>
                         </div>
+
+                    </div>
+                    <div class="col">                        
 
                         <div class="form-group mt-3">
                             <label for="hospital_address">Hospital Address:</label>
