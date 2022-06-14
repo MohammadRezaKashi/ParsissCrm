@@ -49,6 +49,7 @@ func (m *Repository) Report(rw http.ResponseWriter, r *http.Request) {
 	}
 	data := make(map[string]interface{})
 	data["patients"] = patients
+	data["baseurl"] = "http://localhost:8080"
 	render.Template(rw, r, "report.page.html", &models.TemplateData{
 		Data: data,
 	})

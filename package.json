@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "accordion-js": "^3.3.0",
     "jquery": "^3.6.0",
     "persian-datepicker": "^1.2.0"
   },

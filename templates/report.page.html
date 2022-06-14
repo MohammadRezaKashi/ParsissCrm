@@ -1,8 +1,11 @@
 {{template "base" .}}
 
 {{define "css"}}
+{{$baseurl := index .Data "baseurl"}}
+
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
 <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="{{$baseurl}}/node_modules/accordion-js/dist/accordion.min.css">
 <style>
     * {
         box-sizing: border-box;
@@ -99,6 +102,10 @@ Statistical Report
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="{{$baseurl}}/node_modules/accordion-js/dist/accordion.min.js"></script>
+<script>
+    new Accordion('.accordion-container');
+</script>
 <script>
     $(document).ready(function () {
         $('#all-rep').DataTable({
