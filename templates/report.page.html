@@ -136,7 +136,8 @@ Statistical Report
         <button class="accordion">Hospital Type</button>
         <div name="hospital_type" class="panel">
             {{range $filters.HospitalTypeOptions}}
-            <input type="checkbox" name="{{.Text}}" value="{{.Value}}" {{if eq .Selected "selected"}}checked{{end}} style="margin: 1px;">   {{.Text}}<br></input>
+            <input type="checkbox" name="{{.Text}}" value="{{.Value}}" {{if eq .Selected "selected" }}checked{{end}}
+                style="margin: 1px;"> {{.Text}}<br></input>
             {{end}}
         </div>
 
@@ -160,7 +161,7 @@ Statistical Report
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
-        if(window.location.pathname == '/report'){
+        if (window.location.pathname == '/report') {
             let parent = $('.dropdown-item[href="/report"]').parent().parent().parent().find('.nav-link')
             parent[0].classList.add('active');
         }
@@ -189,29 +190,44 @@ Statistical Report
     }
     var filterBody = {}
 
-    $('input[type="checkbox"]').on('change',function(){
-        if($(this).is(":checked")){
-            filterBody[$(this).attr('name')] = 0
-            filterBody[$(this).parent().attr('name')] = 0
-        }else{
+    $('input[type="checkbox"]').on('change', function () {
+        if ($(this).is(":checked")) {
+            filterBody[$(this).attr('name')] = $(this).parent().attr('name')
+        } else {
             delete filterBody[$(this).attr('name')]
-            delete filterBody[$(this).parent().attr('name')]
         }
         doFilter()
     })
-    function doFilter(){
+    function doFilter() {
         $.ajax({
-            method:'post',
-            dataType:'json',
-            url:'/report/filters/show',
-            data:JSON.stringify(filterBody),
-            contentType:'application/json',
-            beforeSend: function(xhrObj){
-                xhrObj.setRequestHeader("Content-Type","application/json");
-                xhrObj.setRequestHeader("Accept","application/json");
+            method: 'get',
+            dataType: 'json',
+            url: '/report/filters/show',
+            data: filterBody,
+            contentType: 'application/json',
+            beforeSend: function (xhrObj) {
+                xhrObj.setRequestHeader("Content-Type", "application/json");
+                xhrObj.setRequestHeader("Accept", "application/json");
+                xhrObj.setRequestHeader('X-CSRF-Token', "{{.CSRFToken}}");
             },
-            success:function(response){
-                $('#all-rep tbody').html(response)
+            success: function (response) {
+                $pa = response
+                console.log($pa)
+                $('#all-rep').DataTable().ajax.reload()
+
+                // let tableHtml = ''
+                // $.each(response, function (index, value) {                    
+                //     tableHtml += '<tr>'
+                //     tableHtml += '<td>' + value.ID + '</td>'
+                //     tableHtml += '<td>' + value.Name + '</td>'
+                //     tableHtml += '<td>' + value.Family + '</td>'
+                //     tableHtml += '<td>' + value.NationalID + '</td>'
+                //     tableHtml += '<td>' + value.PhoneNumber + '</td>'
+                //     tableHtml += '<td><a href="/report/detail/' + value.ID + '/show">Detail</a></td>'
+                //     tableHtml += '</tr>'
+                // })
+
+                // $('#all-rep tbody').html(tableHtml)
             }
         })
     }
