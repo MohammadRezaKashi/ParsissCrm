@@ -201,8 +201,8 @@ Statistical Report
     })
     function doFilter(){
         $.ajax({
-            method:'get',
-            dataType:'html',
+            method:'post',
+            dataType:'json',
             url:'/report/filters/show',
             data:JSON.stringify(filterBody),
             contentType:'application/json',
