@@ -65,12 +65,12 @@
         transition: 0.4s;
     }
 
-    .active,
-    .accordion:hover {
+    .sidebar .active,
+    .sidebar .accordion:hover {
         background-color: #ccc;
     }
 
-    .accordion:after {
+    .sidebar .accordion:after {
         content: '\002B';
         color: #777;
         font-weight: bold;
@@ -78,7 +78,7 @@
         margin-left: 5px;
     }
 
-    .active:after {
+    .sidebar .active:after {
         content: "\2212";
     }
 
@@ -97,6 +97,7 @@ Statistical Report
 {{end}}
 
 {{define "content"}}
+{{$filters := index .Data "filters"}}
 <div class="row" style="margin: 5px;">
     <div class="column" style="width: 80%;">
         {{$pa := index .Data "patients"}}
@@ -129,11 +130,15 @@ Statistical Report
             </div>
         </div>
     </div>
-    <div class="column" style="width: 20%; border: solid; border-color: black; border-width: 1px;">
+
+    <div class="column sidebar" style="width: 20%; border: solid; border-color: black; border-width: 1px;">
+        <form action="/report/filters/show" method="post"></form>
         <h2>Filters</h2>
-        <button class="accordion">Section 1</button>
+        <button class="accordion">Hospital Type</button>
         <div class="panel">
-            <p>Lorem ipsum...</p>
+            {{range $filters.HospitalTypeOptions}}
+            <input type="checkbox" name="{{.Text}}" value="{{.Value}}" {{if eq .Selected "selected"}}checked{{end}} style="margin: 1px;">   {{.Text}}<br></input>
+            {{end}}
         </div>
 
         <button class="accordion">Section 2</button>
@@ -145,6 +150,8 @@ Statistical Report
         <div class="panel">
             <p>Lorem ipsum...</p>
         </div>
+        <input type="submit" class="btn btn-primary" value="Apply" style="float: right; margin: 3px;">
+        </form>
     </div>
 </div>
 {{end}}
@@ -155,6 +162,11 @@ Statistical Report
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
+        if(window.location.pathname == '/report'){
+            let parent = $('.dropdown-item[href="/report"]').parent().parent().parent().find('.nav-link')
+            parent[0].classList.add('active');
+        }
+
         $('#all-rep').DataTable({
             lengthMenu: [
                 [15, 25, 50, -1],
@@ -176,6 +188,32 @@ Statistical Report
                 panel.style.maxHeight = panel.scrollHeight + "px";
             }
         });
+    }
+    var filterBody = {}
+
+    $('input[type="checkbox"]').on('change',function(){
+        if($(this).is(":checked")){
+            filterBody[$(this).attr('name')] = 0           
+        }else{
+            delete filterBody[$(this).attr('name')]
+        }
+        doFilter()
+    })
+    function doFilter(){
+        $.ajax({
+            method:'post',
+            dataType:'html',
+            url:'/report/filters/show',
+            data:JSON.stringify(filterBody),
+            contentType:'application/json',
+            beforeSend: function(xhrObj){
+                xhrObj.setRequestHeader("Content-Type","application/json");
+                xhrObj.setRequestHeader("Accept","application/json");
+            },
+            success:function(response){
+                $('#all-rep tbody').html(response)
+            }
+        })
     }
 </script>
 {{end}}

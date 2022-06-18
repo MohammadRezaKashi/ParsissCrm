@@ -47,12 +47,21 @@ Contact
             <p>&emsp;1418693914</p>
 
             <h5>Email</h5>
-            <p>&emsp;contact@parsiss.com  <a href = "mailto: contact@parsiss.com">Send Email</a> </p>
-                      
+            <p>&emsp;contact@parsiss.com <a href="mailto: contact@parsiss.com">Send Email</a> </p>
+
         </div>
     </div>
 </div>
 {{end}}
 
 {{define "js"}}
+<script>
+    $(document).ready(function ($) {
+        if (window.location.pathname === '/contact') {
+
+            $('.nav-link[href="/contact"]').addClass('active');
+        }
+    });
+</script>
+
 {{end}}

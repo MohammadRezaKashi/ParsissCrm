@@ -49,9 +49,17 @@ func (m *Repository) Report(rw http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(rw, err)
 		return
 	}
+
+	var filters = models.Filters{}
+
+	_, _, _, _, hospitaltype, _, _ := GetAllSelectOptionsSurgery()
+
+	filters.HospitalTypeOptions = hospitaltype
+
 	data := make(map[string]interface{})
 	data["patients"] = patients
-	data["baseurl"] = "http://localhost:8080"
+	data["filters"] = filters
+	data["baseurl"] = baseUrl
 	render.Template(rw, r, "report.page.html", &models.TemplateData{
 		Data: data,
 	})
@@ -553,4 +561,7 @@ func GetAllSelectOptionsSurgery() ([]models.Option, []models.Option, []models.Op
 	}
 
 	return surgeryDay, surgerytime, surgeryarea, surgeryresult, hospitaltype, headfixtype, imagevalidity
+}
+
+func (m *Repository) ShowFilters(w http.ResponseWriter, r *http.Request) {
 }

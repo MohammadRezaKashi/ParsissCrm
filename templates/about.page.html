@@ -12,4 +12,12 @@ Contact
 {{end}}
 
 {{define "js"}}
+<script>
+    $(document).ready(function ($) {
+        if (window.location.pathname === '/about') {
+
+            $('.nav-link[href="/about"]').addClass('active');
+        }
+    });
+</script>
 {{end}}

@@ -57,3 +57,14 @@
     </div>
 </div>
 {{end}}
+
+{{define "js"}}
+<script>
+    $(document).ready(function ($) {
+        if (window.location.pathname === '/') {
+
+            $('.nav-link[href="/"]').addClass('active');
+        }
+    });
+</script>
+{{end}}

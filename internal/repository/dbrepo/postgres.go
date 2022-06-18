@@ -3,6 +3,7 @@ package dbrepo
 import (
 	"ParsissCrm/internal/models"
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -293,9 +294,9 @@ func (m *postgresDBRepo) GetDistinctList(tableName string, columnName string) ([
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `
-	SELECT DISTINCT $1 FROM public.$2`
-	rows, err := m.DB.QueryContext(ctx, query, columnName, tableName)
+	query := fmt.Sprintf("SELECT DISTINCT %s FROM public.\"%s\"", columnName, tableName)
+
+	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
 		log.Println(err)
 		return nil, err

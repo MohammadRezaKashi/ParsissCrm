@@ -16,7 +16,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Use(middleware.RealIP)
 	mux.Use(middleware.Logger)
 	mux.Use(middleware.Recoverer)
-	mux.Use(NoSurf)
+	//mux.Use(NoSurf)
 	mux.Use(SessionLoad)
 
 	fileServer := http.FileServer(http.Dir("./static/."))
@@ -40,6 +40,8 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/report/detail/{id}/show", handlers.Repo.ShowDetail)
 
 	mux.Post("/report/post-update-report/{id}", handlers.Repo.PostUpdateReport)
+
+	mux.Post("/report/filters/show", handlers.Repo.ShowFilters)
 
 	return mux
 }

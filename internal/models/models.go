@@ -100,3 +100,7 @@ type Option struct {
 	Value, Text string
 	Selected    string
 }
+
+type Filters struct {
+	HospitalTypeOptions []Option
+}
