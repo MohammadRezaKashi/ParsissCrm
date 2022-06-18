@@ -150,7 +150,6 @@ Statistical Report
         <div class="panel">
             <p>Lorem ipsum...</p>
         </div>
-        <input type="submit" class="btn btn-primary" value="Apply" style="float: right; margin: 3px;">
     </div>
 </div>
 {{end}}
@@ -211,23 +210,17 @@ Statistical Report
                 xhrObj.setRequestHeader('X-CSRF-Token', "{{.CSRFToken}}");
             },
             success: function (response) {
-                $pa = response
-                console.log($pa)
-                $('#all-rep').DataTable().ajax.reload()
-
-                // let tableHtml = ''
-                // $.each(response, function (index, value) {                    
-                //     tableHtml += '<tr>'
-                //     tableHtml += '<td>' + value.ID + '</td>'
-                //     tableHtml += '<td>' + value.Name + '</td>'
-                //     tableHtml += '<td>' + value.Family + '</td>'
-                //     tableHtml += '<td>' + value.NationalID + '</td>'
-                //     tableHtml += '<td>' + value.PhoneNumber + '</td>'
-                //     tableHtml += '<td><a href="/report/detail/' + value.ID + '/show">Detail</a></td>'
-                //     tableHtml += '</tr>'
-                // })
-
-                // $('#all-rep tbody').html(tableHtml)
+                $('#all-rep').DataTable().clear()
+                $.each(response, function(index, value){
+                    $('#all-rep').DataTable().row.add([
+                        value.ID,
+                        value.Name,
+                        value.Family,
+                        value.NationalID,
+                        value.PhoneNumber,
+                        '<a href="/report/detail/'+value.ID+'/show">Detail</a>'
+                    ]).draw()
+                })
             }
         })
     }
