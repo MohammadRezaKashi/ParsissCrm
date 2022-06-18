@@ -9,6 +9,7 @@ import (
 	"ParsissCrm/internal/render"
 	"ParsissCrm/internal/repository"
 	"ParsissCrm/internal/repository/dbrepo"
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"time"
@@ -564,4 +565,13 @@ func GetAllSelectOptionsSurgery() ([]models.Option, []models.Option, []models.Op
 }
 
 func (m *Repository) ShowFilters(w http.ResponseWriter, r *http.Request) {
+	var p []string
+
+	// Try to decode the request body into the struct. If there is an error,
+	// respond to the client with the error message and a 400 status code.
+	err := json.NewDecoder(r.Body).Decode(&p)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 }
