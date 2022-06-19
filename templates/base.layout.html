@@ -16,12 +16,11 @@
 
     <style>
         * { padding: 0; margin: 0; }
-        html { height: calc(100% - 3.5rem); }
+        html { height: calc(100% - 4rem); }
         body { 
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-            min-height: 100%; 
+            margin-bottom: 4rem;
         }
 
         #footer {
@@ -33,10 +32,6 @@
             background-color: #163b65;
             color: #FFFFFF;
             font-size: 80%;
-        }
-
-        .container {
-            margin-bottom: 4em;
         }
     </style>
 
@@ -85,11 +80,11 @@
 
     {{end}}
 
+    <div style="flex-grow: 1; margin-bottom: 4rem;">
+        {{block "content" .}}
 
-    {{block "content" .}}
-
-    {{end}}
-
+        {{end}}
+    </div>
 
     <footer id="footer">
         <div class="row">
