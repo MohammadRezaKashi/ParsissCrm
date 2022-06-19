@@ -98,11 +98,12 @@ Statistical Report
 
 {{define "content"}}
 {{$filters := index .Data "filters"}}
-<div class="row" style="margin: 5px;">
+
+<div class="row" style="margin: 5px; flex-grow: 1;">
     <div class="column" style="width: 80%;">
         {{$pa := index .Data "patients"}}
         <div id="table-wrapper">
-            <div id="table-scroll" style="height: 745px">
+            <div id="table-scroll" style="height: 100%">
                 <table class="table table-striped table-hover" id="all-rep">
                     <thead>
                         <tr>
@@ -146,6 +147,10 @@ Statistical Report
             <p>Lorem ipsum...</p>
         </div>
 
+        <button class="accordion">Section 3</button>
+        <div class="panel">
+            <p>Lorem ipsum...</p>
+        </div>
         <button class="accordion">Section 3</button>
         <div class="panel">
             <p>Lorem ipsum...</p>
