@@ -170,11 +170,15 @@ Statistical Report
             parent[0].classList.add('active');
         }
 
+        let extra = $('#main-content').outerHeight() - $('table').height();
+        let heightOfHtml = $('html').height() - $('.navbar').outerHeight() - $('footer').outerHeight() - extra;
+
         $('#all-rep').DataTable({
             lengthMenu: [
                 [15, 25, 50, -1],
                 [15, 25, 50, 'All'],
             ],
+            scrollY: `calc(${heightOfHtml}px - 4rem)`,
         });
     });
 
