@@ -535,7 +535,7 @@ Add new report
                             {{end}}
                             <input class="usage form-control {{with .Form.Errors.Get " payment_date"}} is-invalid
                                 {{end}}" type="text" name="payment_date" id="payment_date" autocomplete="off" 
-                                style="background-color: #FFFFFF" 
+                                style="background-color: #FFFFFF" readonly
                                 value="
                                 {{if $financial.DateOfPayment}}
                                 {{humanPgtypeDate $financial.DateOfPayment}}
