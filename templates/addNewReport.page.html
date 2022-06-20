@@ -110,10 +110,10 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " phone_number"}} is-invalid {{end}}"
+                                onkeydown="return lengthCheck(event, this, 11) || validateNumber(event)"
                                 type="text" name="phone_number" id="phone_number" autocomplete="off"
                                 value="{{$patient.PhoneNumber}}" >
                         </div>
-
                         <div class="form-group mt-3">
                             <label for="address">Address:</label>
                             {{ with .Form.Errors.Get "address"}}
@@ -158,6 +158,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " file_number"}} is-invalid {{end}}"
                                 type="text" name="file_number" id="file_number" autocomplete="off"
+                                onkeydown="return validateNumber(event)"
                                 value="{{$surgery.FileNumber}}">
                         </div>
 
@@ -169,6 +170,7 @@ Add new report
                             <input class="usage form-control {{with .Form.Errors.Get " date_of_hospital_admission"}}
                                 is-invalid {{end}}" type="text" name="date_of_hospital_admission"
                                 id="date_of_hospital_admission" autocomplete="off"
+                                style="background-color: #FFFFFF" readonly="readonly"
                                 value="{{if $surgery.DateOfHospitalAdmission}}{{humanPgtypeDate $surgery.DateOfHospitalAdmission}}{{else}}{{end}}" 
                                 >
                         </div>
@@ -179,7 +181,8 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="usage form-control {{with .Form.Errors.Get " surgery_date"}} is-invalid {{end}}" type="text"
-                                name="surgery_date" id="surgery_date" autocomplete="off" 
+                                name="surgery_date" id="surgery_date" autocomplete="off"
+                                style="background-color: #FFFFFF" readonly="readonly"
                                 value="
                                 {{if $surgery.SurgeryDate}}
                                 {{humanPgtypeDate $surgery.SurgeryDate}}
@@ -531,7 +534,8 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="usage form-control {{with .Form.Errors.Get " payment_date"}} is-invalid
-                                {{end}}" type="text" name="payment_date" id="payment_date" autocomplete="off"
+                                {{end}}" type="text" name="payment_date" id="payment_date" autocomplete="off" 
+                                style="background-color: #FFFFFF" readonly
                                 value="
                                 {{if $financial.DateOfPayment}}
                                 {{humanPgtypeDate $financial.DateOfPayment}}
@@ -545,6 +549,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " receipt_number"}} is-invalid {{end}}"
+                                onkeydown="return validateNumber(event)"
                                 type="text" name="receipt_number" id="receipt_number" autocomplete="off"
                                 value="{{$financial.ReceiptNumber}}">
                         </div>
@@ -566,6 +571,7 @@ Add new report
                             {{end}}
                             <input class="usage form-control {{with .Form.Errors.Get " first_contact"}} is-invalid
                                 {{end}}" type="text" name="first_contact" id="first_contact" autocomplete="off"
+                                style="background-color: #FFFFFF" readonly="readonly"
                                 value="
                                 {{if $financial.DateOfFirstContact}}
                                 {{humanPgtypeDate $financial.DateOfFirstContact}}
@@ -614,6 +620,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " discount_percentage"}} is-invalid
                                 {{end}}" type="number" name="discount_percentage" id="discount_percentage"
+                                min="0" max="100"
                                 autocomplete="off" value="{{$financial.DiscountPercent}}" >
                         </div>
 
@@ -655,6 +662,7 @@ Add new report
                             {{end}}
                             <input class="usage form-control {{with .Form.Errors.Get " receipt_received_date"}}
                                 is-invalid {{end}}" type="text" name="receipt_received_date" id="receipt_received_date"
+                                style="background-color: #FFFFFF" readonly="readonly"
                                 autocomplete="off"
                                 value="
                                 {{if $financial.ReceiptDate}}
@@ -670,6 +678,7 @@ Add new report
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get " receipt_receiver"}} is-invalid {{end}}"
                                 type="text" name="receipt_receiver" id="receipt_receiver" autocomplete="off"
+                                style="background-color: #FFFFFF" readonly="readonly"
                                 value="{{$financial.ReceiptReceiver}}" >
                         </div>
 
@@ -697,8 +706,22 @@ Add new report
 <script src="{{$baseurl}}/node_modules/persian-date/dist/persian-date.js"></script>
 <script src="{{$baseurl}}/node_modules/persian-datepicker/dist/js/persian-datepicker.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+<style>
+    .arrow {
+        color: red;
+    }
+</style>
 <script>
+    jQuery.validator.addMethod("phoneNumber", function(value, element) {
+        return this.optional(element) || /^\d{11}$/.test(value);
+    }, "Please enter a valid phone number.");
+
     $('#main-form').validate({
+        errorPlacement: function(label, element) {
+            label.addClass('arrow');
+            label.insertAfter(element);
+        },
+        wrapper: 'span',
         rules: {
             name: {
                 required: true,
@@ -714,16 +737,45 @@ Add new report
                 email: true
             },
             national_id: {
-                digits: true
+                digits: true,
+                required: true,
             },
             file_number: {
                 digits: true
-            }
+            },
+            phone_number: {
+                digits: true,
+                required: true,
+                phoneNumber: true
+            },
+            age: {
+                range: [1, 100]
+            },
+            discount_percentage: {
+                range: [0, 100]
+            },
+            receipt_number: {
+                digits: true
+            },
         },
         submitHandler: function(form) {
             form.submit();
         }
     })
+
+    function validateNumber(event) {
+        var key = window.event ? event.keyCode : event.which;
+        if((key < 48 || key > 57) && !([8, 9, 13, 82, ].indexOf(key) > -1)) {
+            event.preventDefault();
+        }
+    }
+
+    function lengthCheck(event, input, length) {
+        var key = window.event ? event.keyCode : event.which;
+        if (input.value.length > length && key != 8) {
+            event.preventDefault();
+        }
+    }
 </script>
 <script>
     $('.usage').persianDatepicker({

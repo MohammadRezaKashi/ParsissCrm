@@ -99,6 +99,7 @@ type SoftwareInformation struct {
 type Option struct {
 	Value, Text string
 	Selected    string
+	Group       string
 }
 
 type Filters struct {
