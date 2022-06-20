@@ -313,3 +313,10 @@ func (m *postgresDBRepo) GetDistinctList(tableName string, columnName string) ([
 	}
 	return list, nil
 }
+
+// func (m *postgresDBRepo) GetPatientsList(filters models.Filters) ([]models.PersonalInformation, error) {
+// 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+// 	defer cancel()
+
+// 	query := ` Select * from public."PatientsInformation" `
+// }
