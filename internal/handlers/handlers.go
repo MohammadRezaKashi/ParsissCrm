@@ -10,13 +10,13 @@ import (
 	"ParsissCrm/internal/repository"
 	"ParsissCrm/internal/repository/dbrepo"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/jackc/pgtype"
+	"golang.org/x/exp/slices"
 
 	"github.com/go-chi/chi"
 	"github.com/jinzhu/copier"
@@ -545,9 +545,9 @@ func GetAllSelectOptionsSurgery() ([]models.Option, []models.Option, []models.Op
 	}
 
 	hospitaltype := []models.Option{
-		{Value: "1", Text: "Private", Selected: ""},
-		{Value: "2", Text: "Govermental", Selected: ""},
-		{Value: "3", Text: "Other", Selected: ""},
+		{Value: "1", Text: "Private", Selected: "", Group: "hospital_type"},
+		{Value: "2", Text: "Govermental", Selected: "", Group: "hospital_type"},
+		{Value: "3", Text: "Other", Selected: "", Group: "hospital_type"},
 	}
 
 	headfixtype := []models.Option{
@@ -568,7 +568,24 @@ func GetAllSelectOptionsSurgery() ([]models.Option, []models.Option, []models.Op
 
 func (m *Repository) ShowFilters(rw http.ResponseWriter, r *http.Request) {
 	rcdata := r.URL.RawQuery
-	fmt.Println(strings.Split(rcdata, "&"))
+
+	_, _, _, _, hospitaltype, _, _ := GetAllSelectOptionsSurgery()
+
+	var filters models.Filters
+	splitedFilters := strings.Split(rcdata, "&")
+	for _, item := range splitedFilters {
+		if strings.Contains(item, "hospital_type") {
+			hospitalType := strings.Split(item, "=")
+			if len(hospitalType) > 1 {
+				filters.HospitalTypeOptions = append(filters.HospitalTypeOptions, models.Option{
+					Value:    hospitaltype[slices.IndexFunc(hospitaltype, func(c models.Option) bool { return c.Text == hospitalType[0] })].Value,
+					Text:     hospitalType[0],
+					Group:    hospitalType[1],
+					Selected: "selected",
+				})
+			}
+		}
+	}
 
 	patients, err := m.DB.GetAllPatients()
 	if err != nil {
