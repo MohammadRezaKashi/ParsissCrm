@@ -103,7 +103,7 @@ func (m *Repository) AddNewReport(rw http.ResponseWriter, r *http.Request) {
 
 func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 	var patient models.PersonalInformation
-	GetPersonalInformationFromForm(patient, r, m, rw)
+	GetPersonalInformationFromForm(&patient, r, m, rw)
 
 	id, err := m.DB.AddPersonalInformation(patient)
 	if err != nil {
@@ -115,7 +115,7 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 	surgeryinfo := models.SurgeriesInformation{}
 	surgeryinfo.FillDefaults()
 
-	GetSurgeryInformationFromForm(surgeryinfo, r, m)
+	GetSurgeryInformationFromForm(&surgeryinfo, r, m)
 
 	err = m.DB.AddSurgeriesInformation(surgeryinfo, id)
 	if err != nil {
@@ -126,7 +126,7 @@ func (m *Repository) PostAddNewReport(rw http.ResponseWriter, r *http.Request) {
 	financial := models.FinancialInformation{}
 	financial.FillDefaults()
 
-	GetFinancialInformationFromForm(financial, r)
+	GetFinancialInformationFromForm(&financial, r)
 
 	err = m.DB.AddFinancialInformation(financial, id)
 	if err != nil {
@@ -152,7 +152,7 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	shouldReturn := GetPersonalInformationFromForm(patient, r, m, rw)
+	shouldReturn := GetPersonalInformationFromForm(&patient, r, m, rw)
 	if shouldReturn {
 		return
 	}
@@ -170,7 +170,7 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
 	}
 
-	GetSurgeryInformationFromForm(surgery, r, m)
+	GetSurgeryInformationFromForm(&surgery, r, m)
 
 	err = m.DB.PutSurgeriesInformation(surgery)
 	if err != nil {
@@ -185,7 +185,7 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 		http.Redirect(rw, r, "/report", http.StatusTemporaryRedirect)
 	}
 
-	GetFinancialInformationFromForm(financial, r)
+	GetFinancialInformationFromForm(&financial, r)
 
 	err = m.DB.PutFinancialInformation(financial)
 	if err != nil {
@@ -198,7 +198,7 @@ func (m *Repository) PostUpdateReport(rw http.ResponseWriter, r *http.Request) {
 	http.Redirect(rw, r, "/report/detail/"+strconv.Itoa(patient.ID)+"/show", http.StatusSeeOther)
 }
 
-func GetFinancialInformationFromForm(financial models.FinancialInformation, r *http.Request) {
+func GetFinancialInformationFromForm(financial *models.FinancialInformation, r *http.Request) {
 	financial.PaymentStatus, _ = strconv.Atoi(r.Form.Get("payment_status"))
 	date := driver.ConvertStringToDate(r.Form.Get("first_contact"))
 	if date.Status == 2 {
@@ -224,7 +224,7 @@ func GetFinancialInformationFromForm(financial models.FinancialInformation, r *h
 	financial.ReceiptReceiver = r.Form.Get("receipt_receiver")
 }
 
-func GetSurgeryInformationFromForm(surgery models.SurgeriesInformation, r *http.Request, m *Repository) {
+func GetSurgeryInformationFromForm(surgery *models.SurgeriesInformation, r *http.Request, m *Repository) {
 	surgery.FileNumber = r.Form.Get("file_number")
 	date := driver.ConvertStringToDate(r.Form.Get("date_of_hospital_admission"))
 	if date.Status == 2 {
@@ -287,7 +287,7 @@ func GetSurgeryInformationFromForm(surgery models.SurgeriesInformation, r *http.
 	surgery.PatientEnterTime = pgtype.Timestamp{Time: t, Status: pgtype.Present}
 }
 
-func GetPersonalInformationFromForm(patient models.PersonalInformation, r *http.Request, m *Repository, rw http.ResponseWriter) bool {
+func GetPersonalInformationFromForm(patient *models.PersonalInformation, r *http.Request, m *Repository, rw http.ResponseWriter) bool {
 	patient.Name = r.Form.Get("name")
 	patient.Family = r.Form.Get("family")
 	age, err := strconv.Atoi(r.Form.Get("age"))
