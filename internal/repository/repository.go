@@ -14,4 +14,5 @@ type DatabaseRepo interface {
 	PutSurgeriesInformation(surgeriesInfo models.SurgeriesInformation) error
 	PutFinancialInformation(surgeriesInfo models.FinancialInformation) error
 	GetDistinctList(tableName string, columnName string) ([]interface{}, error)
+	GetFilterData(p interface{}) ([]models.PersonalInformation, error)
 }

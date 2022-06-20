@@ -196,22 +196,31 @@ Statistical Report
             }
         });
     }
+
     var filterBody = {}
 
     $('input[type="checkbox"]').on('change', function () {
         if ($(this).is(":checked")) {
-            filterBody[$(this).attr('name')] = $(this).parent().attr('name')
+            if(filterBody[$(this).parent().attr('name')] == undefined){
+                filterBody[$(this).parent().attr('name')] = []
+            }
+            filterBody[$(this).parent().attr('name')] = [...filterBody[$(this).parent().attr('name')], $(this).attr('value')];
         } else {
-            delete filterBody[$(this).attr('name')]
+            filterBody[$(this).parent().attr('name')].splice(
+                filterBody[$(this).parent().attr('name')].indexOf($(this).attr('value')), 1
+            );
+            if(filterBody[$(this).parent().attr('name')].length == 0){
+                delete filterBody[$(this).parent().attr('name')]
+            }
         }
         doFilter()
     })
     function doFilter() {
         $.ajax({
-            method: 'get',
+            method: 'post',
             dataType: 'json',
             url: '/report/filters/show',
-            data: filterBody,
+            data: JSON.stringify(filterBody),
             contentType: 'application/json',
             beforeSend: function (xhrObj) {
                 xhrObj.setRequestHeader("Content-Type", "application/json");
@@ -228,8 +237,9 @@ Statistical Report
                         value.NationalID,
                         value.PhoneNumber,
                         '<a href="/report/detail/'+value.ID+'/show">Detail</a>'
-                    ]).draw()
+                    ])
                 })
+                $('#all-rep').DataTable().draw()
             }
         })
     }

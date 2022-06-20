@@ -319,11 +319,11 @@ func ConvertStringToTimestamp(ts string) pgtype.Timestamp {
 func ConvertHospitalTypeToInt(s string) int {
 	switch s {
 	case "خصوصی", "خصوصی ":
-		return 1
+		return 0
 	case "دولتی", "دولتی ":
-		return 2
+		return 1
 	}
-	return 0
+	return 2
 }
 
 func ConvertSurgeryResultToInt(s string) int {

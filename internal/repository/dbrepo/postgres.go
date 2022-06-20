@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgtype"
@@ -312,4 +313,54 @@ func (m *postgresDBRepo) GetDistinctList(tableName string, columnName string) ([
 		list = append(list, value)
 	}
 	return list, nil
+}
+
+func (m *postgresDBRepo) GetFilterData(filter interface{}) ([]models.PersonalInformation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `SELECT pa.* FROM public."PatientsInformation" pa
+	FULL OUTER JOIN public."SurgeriesInformation" su ON pa.id = su.patient_id
+	FULL OUTER JOIN public."FinancialInformation" fi ON pa.id = fi.patient_id
+	`
+	f := filter.(map[string]interface{})
+	if len(f) > 0 {
+		query += "WHERE "
+	}
+	var ands []string
+	for key, value := range filter.(map[string]interface{}) {
+		var ors []string
+		for _, v := range value.([]interface{}) {
+			ors = append(ors, fmt.Sprintf("%s = '%s'", key, v))
+		}
+		ands = append(ands, fmt.Sprintf("(%s)", strings.Join(ors, " OR ")))
+	}
+	query += strings.Join(ands, " AND ")
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var patients []models.PersonalInformation
+	for rows.Next() {
+		//var surgery models.SurgeriesInformation
+		//
+		//err := rows.Scan(&surgery.ID, &surgery.PatientID, &surgery.SurgeryDate, &surgery.SurgeryDay, &surgery.SurgeryTime, &surgery.SurgeryType,
+		//	&surgery.SurgeryArea, &surgery.SurgeryDescription, &surgery.SurgeryResult, &surgery.SurgeonFirst, &surgery.SurgeonSecond,
+		//	&surgery.Resident, &surgery.Hospital, &surgery.HospitalType, &surgery.HospitalAddress, &surgery.CT, &surgery.MR, &surgery.FMRI,
+		//	&surgery.DTI, &surgery.OperatorFirst, &surgery.OperatorSecond, &surgery.StartTime.Time, &surgery.StopTime.Time, &surgery.EnterTime.Time,
+		//	&surgery.ExitTime.Time, &surgery.PatientEnterTime.Time, &surgery.HeadFixType, &surgery.CancellationReason, &surgery.FileNumber,
+		//	&surgery.DateOfHospitalAdmission, new(time.Time), new(time.Time))
+		var patient models.PersonalInformation
+		err := rows.Scan(&patient.ID, &patient.Name, &patient.Family, &patient.Age, &patient.PhoneNumber,
+			&patient.NationalID, &patient.Address, &patient.Email, &patient.PlaceOfBirth, new(time.Time), new(time.Time))
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		patients = append(patients, patient)
+	}
+	return patients, nil
 }

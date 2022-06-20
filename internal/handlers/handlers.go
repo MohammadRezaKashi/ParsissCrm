@@ -10,10 +10,8 @@ import (
 	"ParsissCrm/internal/repository"
 	"ParsissCrm/internal/repository/dbrepo"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/jackc/pgtype"
@@ -545,9 +543,9 @@ func GetAllSelectOptionsSurgery() ([]models.Option, []models.Option, []models.Op
 	}
 
 	hospitaltype := []models.Option{
-		{Value: "1", Text: "Private", Selected: ""},
-		{Value: "2", Text: "Govermental", Selected: ""},
-		{Value: "3", Text: "Other", Selected: ""},
+		{Value: "0", Text: "Private", Selected: ""},
+		{Value: "1", Text: "Govermental", Selected: ""},
+		{Value: "2", Text: "Other", Selected: ""},
 	}
 
 	headfixtype := []models.Option{
@@ -567,15 +565,22 @@ func GetAllSelectOptionsSurgery() ([]models.Option, []models.Option, []models.Op
 }
 
 func (m *Repository) ShowFilters(rw http.ResponseWriter, r *http.Request) {
-	rcdata := r.URL.RawQuery
-	fmt.Println(strings.Split(rcdata, "&"))
+	var p interface{}
 
-	patients, err := m.DB.GetAllPatients()
+	// Try to decode the request body into the struct. If there is an error,
+	// respond to the client with the error message and a 400 status code.
+	err := json.NewDecoder(r.Body).Decode(&p)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	patients, err := m.DB.GetFilterData(p)
 	if err != nil {
 		helpers.ServerError(rw, err)
 		return
 	}
 
-	b, _ := json.Marshal(patients[0:10])
+	b, _ := json.Marshal(patients)
 	rw.Write(b)
 }
