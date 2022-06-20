@@ -712,6 +712,10 @@ Add new report
     }
 </style>
 <script>
+    jQuery.validator.addMethod("phoneNumber", function(value, element) {
+        return this.optional(element) || /^\d{11}$/.test(value);
+    }, "Please enter a valid phone number.");
+
     $('#main-form').validate({
         errorPlacement: function(label, element) {
             label.addClass('arrow');
@@ -742,6 +746,7 @@ Add new report
             phone_number: {
                 digits: true,
                 required: true,
+                phoneNumber: true
             },
             age: {
                 range: [1, 100]
@@ -760,17 +765,15 @@ Add new report
 
     function validateNumber(event) {
         var key = window.event ? event.keyCode : event.which;
-        if (event.keyCode === 8 || event.keyCode === 46) {
-            return true;
-        } else if (key < 48 || key > 57) {
-            return false;
-        } else {
-            return true;
+        if((key < 48 || key > 57) && !([8, 9, 13, 82, ].indexOf(key) > -1)) {
+            event.preventDefault();
         }
     }
+
     function lengthCheck(event, input, length) {
-        if (input.value.length >= length) {
-            input.value = input.value.substring(0, length - 1);
+        var key = window.event ? event.keyCode : event.which;
+        if (input.value.length > length && key != 8) {
+            event.preventDefault();
         }
     }
 </script>
