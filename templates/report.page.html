@@ -5,6 +5,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
 <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="{{$baseurl}}/node_modules/persian-datepicker/dist/css/persian-datepicker.css" type="text/css"/>
 <style>
     * {
         box-sizing: border-box;
@@ -89,6 +90,10 @@
         overflow: hidden;
         transition: max-height 0.2s ease-out;
     }
+    .label_filter {
+        display: inline-block;
+        text-align: right;
+    }
 </style>
 {{end}}
 
@@ -142,15 +147,23 @@ Statistical Report
             {{end}}
         </div>
 
-        <button class="accordion">Section 2</button>
-        <div class="panel">
-            <p>Lorem ipsum...</p>
+        <button class="accordion">Surgery Date</button>
+        <div name="surgery_date" class="panel">
+            <label class="label_filter block">From:</label>
+            <input class="usage form-control" name="surgery_date_from" id="surgery_date_from"
+                   style="background-color: #FFFFFF"
+                   autocomplete="off">
+            <label class="label_filter block">To:</label>
+            <input class="usage form-control" name="surgery_date_to" id="surgery_date_to"
+                   style="background-color: #FFFFFF" readonly="readonly"
+                   autocomplete="off" >
         </div>
 
         <button class="accordion">Section 3</button>
         <div class="panel">
-            <p>Lorem ipsum...</p>
+
         </div>
+
         <button class="accordion">Section 3</button>
         <div class="panel">
             <p>Lorem ipsum...</p>
@@ -160,10 +173,34 @@ Statistical Report
 {{end}}
 
 {{define "js"}}
+{{$baseurl := index .Data "baseurl"}}
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="{{$baseurl}}/node_modules/persian-date/dist/persian-date.js"></script>
+<script src="{{$baseurl}}/node_modules/persian-datepicker/dist/js/persian-datepicker.js"></script>
 <script>
+    var filterBody = {}
+
+    $('.usage').persianDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '.observer-example-alt',
+        calendar:{
+            persian: {
+                locale: 'en'
+            }
+        },
+        onSelect: function(dateText ) {
+            console.log(dateText);
+            if(filterBody[$("#surgery_date_to").attr('name')] == undefined){
+                filterBody[$("#surgery_date_to").attr('name')] = []
+            }
+            filterBody[$("#surgery_date_to").attr('name')] = [...filterBody[$("#surgery_date_to").attr('name')], dateText];
+            doFilter();
+        }
+    });
+
     $(document).ready(function () {
         if (window.location.pathname == '/report') {
             let parent = $('.dropdown-item[href="/report"]').parent().parent().parent().find('.nav-link')
@@ -197,8 +234,6 @@ Statistical Report
         });
     }
 
-    var filterBody = {}
-
     $('input[type="checkbox"]').on('change', function () {
         if ($(this).is(":checked")) {
             if(filterBody[$(this).parent().attr('name')] == undefined){
@@ -213,6 +248,12 @@ Statistical Report
                 delete filterBody[$(this).parent().attr('name')]
             }
         }
+        doFilter()
+    })
+
+    $('.usage').on('change', function () {
+        console.log("this.date");
+        filterBody[$(this).attr('name')] = $(this).val()
         doFilter()
     })
     function doFilter() {
@@ -236,7 +277,7 @@ Statistical Report
                         value.Family,
                         value.NationalID,
                         value.PhoneNumber,
-                        '<a href="/report/detail/'+value.ID+'/show">Detail</a>'
+                        '<button class="btn btn-primary"><a href="/report/detail/'+value.ID+'/show">Detail</a></button>'
                     ])
                 })
                 $('#all-rep').DataTable().draw()
