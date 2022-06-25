@@ -155,8 +155,8 @@ Statistical Report
                    autocomplete="off">
             <label class="label_filter block">To:</label>
             <input class="datepickerTo form-control" name="surgery_date_to" data-type="dateSelector" id="surgery_date_to"
-                   style="background-color: #FFFFFF" readonly="readonly"
-                   autocomplete="off" >
+                   style="background-color: #FFFFFF;" readonly="readonly"
+                   autocomplete="off">
         </div>
 
         <button class="accordion">Section 3</button>
@@ -232,8 +232,8 @@ Statistical Report
         let inputs = parent.find('input')
         delete filterBody[parent.attr('name')]
         filterBody[parent.attr('name')] = {}
-        filterBody[parent.attr('name')].values = []
         filterBody[parent.attr('name')].type = 'date'
+        filterBody[parent.attr('name')].values = []
         for(let input of inputs){
             filterBody[parent.attr('name')].values.push(input.value)
         }
@@ -241,6 +241,7 @@ Statistical Report
             doFilter()
         }
     }
+
     $(document).ready(function () {
         if (window.location.pathname == '/report') {
             let parent = $('.dropdown-item[href="/report"]').parent().parent().parent().find('.nav-link')
@@ -279,8 +280,8 @@ Statistical Report
             if(filterBody[$(this).parent().attr('name')] == undefined){
                 filterBody[$(this).parent().attr('name')] = {}
             }
-            filterBody[$(this).parent().attr('name')].values = []
             filterBody[$(this).parent().attr('name')].type = 'checkbox'
+            filterBody[$(this).parent().attr('name')].values = []
             filterBody[$(this).parent().attr('name')].values.push($(this).attr('value'));
         } else {
             filterBody[$(this).parent().attr('name')].values.splice(

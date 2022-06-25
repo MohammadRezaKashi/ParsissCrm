@@ -101,3 +101,7 @@ type Option struct {
 	Selected    string
 	Group       string
 }
+
+type Filters struct {
+	HospitalTypeOptions []Option
+}

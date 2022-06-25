@@ -1,6 +1,7 @@
 package dbrepo
 
 import (
+	"ParsissCrm/internal/driver"
 	"ParsissCrm/internal/models"
 	"context"
 	"fmt"
@@ -330,10 +331,32 @@ func (m *postgresDBRepo) GetFilterData(filter interface{}) ([]models.PersonalInf
 	var ands []string
 	for key, value := range filter.(map[string]interface{}) {
 		var ors []string
-		for _, v := range value.([]interface{}) {
-			ors = append(ors, fmt.Sprintf("%s = '%s'", key, v))
+		var typeOfValue string
+		for k, v := range value.(map[string]interface{}) {
+			if k == "type" {
+				typeOfValue = v.(string)
+			} else {
+				for i, v := range v.([]interface{}) {
+					if typeOfValue == "checkbox" {
+						ors = append(ors, fmt.Sprintf("%s = '%s'", key, v.(string)))
+					} else if typeOfValue == "date" {
+						d := driver.ConvertStringToDate(v.(string))
+						switch i {
+						case 0:
+							ors = append(ors, fmt.Sprintf("%s >= '%s'", key, d.Time.Format("2006-01-02")))
+						case 1:
+							ors = append(ors, fmt.Sprintf("%s <= '%s'", key, d.Time.Format("2006-01-02")))
+						}
+					}
+				}
+			}
 		}
-		ands = append(ands, fmt.Sprintf("(%s)", strings.Join(ors, " OR ")))
+		if typeOfValue == "checkbox" {
+			ands = append(ands, fmt.Sprintf("(%s)", strings.Join(ors, " OR ")))
+		} else if typeOfValue == "date" {
+			ands = append(ands, fmt.Sprintf("(%s)", strings.Join(ors, " AND ")))
+		}
+
 	}
 	query += strings.Join(ands, " AND ")
 	rows, err := m.DB.QueryContext(ctx, query)
