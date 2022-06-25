@@ -51,15 +51,8 @@ func (m *Repository) Report(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var filters = models.Filters{}
-
-	_, _, _, _, hospitaltype, _, _ := GetAllSelectOptionsSurgery()
-
-	filters.HospitalTypeOptions = hospitaltype
-
 	data := make(map[string]interface{})
 	data["patients"] = patients
-	data["filters"] = filters
 	data["baseurl"] = baseUrl
 	render.Template(rw, r, "report.page.html", &models.TemplateData{
 		Data: data,
