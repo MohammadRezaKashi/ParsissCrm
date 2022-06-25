@@ -148,13 +148,13 @@ Statistical Report
         </div>
 
         <button class="accordion">Surgery Date</button>
-        <div name="surgery_date" class="panel">
+        <div id="surgeryDatePick" name="surgery_date" class="panel">
             <label class="label_filter block">From:</label>
-            <input class="usage form-control" name="surgery_date_from" id="surgery_date_from"
+            <input class="datepickerFrom form-control" name="surgery_date_from" data-type="dateSelector" id="surgery_date_from"
                    style="background-color: #FFFFFF"
                    autocomplete="off">
             <label class="label_filter block">To:</label>
-            <input class="usage form-control" name="surgery_date_to" id="surgery_date_to"
+            <input class="datepickerTo form-control" name="surgery_date_to" data-type="dateSelector" id="surgery_date_to"
                    style="background-color: #FFFFFF" readonly="readonly"
                    autocomplete="off" >
         </div>
@@ -179,28 +179,68 @@ Statistical Report
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="{{$baseurl}}/node_modules/persian-date/dist/persian-date.js"></script>
 <script src="{{$baseurl}}/node_modules/persian-datepicker/dist/js/persian-datepicker.js"></script>
+<script src="https://unpkg.com/jalali-moment/dist/jalali-moment.browser.js"></script>
 <script>
     var filterBody = {}
-
-    $('.usage').persianDatepicker({
-        observer: true,
+    var to, from;
+    to = $(".datepickerTo").persianDatepicker({
         format: 'YYYY/MM/DD',
         altField: '.observer-example-alt',
+        initialValue: false,
         calendar:{
             persian: {
                 locale: 'en'
             }
         },
-        onSelect: function(dateText ) {
-            console.log(dateText);
-            if(filterBody[$("#surgery_date_to").attr('name')] == undefined){
-                filterBody[$("#surgery_date_to").attr('name')] = []
+        onSelect: function (unix) {
+            to.touched = true;
+            if (from && from.options && from.options.maxDate != unix) {
+                var cachedValue = from.getState().selected.unixDate;
+                from.options = {maxDate: unix};
+                if (from.touched) {
+                    from.setDate(cachedValue);
+                }
             }
-            filterBody[$("#surgery_date_to").attr('name')] = [...filterBody[$("#surgery_date_to").attr('name')], dateText];
-            doFilter();
+            onChangeDate($(this))
         }
     });
-
+    from = $(".datepickerFrom").persianDatepicker({
+        format: 'YYYY/MM/DD',
+        altField: '.observer-example-alt',
+        initialValue: false,
+        calendar:{
+            persian: {
+                locale: 'en'
+            }
+        },
+        onSelect: function (unix) {
+            from.touched = true;
+            if (to && to.options && to.options.minDate != unix) {
+                var cachedValue = to.getState().selected.unixDate;
+                to.options = {minDate: unix};
+                if (to.touched) {
+                    to.setDate(cachedValue);
+                }
+            }
+            onChangeDate($(this))
+        }
+    });
+    function onChangeDate(dateObj) {
+        $(dateObj[0].model.input.elem).val()
+        let inputFromSelect = dateObj[0].model.input.elem
+        let parent = $(inputFromSelect).parent()
+        let inputs = parent.find('input')
+        delete filterBody[parent.attr('name')]
+        filterBody[parent.attr('name')] = {}
+        filterBody[parent.attr('name')].values = []
+        filterBody[parent.attr('name')].type = 'date'
+        for(let input of inputs){
+            filterBody[parent.attr('name')].values.push(input.value)
+        }
+        if(filterBody[parent.attr('name')].values[0].length > 0 && filterBody[parent.attr('name')].values[1].length > 0){
+            doFilter()
+        }
+    }
     $(document).ready(function () {
         if (window.location.pathname == '/report') {
             let parent = $('.dropdown-item[href="/report"]').parent().parent().parent().find('.nav-link')
@@ -237,14 +277,16 @@ Statistical Report
     $('input[type="checkbox"]').on('change', function () {
         if ($(this).is(":checked")) {
             if(filterBody[$(this).parent().attr('name')] == undefined){
-                filterBody[$(this).parent().attr('name')] = []
+                filterBody[$(this).parent().attr('name')] = {}
             }
-            filterBody[$(this).parent().attr('name')] = [...filterBody[$(this).parent().attr('name')], $(this).attr('value')];
+            filterBody[$(this).parent().attr('name')].values = []
+            filterBody[$(this).parent().attr('name')].type = 'checkbox'
+            filterBody[$(this).parent().attr('name')].values.push($(this).attr('value'));
         } else {
-            filterBody[$(this).parent().attr('name')].splice(
-                filterBody[$(this).parent().attr('name')].indexOf($(this).attr('value')), 1
+            filterBody[$(this).parent().attr('name')].values.splice(
+                filterBody[$(this).parent().attr('name')].values.indexOf($(this).attr('value')), 1
             );
-            if(filterBody[$(this).parent().attr('name')].length == 0){
+            if(filterBody[$(this).parent().attr('name')].values.length == 0){
                 delete filterBody[$(this).parent().attr('name')]
             }
         }
