@@ -42,10 +42,7 @@ Add new report
 {{$hospitaltype := index .Data "hospitaltype"}}
 {{$paymentstatus := index .Data "paymentstatus"}}
 {{$headfixtype := index .Data "headfixtype"}}
-{{$ct := index .Data "ct"}}
-{{$mr := index .Data "mr"}}
-{{$fmri := index .Data "fmri"}}
-{{$dti := index .Data "dti"}}
+{{$imagevalidity := index .Data "imagevalidity"}}
 {{$baseurl := index .Data "baseurl"}}
 
 <div class="container">
@@ -349,7 +346,7 @@ Add new report
                             {{end}}
                             <select id="mr" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
-                                {{range $mr}}
+                                {{range $imagevalidity}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
@@ -364,7 +361,7 @@ Add new report
                             {{end}}
                             <select id="ct" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
-                                {{range $ct}}
+                                {{range $imagevalidity}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
@@ -379,7 +376,7 @@ Add new report
                             {{end}}
                             <select id="fmri" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
-                                {{range $fmri}}
+                                {{range $imagevalidity}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
@@ -394,7 +391,7 @@ Add new report
                             {{end}}
                             <select id="dti" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
-                                {{range $dti}}
+                                {{range $imagevalidity}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
