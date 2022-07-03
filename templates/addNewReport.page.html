@@ -713,6 +713,9 @@ Add new report
 </style>
 <script>
     jQuery.validator.addMethod("phoneNumber", function(value, element) {
+        if(value.length < 10) {
+            return false;
+        }
         if(value[0] == '+') {
             return this.optional(element) || /^\+[0-9]{2}[0-9]{3}[0-9]{7}$/.test(value);
         } else {
