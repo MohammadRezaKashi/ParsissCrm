@@ -61,10 +61,7 @@ Add new report
 {{$hospitaltype := index .Data "hospitaltype"}}
 {{$paymentstatus := index .Data "paymentstatus"}}
 {{$headfixtype := index .Data "headfixtype"}}
-{{$ct := index .Data "ct"}}
-{{$mr := index .Data "mr"}}
-{{$fmri := index .Data "fmri"}}
-{{$dti := index .Data "dti"}}
+{{$imagevalidity := index .Data "imagevalidity"}}
 {{$baseurl := index .Data "baseurl"}}
 
 <div class="container">
@@ -376,9 +373,8 @@ Add new report
                             {{end}}
                             <select id="mr" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
-                                {{range $mr}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
+                                {{range $imagevalidity}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " mr"}} is-invalid {{end}}" type="hidden"
@@ -392,9 +388,8 @@ Add new report
                             {{end}}
                             <select id="ct" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
-                                {{range $ct}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
+                                {{range $imagevalidity}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " ct"}} is-invalid {{end}}" type="hidden"
@@ -408,9 +403,8 @@ Add new report
                             {{end}}
                             <select id="fmri" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
-                                {{range $fmri}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
+                                {{range $imagevalidity}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " fmri"}} is-invalid {{end}}"
@@ -424,9 +418,8 @@ Add new report
                             {{end}}
                             <select id="dti" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
-                                {{range $dti}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
+                                {{range $imagevalidity}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " dti"}} is-invalid {{end}}"

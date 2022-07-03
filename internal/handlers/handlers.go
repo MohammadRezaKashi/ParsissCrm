@@ -554,10 +554,10 @@ func GetAllSelectOptionsSurgery() ([]models.Option, []models.Option, []models.Op
 	}
 
 	imagevalidity := []models.Option{
-		{Value: "1", Text: "Exist", Selected: ""},
+		{Value: "1", Text: "Not Checked", Selected: ""},
 		{Value: "2", Text: "Not Exist", Selected: ""},
 		{Value: "3", Text: "Exist And Valid", Selected: ""},
-		{Value: "4", Text: "Exist Not Valid", Selected: ""},
+		{Value: "4", Text: "Exist And Not Valid", Selected: ""},
 	}
 
 	return surgeryDay, surgerytime, surgeryarea, surgeryresult, hospitaltype, headfixtype, imagevalidity
