@@ -32,6 +32,15 @@
     .grid-container>div {
         padding-top: 8px;
     }
+
+    div.sticky {
+        padding-top: 1px;
+        padding-bottom: 4px;
+        background: #fff;
+        position: -webkit-sticky; /* Safari */
+        position: sticky;
+        top: 0;
+    }
 </style>
 {{end}}
 
@@ -59,12 +68,20 @@ Add new report
 {{$baseurl := index .Data "baseurl"}}
 
 <div class="container">
-    <div class="w-100">
-        <h3 style="margin-top: 20px;"><img
-            src="{{if eq $patient.Name ""}}{{$baseurl}}/static/images/AddImageIcon.png{{else}}{{$baseurl}}/static/images/PatientIcon.jpg{{end}}"
-            style="height: 70px; width: 70px;"> {{if eq $patient.Name ""}}Add New
-        Patient{{else}}{{$patient.Name}}{{$patient.Family}}{{end}}</h3>
-
+    <div class="w-100 sticky">
+        <div class="d-flex flex-row pt-2 pb-2 align-items-center">
+            <h3 style="margin-top: 20px;width: 100%;">
+                <img
+                src="{{if eq $patient.Name ""}}{{$baseurl}}/static/images/AddImageIcon.png{{else}}{{$baseurl}}/static/images/PatientIcon.jpg{{end}}"
+                style="height: 70px; width: 70px;"> {{if eq $patient.Name ""}}Add New
+                Patient{{else}}{{$patient.Name}}{{$patient.Family}}{{end}}
+            </h3>
+            {{if eq $patient.Name ""}}
+                <input type="submit" class="btn btn-primary" value="Add" style="float: right;height: 45px;">
+            {{else}}
+                <input type="submit" class="btn btn-primary" value="Save" style="float: right;height: 45px;">
+            {{end}}
+        </div>
     </div>
     <div class="row">
         <div class="col">
@@ -682,11 +699,7 @@ Add new report
                 </div>
 
                 <hr>
-                {{if eq $patient.Name ""}}
-                <input type="submit" class="btn btn-primary" value="Add" style="float: right;">
-                {{else}}
-                <input type="submit" class="btn btn-primary" value="Save" style="float: right;">
-                {{end}}
+                
 
             </form>
         </div>
@@ -789,6 +802,10 @@ Add new report
     $('select').on('change', function () {
         let parent = $(this).parent()
         parent.find('input').val($(this).val())
+    })
+
+    $('input[type="submit"]').on('click',function(){
+        $('#main-form').submit()
     })
 </script>
 {{end}}
