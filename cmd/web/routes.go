@@ -18,6 +18,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
+	// mux.Use(I18n)
 
 	fileServer := http.FileServer(http.Dir("./static/."))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
@@ -42,6 +43,8 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Post("/report/post-update-report/{id}", handlers.Repo.PostUpdateReport)
 
 	mux.Post("/report/filters/show", handlers.Repo.ShowFilters)
+
+	mux.Post("/language/apply", handlers.Repo.ApplyLang)
 
 	return mux
 }

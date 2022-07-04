@@ -11,6 +11,7 @@ type TemplateData struct {
 	Flash           string
 	Warning         string
 	Error           string
+	Language        string
 	Form            *forms.Form
 	IsAuthenticated int
 	AccessLevel     int

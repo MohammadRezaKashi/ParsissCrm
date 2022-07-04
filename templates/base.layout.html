@@ -1,6 +1,8 @@
 {{define "base"}}
+{{$baseurl := index .Data "baseurl"}}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{.Language}}" {{if eq .Language "fa"}}dir="rtl"{{else}}dir="ltr"{{end}}>
 
 <head>
     <!-- Required meta tags -->
@@ -13,11 +15,20 @@
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
 
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
-
+    <script>
+        var language = '{{.Language}}';
+    </script>
     <style>
-        * { padding: 0; margin: 0; }
-        html { height: calc(100% - 4rem); }
-        body { 
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html {
+            height: calc(100% - 4rem);
+        }
+
+        body {
             display: flex;
             flex-direction: column;
             margin-bottom: 4rem;
@@ -48,8 +59,9 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav mb-2 mb-lg-0" id="navbar-buttons-container">
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/">Home</a>
                     </li>
@@ -72,6 +84,13 @@
                         <a class="nav-link" href="/contact">Contact</a>
                     </li>
                 </ul>
+                <button class="btn btn-outline-light" id="changeLang">
+                    {{if eq .Language "fa"}}
+                        English
+                    {{else}}
+                        Persian
+                    {{end}}
+                </button>
             </div>
         </div>
     </nav>
@@ -117,7 +136,7 @@
     {{end}}
 
     <script>
-        
+
         let attention = prompt();
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -172,6 +191,33 @@
             notify("{{.Warning}}", "warning")
         }
 
+        $('#changeLang').on('click', function () {
+            console.log(language == "fa" ? "en" : "fa")
+            $.ajax({
+                method: 'post',
+                dataType: 'json',
+                url: '/language/apply',
+                data: JSON.stringify({lang: language == "fa" ? "en" : "fa"}),
+                contentType: 'application/json',
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Content-Type", "application/json");
+                    xhrObj.setRequestHeader("Accept", "application/json");
+                    xhrObj.setRequestHeader('X-CSRF-Token', "{{.CSRFToken}}");
+                },
+                success: function (data) {
+                    console.log("success");
+                    location.reload();
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            if(language == 'fa') {
+                $("#navbar-buttons-container").addClass("ms-auto")
+            } else {
+                $("#navbar-buttons-container").addClass("me-auto")
+            }
+        });
     </script>
 </body>
 

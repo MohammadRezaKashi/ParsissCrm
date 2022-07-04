@@ -93,7 +93,7 @@ Add new report
 
                 <div class="grid-container">
                         <div class="form-group required-label required">
-                            <label for="name">Name:</label>
+                            <label for="name">{{i18n "name"}}:</label>
                             {{ with .Form.Errors.Get "name"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}

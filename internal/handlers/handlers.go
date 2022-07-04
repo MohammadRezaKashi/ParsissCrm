@@ -583,3 +583,23 @@ func (m *Repository) ShowFilters(rw http.ResponseWriter, r *http.Request) {
 	b, _ := json.Marshal(patients)
 	rw.Write(b)
 }
+
+func (m *Repository) ApplyLang(rw http.ResponseWriter, r *http.Request) {
+	var p interface{}
+	err := json.NewDecoder(r.Body).Decode(&p)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+	language := p.(map[string]interface{})
+
+	cookie := &http.Cookie{
+		Name:  "lang",
+		Value: language["lang"].(string),
+		Path:  "/",
+	}
+	http.SetCookie(rw, cookie)
+
+	b, _ := json.Marshal([]byte("OK"))
+	rw.Write(b)
+}

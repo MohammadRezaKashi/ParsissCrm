@@ -4,10 +4,13 @@ import (
 	"ParsissCrm/internal/config"
 	"ParsissCrm/internal/models"
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net/http"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -19,12 +22,29 @@ import (
 
 var app *config.AppConfig
 var pathToTemplates = "./templates"
+var language = "en"
 
 var functions = template.FuncMap{
 	"humanDate":              HumanDate,
 	"humanPgtypeDate":        HumanPgtypeDate,
 	"humanPgtypeDatePersian": HumanPgtypeDatePersian,
 	"timestampToTime":        TimestampToTime,
+	"i18n":                   I18n,
+}
+
+func I18n(key string) string {
+	jsonFile, err := os.Open("./static/i18n/i18n.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var result map[string]map[string]string
+	json.Unmarshal([]byte(byteValue), &result)
+
+	return result[language][key]
 }
 
 func HumanDate(t time.Time) string {
@@ -58,6 +78,7 @@ func NewRenderer(a *config.AppConfig) {
 }
 
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.Language = language
 	td.Flash = app.Session.PopString(r.Context(), "flash")
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.Warning = app.Session.PopString(r.Context(), "warning")
@@ -74,6 +95,8 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 }
 
 func Template(rw http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) error {
+	setDefaultLanguage(r, rw)
+
 	var tc map[string]*template.Template
 	if app.UseCache {
 		tc = app.TemplateCache
@@ -99,6 +122,21 @@ func Template(rw http.ResponseWriter, r *http.Request, tmpl string, td *models.T
 	}
 
 	return nil
+}
+
+func setDefaultLanguage(r *http.Request, rw http.ResponseWriter) {
+	lang, err := r.Cookie("lang")
+	if err != nil {
+		cookie := &http.Cookie{
+			Name:  "lang",
+			Value: "en",
+			Path:  "/",
+		}
+		http.SetCookie(rw, cookie)
+		language = "en"
+	} else {
+		language = lang.Value
+	}
 }
 
 func CreateTemplateCache() (map[string]*template.Template, error) {
