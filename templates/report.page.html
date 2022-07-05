@@ -112,10 +112,10 @@ Statistical Report
                 <table class="table table-striped table-hover" id="all-rep">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Family</th>
-                            <th>National ID</th>
-                            <th>Phone Number</th>
+                            <th {{if eq .Language "fa"}}style="text-align: right"{{end}}>{{i18n "name"}}</th>
+                            <th {{if eq .Language "fa"}}style="text-align: right"{{end}}>{{i18n "family"}}</th>
+                            <th {{if eq .Language "fa"}}style="text-align: right"{{end}}>{{i18n "national_code"}}</th>
+                            <th {{if eq .Language "fa"}}style="text-align: right"{{end}}>{{i18n "phone"}}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -126,7 +126,7 @@ Statistical Report
                             <td>{{.Family}}</td>
                             <td>{{.NationalID}}</td>
                             <td>{{.PhoneNumber}}</td>
-                            <td><button class="btn btn-primary"><a href="/report/detail/{{.ID}}/show">Detail</a></button></td>
+                            <td><button class="btn btn-primary"><a href="/report/detail/{{.ID}}/show">{{i18n "details"}}</a></button></td>
                         </tr>
                         {{end}}
                     </tbody>
@@ -136,8 +136,8 @@ Statistical Report
     </div>
 
     <div class="column sidebar" style="width: 20%; border: solid; border-color: black; border-width: 1px;">
-        <h2>Filters</h2>
-        <button class="accordion">Hospital Type</button>
+        <h2>{{i18n "filters"}}</h2>
+        <button class="accordion">{{i18n "hospital type"}}</button>
         <div name="hospital_type" class="panel">
             {{range $filters.HospitalTypeOptions}}
             <input type="checkbox" name="{{.Text}}" value="{{.Value}}" {{if eq .Selected "selected" }}checked{{end}}
@@ -145,7 +145,7 @@ Statistical Report
             {{end}}
         </div>
 
-        <button class="accordion">Surgery Date</button>
+        <button class="accordion">{{i18n "surgery date"}}</button>
         <div id="surgeryDatePick" name="surgery_date" class="panel">
             <label class="label_filter block">From:</label>
             <input class="datepickerFrom form-control" name="surgery_date_from" data-type="dateSelector" id="surgery_date_from"
@@ -155,16 +155,6 @@ Statistical Report
             <input class="datepickerTo form-control" name="surgery_date_to" data-type="dateSelector" id="surgery_date_to"
                    style="background-color: #FFFFFF;" readonly="readonly"
                    autocomplete="off">
-        </div>
-
-        <button class="accordion">Section 3</button>
-        <div class="panel">
-
-        </div>
-
-        <button class="accordion">Section 3</button>
-        <div class="panel">
-            <p>Lorem ipsum...</p>
         </div>
     </div>
 </div>

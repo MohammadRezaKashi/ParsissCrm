@@ -62,6 +62,10 @@ Add new report
 {{$paymentstatus := index .Data "paymentstatus"}}
 {{$headfixtype := index .Data "headfixtype"}}
 {{$imagevalidity := index .Data "imagevalidity"}}
+{{$ct := index .Data "ct"}}
+{{$mr := index .Data "mr"}}
+{{$fmri := index .Data "fmri"}}
+{{$dti := index .Data "dti"}}
 {{$baseurl := index .Data "baseurl"}}
 
 <div class="container">
@@ -70,13 +74,13 @@ Add new report
             <h3 style="margin-top: 20px;width: 100%;">
                 <img
                 src="{{if eq $patient.Name ""}}{{$baseurl}}/static/images/AddImageIcon.png{{else}}{{$baseurl}}/static/images/PatientIcon.jpg{{end}}"
-                style="height: 70px; width: 70px;"> {{if eq $patient.Name ""}}Add New
-                Patient{{else}}{{$patient.Name}}{{$patient.Family}}{{end}}
+                style="height: 70px; width: 70px;"> {{if eq $patient.Name ""}}{{i18n "add new patient"}}
+                {{else}}{{$patient.Name}}{{$patient.Family}}{{end}}
             </h3>
             {{if eq $patient.Name ""}}
-                <input type="submit" class="btn btn-primary" value="Add" style="float: right;height: 45px;">
+                <input type="submit" class="btn btn-primary" value="{{i18n "add"}}" style="float: right;height: 45px;">
             {{else}}
-                <input type="submit" class="btn btn-primary" value="Save" style="float: right;height: 45px;">
+                <input type="submit" class="btn btn-primary" value="{{i18n "save"}}" style="float: right;height: 45px;">
             {{end}}
         </div>
     </div>
@@ -84,7 +88,7 @@ Add new report
         <div class="col">
 
             
-            <h4 class="mt-4">Patient Information</h4>
+            <h4 class="mt-4">{{i18n "patient information"}}</h4>
 
             <form id="main-form" method="post"
                 action="{{if eq $patient.Name ""}}/report/post-add-new-report{{else}}/report/post-update-report/{{$patient.ID}}{{end}}"
@@ -102,7 +106,7 @@ Add new report
                         </div>
 
                         <div class="form-group  required-label required">
-                            <label for="family">Family:</label>
+                            <label for="family">{{i18n "family"}}:</label>
                             {{ with .Form.Errors.Get "family"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -111,7 +115,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="age">Age:</label>
+                            <label for="age">{{i18n "age"}}:</label>
                             {{ with .Form.Errors.Get "age"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -120,7 +124,7 @@ Add new report
                         </div>
 
                         <div class="form-group">
-                            <label for="national_id">National Id:</label>
+                            <label for="national_id">{{i18n "national_code"}}:</label>
                             {{ with .Form.Errors.Get "national_id"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -130,7 +134,7 @@ Add new report
                         </div>
 
                         <div class="form-group">
-                            <label for="phone_number">Phone Number:</label>
+                            <label for="phone_number">{{i18n "phone"}}:</label>
                             {{ with .Form.Errors.Get "phone_number"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -140,7 +144,7 @@ Add new report
                                 value="{{$patient.PhoneNumber}}" >
                         </div>
                         <div class="form-group ">
-                            <label for="address">Address:</label>
+                            <label for="address">{{i18n "address"}}:</label>
                             {{ with .Form.Errors.Get "address"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -149,7 +153,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="place_of_birth">Place Of Birth:</label>
+                            <label for="place_of_birth">{{i18n "place_of_birth"}}:</label>
                             {{ with .Form.Errors.Get "place_of_birth"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -159,7 +163,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="email">Email:</label>
+                            <label for="email">{{i18n "email"}}:</label>
                             {{ with .Form.Errors.Get "email"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -169,12 +173,12 @@ Add new report
                 </div>
 
 
-                <h4 class="mt-4">Surgery Information</h4>
+                <h4 class="mt-4">{{i18n "surgical information"}}</h4>
 
                 <div class="grid-container">
 
                         <div class="form-group ">
-                            <label for="file_number">File Number:</label>
+                            <label for="file_number">{{i18n "file number"}}:</label>
                             {{ with .Form.Errors.Get "file_number"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -185,7 +189,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="date_of_hospital_admission">Date Of Hospital Admission:</label>
+                            <label for="date_of_hospital_admission">{{i18n "date of hospital admission"}}:</label>
                             {{ with .Form.Errors.Get "date_of_hospital_admission"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -197,7 +201,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="surgery_date">Surgery Date:</label>
+                            <label for="surgery_date">{{i18n "surgery date"}}:</label>
                             {{ with .Form.Errors.Get "surgery_date"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -211,7 +215,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label>Surgery Day:</label>
+                            <label>{{i18n "surgery day"}}:</label>
                             {{ with .Form.Errors.Get "surgery_day"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -228,7 +232,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label>Time:</label>
+                            <label>{{i18n "surgery time"}}:</label>
                             {{ with .Form.Errors.Get "surgery_time"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -245,7 +249,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="surgery_type">Surgery Type:</label>
+                            <label for="surgery_type">{{i18n "surgery type"}}:</label>
                             {{ with .Form.Errors.Get "surgery_type"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -255,7 +259,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label>Surgery Area:</label>
+                            <label>{{i18n "surgery area"}}:</label>
                             {{ with .Form.Errors.Get "surgery_area"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -272,7 +276,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="surgery_description">Surgery Description:</label>
+                            <label for="surgery_description">{{i18n "surgery description"}}:</label>
                             {{ with .Form.Errors.Get "surgery_description"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -283,7 +287,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label>Surgery Result:</label>
+                            <label>{{i18n "surgery result"}}:</label>
                             {{ with .Form.Errors.Get "surgery_result"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -300,7 +304,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="surgeon_first">Surgeon First:</label>
+                            <label for="surgeon_first">{{i18n "surgeon first"}}:</label>
                             {{ with .Form.Errors.Get "surgeon_first"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -310,7 +314,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="surgeon_second">Surgeon Second:</label>
+                            <label for="surgeon_second">{{i18n "surgeon second"}}:</label>
                             {{ with .Form.Errors.Get "surgeon_second"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -320,7 +324,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="resident">Resident:</label>
+                            <label for="resident">{{i18n "resident"}}:</label>
                             {{ with .Form.Errors.Get "resident"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -330,7 +334,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="hospital">Hospital:</label>
+                            <label for="hospital">{{i18n "hospital"}}:</label>
                             {{ with .Form.Errors.Get "hospital"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -340,7 +344,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label>Hospital Type:</label>
+                            <label>{{i18n "hospital type"}}:</label>
                             {{ with .Form.Errors.Get "hospital_type"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -350,14 +354,14 @@ Add new report
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
                                     {{.Text}}</option>
                                 {{end}}
-                                </datalist>
+                            </select>
                                 <input class="form-control {{with .Form.Errors.Get " hospital_type"}} is-invalid
                                     {{end}}" type="hidden" name="hospital_type" id="hospital_type" autocomplete="off"
                                     value="{{$surgery.HospitalType}}">
                         </div>
 
                         <div class="form-group ">
-                            <label for="hospital_address">Hospital Address:</label>
+                            <label for="hospital_address">{{i18n "hospital address"}}:</label>
                             {{ with .Form.Errors.Get "hospital_address"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -373,9 +377,16 @@ Add new report
                             {{end}}
                             <select id="mr" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
+                                {{if eq $patient.Name ""}}
                                 {{range $imagevalidity}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
                                 {{end}}
+                                {{else}}
+                                {{range $mr}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
+                                {{end}}
+
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " mr"}} is-invalid {{end}}" type="hidden"
                                 name="mr" id="mr" autocomplete="off" value="{{$surgery.MR}}">
@@ -388,8 +399,14 @@ Add new report
                             {{end}}
                             <select id="ct" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
+                                {{if eq $patient.Name ""}}
                                 {{range $imagevalidity}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
+                                {{else}}
+                                {{range $ct}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " ct"}} is-invalid {{end}}" type="hidden"
@@ -403,8 +420,14 @@ Add new report
                             {{end}}
                             <select id="fmri" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
+                                {{if eq $patient.Name ""}}
                                 {{range $imagevalidity}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
+                                {{else}}
+                                {{range $fmri}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " fmri"}} is-invalid {{end}}"
@@ -418,8 +441,14 @@ Add new report
                             {{end}}
                             <select id="dti" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
+                                {{if eq $patient.Name ""}}
                                 {{range $imagevalidity}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
+                                {{else}}
+                                {{range $dti}}
+                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
+                                {{end}}
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " dti"}} is-invalid {{end}}"
@@ -427,7 +456,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="operator_first">Operator First:</label>
+                            <label for="operator_first">{{i18n "operator first"}}:</label>
                             {{ with .Form.Errors.Get "operator_first"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -437,7 +466,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="operator_second">Operator Second:</label>
+                            <label for="operator_second">{{i18n "operator second"}}:</label>
                             {{ with .Form.Errors.Get "operator_second"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -447,7 +476,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="start_time">Start Time:</label>
+                            <label for="start_time">{{i18n "start time"}}:</label>
                             {{ with .Form.Errors.Get "start_time"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -457,7 +486,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="stop_time">Stop Time:</label>
+                            <label for="stop_time">{{i18n "end time"}}:</label>
                             {{ with .Form.Errors.Get "stop_time"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -467,7 +496,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="enter_time">Enter Time:</label>
+                            <label for="enter_time">{{i18n "enter time"}}:</label>
                             {{ with .Form.Errors.Get "enter_time"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -477,7 +506,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="exit_time">Exit Time:</label>
+                            <label for="exit_time">{{i18n "exit time"}}:</label>
                             {{ with .Form.Errors.Get "exit_time"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -487,7 +516,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="patient_enter_time">Patient Enter Time:</label>
+                            <label for="patient_enter_time">{{i18n "patient enter time"}}:</label>
                             {{ with .Form.Errors.Get "patient_enter_time"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -498,7 +527,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label>Head Fix Type:</label>
+                            <label>{{i18n "headband fix type"}}:</label>
                             {{ with .Form.Errors.Get "head_fix_type"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -508,14 +537,14 @@ Add new report
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
                                     {{.Text}}</option>
                                 {{end}}
-                                </datalist>
+                            </select>
                                 <input class="form-control {{with .Form.Errors.Get " head_fix_type"}} is-invalid
                                     {{end}}" type="hidden" name="head_fix_type" id="head_fix_type" autocomplete="off"
                                     value="{{$surgery.HeadFixType}}" list="head_fix_type">
                         </div>
 
                         <div class="form-group ">
-                            <label for="cancelation_reason">Cancelation Reason:</label>
+                            <label for="cancelation_reason">{{i18n "cancellation reason"}}:</label>
                             {{ with .Form.Errors.Get "cancelation_reason"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -525,29 +554,29 @@ Add new report
                         </div>
                 </div>
 
-                <h4 class="mt-4">Financial Information</h4>
+                <h4 class="mt-4">{{i18n "financial information"}}</h4>
 
                 <div class="grid-container ">
 
                         <div class="form-group ">
-                            <label>Payment Status:</label>
+                            <label>{{i18n "payment status"}}:</label>
                             {{ with .Form.Errors.Get "payment_status"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="payment_status" class="form-control">
                                 <option disabled selected value> -- select an option -- </option>
                                 {{range $paymentstatus}}
-                                <option value="{{.Value}}" {{if eq .Selected .Value}}selected="selected" {{end}}>
+                                <option value="{{.Value}}" {{if eq .Selected "selected"}}selected="selected" {{end}}>
                                     {{.Text}}</option>
                                 {{end}}
-                                </datalist>
+                            </select>
                                 <input class="form-control {{with .Form.Errors.Get " payment_status"}} is-invalid
                                     {{end}}" type="hidden" name="payment_status" id="payment_status" autocomplete="off"
                                     value="{{$financial.PaymentStatus}}">
                         </div>
 
                         <div class="form-group ">
-                            <label for="payment_date">Payment Date:</label>
+                            <label for="payment_date">{{i18n "payment date"}}:</label>
                             {{ with .Form.Errors.Get "payment_date"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -561,7 +590,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="receipt_number">Receipt Number:</label>
+                            <label for="receipt_number">{{i18n "receipt number"}}:</label>
                             {{ with .Form.Errors.Get "receipt_number"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -572,7 +601,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="payment_receipt_amount">Payment Receipt Amount:</label>
+                            <label for="payment_receipt_amount">{{i18n "payment receipt amount"}}:</label>
                             {{ with .Form.Errors.Get "payment_receipt_amount"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -582,7 +611,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="first_contact">First Contact:</label>
+                            <label for="first_contact">{{i18n "first contact"}}:</label>
                             {{ with .Form.Errors.Get "first_contact"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -596,7 +625,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="first_caller">First Caller:</label>
+                            <label for="first_caller">{{i18n "first caller"}}:</label>
                             {{ with .Form.Errors.Get "first_caller"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -606,7 +635,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="payment_card_number">Payment Card Number:</label>
+                            <label for="payment_card_number">{{i18n "payment card number"}}:</label>
                             {{ with .Form.Errors.Get "payment_card_number"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -616,7 +645,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="bank">Bank:</label>
+                            <label for="bank">{{i18n "bank"}}:</label>
                             {{ with .Form.Errors.Get "bank"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -626,7 +655,7 @@ Add new report
 
 
                         <div class="form-group ">
-                            <label for="discount_percentage">Discount Percentage:</label>
+                            <label for="discount_percentage">{{i18n "discount percentage"}}:</label>
                             {{ with .Form.Errors.Get "discount_percentage"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -637,7 +666,7 @@ Add new report
 
 
                         <div class="form-group ">
-                            <label for="discount_reason">Discount Reason:</label>
+                            <label for="discount_reason">{{i18n "discount reason"}}:</label>
                             {{ with .Form.Errors.Get "discount_reason"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -647,7 +676,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="insurance_type">Insurance Type:</label>
+                            <label for="insurance_type">{{i18n "insurance"}}:</label>
                             {{ with .Form.Errors.Get "insurance_type"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -657,7 +686,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="financial_verifier">Financial Verifier:</label>
+                            <label for="financial_verifier">{{i18n "financial verifier"}}:</label>
                             {{ with .Form.Errors.Get "financial_verifier"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -667,7 +696,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="receipt_received_date">Receipt Received Date:</label>
+                            <label for="receipt_received_date">{{i18n "receipt received date"}}:</label>
                             {{ with .Form.Errors.Get "receipt_received_date"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
@@ -681,7 +710,7 @@ Add new report
                         </div>
 
                         <div class="form-group ">
-                            <label for="receipt_receiver">Receipt Receiver:</label>
+                            <label for="receipt_receiver">{{i18n "receipt receiver"}}:</label>
                             {{ with .Form.Errors.Get "receipt_receiver"}}
                             <label class="text-danger">{{.}}</label>
                             {{end}}
