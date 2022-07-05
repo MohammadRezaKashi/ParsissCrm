@@ -91,7 +91,7 @@ func (m *postgresDBRepo) GetAllPatients() ([]models.PersonalInformation, error) 
 	defer cancel()
 
 	query := `SELECT * FROM public."PatientsInformation"
-	ORDER BY id ASC `
+	ORDER BY id DESC `
 
 	var patients []models.PersonalInformation
 

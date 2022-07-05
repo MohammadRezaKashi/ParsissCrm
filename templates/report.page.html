@@ -255,6 +255,7 @@ Statistical Report
                 [15, 25, 50, 'All'],
             ],
             scrollY: `calc(${heightOfHtml}px - 4rem)`,
+            "order": [],
         });
     });
 
@@ -313,7 +314,6 @@ Statistical Report
                 $('#all-rep').DataTable().clear()
                 $.each(response, function(index, value){
                     $('#all-rep').DataTable().row.add([
-                        value.ID,
                         value.Name,
                         value.Family,
                         value.NationalID,
