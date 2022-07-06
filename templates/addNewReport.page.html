@@ -757,15 +757,11 @@ Add new report
             return this.optional(element) || /^[0-9]{11}$/.test(value);
         }
     }, "Please enter a valid phone number.");
-    $('input').on('change', function() {
-        $(this).parent().find('label > span').html('');
-    });
+
     $('#main-form').validate({
         errorPlacement: function (label, element) {
             label.addClass('arrow');
-            console.log(element.parent());
-            let lableReal = element.parent().find('label > span')[0]
-            lableReal.innerHTML = label.html();
+            label.insertAfter(element);
         },
         wrapper: 'span',
         rules: {
