@@ -25,19 +25,19 @@
     }
 
     .grid-container {
-       column-count: 3;
-       padding-top: 8px;
+        column-count: 3;
     }
 
     .grid-container>div {
-        padding-top: 8px;
+        padding-top: 0px;
     }
 
     div.sticky {
         padding-top: 1px;
         padding-bottom: 4px;
         background: #fff;
-        position: -webkit-sticky; /* Safari */
+        position: -webkit-sticky;
+        /* Safari */
         position: sticky;
         top: 0;
     }
@@ -72,22 +72,19 @@ Add new report
     <div class="w-100 sticky">
         <div class="d-flex flex-row pt-2 pb-2 align-items-center">
             <h3 style="margin-top: 20px;width: 100%;">
-                <img
-                src="{{if eq $patient.Name ""}}{{$baseurl}}/static/images/AddImageIcon.png{{else}}{{$baseurl}}/static/images/PatientIcon.jpg{{end}}"
-                style="height: 70px; width: 70px;"> {{if eq $patient.Name ""}}{{i18n "add new patient"}}
-                {{else}}{{$patient.Name}}{{$patient.Family}}{{end}}
+                <img src="{{if eq $patient.Name ""}}{{$baseurl}}/static/images/AddImageIcon.png{{else}}{{$baseurl}}/static/images/PatientIcon.jpg{{end}}"
+                    style="height: 70px; width: 70px;"> {{if eq $patient.Name ""}}{{i18n "add new patient"}}{{else}}{{$patient.Name}}{{$patient.Family}}{{end}}
             </h3>
             {{if eq $patient.Name ""}}
-                <input type="submit" class="btn btn-primary" value="{{i18n "add"}}" style="float: right;height: 45px;">
+            <input type="submit" class="btn btn-primary" value="{{i18n "add"}}" style="float: right;height: 45px;">
             {{else}}
-                <input type="submit" class="btn btn-primary" value="{{i18n "save"}}" style="float: right;height: 45px;">
+            <input type="submit" class="btn btn-primary" value="{{i18n "save"}}" style="float: right;height: 45px;">
             {{end}}
         </div>
     </div>
     <div class="row">
         <div class="col">
 
-            
             <h4 class="mt-4">{{i18n "patient information"}}</h4>
 
             <form id="main-form" method="post"
@@ -96,80 +93,373 @@ Add new report
                 <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
                 <div class="grid-container">
-                        <div class="form-group required-label required">
-                            <label for="name">{{i18n "name"}}:</label>
-                            {{ with .Form.Errors.Get "name"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " name"}} is-invalid {{end}}" type="text"
-                                name="name" id="name" autocomplete="off" value="{{$patient.Name}}" required>
-                        </div>
+                    <div class="form-group required-label required">
+                        <label for="name">{{i18n "name"}}:</label>
+                        {{ with .Form.Errors.Get "name"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " name"}} is-invalid {{end}}" type="text"
+                            name="name" id="name" autocomplete="off" value="{{$patient.Name}}" required>
+                    </div>
 
-                        <div class="form-group  required-label required">
-                            <label for="family">{{i18n "family"}}:</label>
-                            {{ with .Form.Errors.Get "family"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " family"}} is-invalid {{end}}"
-                                type="text" name="family" id="family" autocomplete="off" value="{{$patient.Family}}">
-                        </div>
+                    <div class="form-group  required-label required">
+                        <label for="family">{{i18n "family"}}:</label>
+                        {{ with .Form.Errors.Get "family"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " family"}} is-invalid {{end}}" type="text"
+                            name="family" id="family" autocomplete="off" value="{{$patient.Family}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="age">{{i18n "age"}}:</label>
-                            {{ with .Form.Errors.Get "age"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " age"}} is-invalid {{end}}"
-                                type="number" name="age" id="age" autocomplete="off" value="{{$patient.Age}}">
-                        </div>
+                    <div class="form-group">
+                        <label for="national_id">{{i18n "national_code"}}:</label>
+                        {{ with .Form.Errors.Get "national_id"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="nationalCode form-control {{with .Form.Errors.Get " national_id"}} is-invalid
+                            {{end}}" type="number" name="national_id" id="national_id" autocomplete="off"
+                            value="{{$patient.NationalID}}">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="national_id">{{i18n "national_code"}}:</label>
-                            {{ with .Form.Errors.Get "national_id"}}
-                            <label class="text-danger">{{.}}</label>
+                    <div class="form-group">
+                        <label for="phone_number">{{i18n "phone"}}:</label>
+                        {{ with .Form.Errors.Get "phone_number"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " phone_number"}} is-invalid {{end}}"
+                            oninput="return phoneCheck(event, this)" type="text" name="phone_number" id="phone_number"
+                            autocomplete="off" value="{{$patient.PhoneNumber}}">
+                    </div>
+                    <div class="form-group ">
+                        <label>{{i18n "surgery day"}}:</label>
+                        {{ with .Form.Errors.Get "surgery_day"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="surgery_day" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{range $surgeryday}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <input class="nationalCode form-control {{with .Form.Errors.Get " national_id"}} is-invalid
-                                {{end}}" type="number" name="national_id" id="national_id" autocomplete="off"
-                                value="{{$patient.NationalID}}">
-                        </div>
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " surgery_day"}} is-invalid {{end}}"
+                            type="hidden" name="surgery_day" id="surgery_day" autocomplete="off"
+                            value="{{$surgery.SurgeryDay}}">
+                    </div>
+                    <div class="form-group ">
+                        <label>{{i18n "surgery time"}}:</label>
+                        {{ with .Form.Errors.Get "surgery_time"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="surgery_time" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{range $surgerytime}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
+                            {{end}}
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " time"}} is-invalid {{end}}" type="hidden"
+                            name="surgery_time" id="surgery_time" autocomplete="off" value="{{$rep.SurgeryTime}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">{{i18n "address"}}:</label>
+                        {{ with .Form.Errors.Get "address"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " address"}} is-invalid {{end}}" type="text"
+                            name="address" id="address" autocomplete="off" value="{{$patient.Address}}">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="phone_number">{{i18n "phone"}}:</label>
-                            {{ with .Form.Errors.Get "phone_number"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " phone_number"}} is-invalid {{end}}"
-                                oninput ="return phoneCheck(event, this)"
-                                type="text" name="phone_number" id="phone_number" autocomplete="off"
-                                value="{{$patient.PhoneNumber}}" >
-                        </div>
-                        <div class="form-group ">
-                            <label for="address">{{i18n "address"}}:</label>
-                            {{ with .Form.Errors.Get "address"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " address"}} is-invalid {{end}}"
-                                type="text" name="address" id="address" autocomplete="off" value="{{$patient.Address}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="place_of_birth">{{i18n "place_of_birth"}}:</label>
+                        {{ with .Form.Errors.Get "place_of_birth"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " place_of_birth"}} is-invalid {{end}}"
+                            type="text" name="place_of_birth" id="place_of_birth" autocomplete="off"
+                            value="{{$patient.PlaceOfBirth}}">
+                    </div>                    
 
-                        <div class="form-group ">
-                            <label for="place_of_birth">{{i18n "place_of_birth"}}:</label>
-                            {{ with .Form.Errors.Get "place_of_birth"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " place_of_birth"}} is-invalid {{end}}"
-                                type="text" name="place_of_birth" id="place_of_birth" autocomplete="off"
-                                value="{{$patient.PlaceOfBirth}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="surgery_date">{{i18n "surgery date"}}:</label>
+                        {{ with .Form.Errors.Get "surgery_date"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="usage form-control {{with .Form.Errors.Get " surgery_date"}} is-invalid {{end}}"
+                            type="text" name="surgery_date" id="surgery_date" autocomplete="off"
+                            style="background-color: #FFFFFF" readonly="readonly" value="
+                                {{if $surgery.SurgeryDate}}
+                                {{humanPgtypeDate $surgery.SurgeryDate}}
+                                {{else}}
+                                {{end}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="email">{{i18n "email"}}:</label>
-                            {{ with .Form.Errors.Get "email"}}
-                            <label class="text-danger">{{.}}</label>
+                    <div class="form-group ">
+                        <label for="surgeon_first">{{i18n "surgeon first"}}:</label>
+                        {{ with .Form.Errors.Get "surgeon_first"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " surgeon_first"}} is-invalid {{end}}"
+                            type="text" name="surgeon_first" id="surgeon_first" autocomplete="off"
+                            value="{{$surgery.SurgeonFirst}}">
+                    </div>
+                    
+
+                    <div class="form-group ">
+                        <label for="hospital">{{i18n "hospital"}}:</label>
+                        {{ with .Form.Errors.Get "hospital"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " hospital"}} is-invalid {{end}}" type="text"
+                            name="hospital" id="hospital" autocomplete="off" value="{{$surgery.Hospital}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label>{{i18n "hospital type"}}:</label>
+                        {{ with .Form.Errors.Get "hospital_type"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="hospital_type" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{range $hospitaltype}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " email"}} is-invalid {{end}}"
-                                type="text" name="email" id="email" autocomplete="off" value="{{$patient.Email}}">
-                        </div>
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " hospital_type"}} is-invalid {{end}}"
+                            type="hidden" name="hospital_type" id="hospital_type" autocomplete="off"
+                            value="{{$surgery.HospitalType}}">
+                    </div>
+        
+
+                    <div class="form-group ">
+                        <label>MR:</label>
+                        {{ with .Form.Errors.Get "mr"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="mr" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{if eq $patient.Name ""}}
+                            {{range $imagevalidity}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
+                            {{end}}
+                            {{else}}
+                            {{range $mr}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
+                            {{end}}
+                            {{end}}
+
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " mr"}} is-invalid {{end}}" type="hidden"
+                            name="mr" id="mr" autocomplete="off" value="{{$surgery.MR}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label>CT:</label>
+                        {{ with .Form.Errors.Get "ct"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="ct" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{if eq $patient.Name ""}}
+                            {{range $imagevalidity}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
+                            {{end}}
+                            {{else}}
+                            {{range $ct}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
+                            {{end}}
+                            {{end}}
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " ct"}} is-invalid {{end}}" type="hidden"
+                            name="ct" id="ct" autocomplete="off" value="{{$surgery.CT}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="operator_first">{{i18n "operator first"}}:</label>
+                        {{ with .Form.Errors.Get "operator_first"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " operator_first"}} is-invalid {{end}}"
+                            type="text" name="operator_first" id="operator_first" autocomplete="off"
+                            value="{{$surgery.OperatorFirst}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="operator_second">{{i18n "operator second"}}:</label>
+                        {{ with .Form.Errors.Get "operator_second"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " operator_second"}} is-invalid {{end}}"
+                            type="text" name="operator_second" id="operator_second" autocomplete="off"
+                            value="{{$surgery.OperatorSecond}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="first_contact">{{i18n "first contact"}}:</label>
+                        {{ with .Form.Errors.Get "first_contact"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="usage form-control {{with .Form.Errors.Get " first_contact"}} is-invalid {{end}}"
+                            type="text" name="first_contact" id="first_contact" autocomplete="off"
+                            style="background-color: #FFFFFF" readonly="readonly" value="
+                                {{if $financial.DateOfFirstContact}}
+                                {{humanPgtypeDate $financial.DateOfFirstContact}}
+                                {{else}}
+                                {{end}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="first_caller">{{i18n "first caller"}}:</label>
+                        {{ with .Form.Errors.Get "first_caller"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " first_caller"}} is-invalid {{end}}"
+                            type="text" name="first_caller" id="first_caller" autocomplete="off"
+                            value="{{$financial.FirstCaller}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label>{{i18n "payment status"}}:</label>
+                        {{ with .Form.Errors.Get "payment_status"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="payment_status" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{range $paymentstatus}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
+                            {{end}}
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " payment_status"}} is-invalid {{end}}"
+                            type="hidden" name="payment_status" id="payment_status" autocomplete="off"
+                            value="{{$financial.PaymentStatus}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="payment_date">{{i18n "payment date"}}:</label>
+                        {{ with .Form.Errors.Get "payment_date"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="usage form-control {{with .Form.Errors.Get " payment_date"}} is-invalid {{end}}"
+                            type="text" name="payment_date" id="payment_date" autocomplete="off"
+                            style="background-color: #FFFFFF" readonly value="
+                                {{if $financial.DateOfPayment}}
+                                {{humanPgtypeDate $financial.DateOfPayment}}
+                                {{else}}
+                                {{end}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="payment_card_number">{{i18n "payment card number"}}:</label>
+                        {{ with .Form.Errors.Get "payment_card_number"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " payment_card_number"}} is-invalid {{end}}"
+                            type="text" name="payment_card_number" id="payment_card_number" autocomplete="off"
+                            value="{{$financial.LastFourDigitsCard}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="payment_receipt_amount">{{i18n "payment receipt amount"}}:</label>
+                        {{ with .Form.Errors.Get "payment_receipt_amount"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " payment_receipt_amount"}} is-invalid
+                            {{end}}" type="text" name="payment_receipt_amount" id="payment_receipt_amount"
+                            autocomplete="off" value="{{$financial.CashAmount}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="bank">{{i18n "bank"}}:</label>
+                        {{ with .Form.Errors.Get "bank"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " bank"}} is-invalid {{end}}" type="text"
+                            name="bank" id="bank" autocomplete="off" value="{{$financial.Bank}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="discount_percentage">{{i18n "discount percentage"}}:</label>
+                        {{ with .Form.Errors.Get "discount_percentage"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " discount_percentage"}} is-invalid {{end}}"
+                            type="number" name="discount_percentage" id="discount_percentage" min="0" max="100"
+                            autocomplete="off" value="{{$financial.DiscountPercent}}">
+                    </div>
+
+
+                    <div class="form-group ">
+                        <label for="discount_reason">{{i18n "discount reason"}}:</label>
+                        {{ with .Form.Errors.Get "discount_reason"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " discount_reason"}} is-invalid {{end}}"
+                            type="text" name="discount_reason" id="discount_reason" autocomplete="off"
+                            value="{{$financial.ReasonForDiscount}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="insurance_type">{{i18n "insurance"}}:</label>
+                        {{ with .Form.Errors.Get "insurance_type"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " insurance_type"}} is-invalid {{end}}"
+                            type="text" name="insurance_type" id="insurance_type" autocomplete="off"
+                            value="{{$financial.TypeOfInsurance}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="financial_verifier">{{i18n "financial verifier"}}:</label>
+                        {{ with .Form.Errors.Get "financial_verifier"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " financial_verifier"}} is-invalid {{end}}"
+                            type="text" name="financial_verifier" id="financial_verifier" autocomplete="off"
+                            value="{{$financial.FinancialVerifier}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="receipt_number">{{i18n "receipt number"}}:</label>
+                        {{ with .Form.Errors.Get "receipt_number"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " receipt_number"}} is-invalid {{end}}"
+                            oninput="return validateNumber(event, this)" type="text" name="receipt_number"
+                            id="receipt_number" autocomplete="off" value="{{$financial.ReceiptNumber}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label>{{i18n "surgery result"}}:</label>
+                        {{ with .Form.Errors.Get "surgery_result"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="surgery_result" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{range $surgeryresult}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
+                            {{end}}
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " surgery_result"}} is-invalid {{end}}"
+                            type="hidden" name="surgery_result" id="surgery_result" autocomplete="off"
+                            value="{{$rep.SurgeryResult}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="cancelation_reason">{{i18n "cancellation reason"}}:</label>
+                        {{ with .Form.Errors.Get "cancelation_reason"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " cancelation_reason"}} is-invalid {{end}}"
+                            type="text" name="cancelation_reason" id="cancelation_reason" autocomplete="off"
+                            value="{{$surgery.CancellationReason}}">
+                    </div>
                 </div>
 
 
@@ -177,561 +467,274 @@ Add new report
 
                 <div class="grid-container">
 
-                        <div class="form-group ">
-                            <label for="file_number">{{i18n "file number"}}:</label>
-                            {{ with .Form.Errors.Get "file_number"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " file_number"}} is-invalid {{end}}"
-                                type="text" name="file_number" id="file_number" autocomplete="off"
-                                oninput ="return validateNumber(event, this)"
-                                value="{{$surgery.FileNumber}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="file_number">{{i18n "file number"}}:</label>
+                        {{ with .Form.Errors.Get "file_number"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " file_number"}} is-invalid {{end}}"
+                            type="text" name="file_number" id="file_number" autocomplete="off"
+                            oninput="return validateNumber(event, this)" value="{{$surgery.FileNumber}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="date_of_hospital_admission">{{i18n "date of hospital admission"}}:</label>
-                            {{ with .Form.Errors.Get "date_of_hospital_admission"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="usage form-control {{with .Form.Errors.Get " date_of_hospital_admission"}}
-                                is-invalid {{end}}" type="text" name="date_of_hospital_admission"
-                                id="date_of_hospital_admission" autocomplete="off" style="background-color: #FFFFFF"
-                                readonly="readonly"
-                                value="{{if $surgery.DateOfHospitalAdmission}}{{humanPgtypeDate $surgery.DateOfHospitalAdmission}}{{else}}{{end}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="age">{{i18n "age"}}:</label>
+                        {{ with .Form.Errors.Get "age"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " age"}} is-invalid {{end}}" type="number"
+                            name="age" id="age" autocomplete="off" value="{{$patient.Age}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="surgery_date">{{i18n "surgery date"}}:</label>
-                            {{ with .Form.Errors.Get "surgery_date"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="usage form-control {{with .Form.Errors.Get " surgery_date"}} is-invalid
-                                {{end}}" type="text" name="surgery_date" id="surgery_date" autocomplete="off"
-                                style="background-color: #FFFFFF" readonly="readonly" value="
-                                {{if $surgery.SurgeryDate}}
-                                {{humanPgtypeDate $surgery.SurgeryDate}}
-                                {{else}}
-                                {{end}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="email">{{i18n "email"}}:</label>
+                        {{ with .Form.Errors.Get "email"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " email"}} is-invalid {{end}}" type="text"
+                            name="email" id="email" autocomplete="off" value="{{$patient.Email}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label>{{i18n "surgery day"}}:</label>
-                            {{ with .Form.Errors.Get "surgery_day"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <select id="surgery_day" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{range $surgeryday}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{i18n .Text}}</option>
-                                {{end}}
-                            </select>
-                            <input class="form-control {{with .Form.Errors.Get " surgery_day"}} is-invalid {{end}}"
-                                type="hidden" name="surgery_day" id="surgery_day" autocomplete="off"
-                                value="{{$surgery.SurgeryDay}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="date_of_hospital_admission">{{i18n "date of hospital admission"}}:</label>
+                        {{ with .Form.Errors.Get "date_of_hospital_admission"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="usage form-control {{with .Form.Errors.Get " date_of_hospital_admission"}}
+                            is-invalid {{end}}" type="text" name="date_of_hospital_admission"
+                            id="date_of_hospital_admission" autocomplete="off" style="background-color: #FFFFFF"
+                            readonly="readonly"
+                            value="{{if $surgery.DateOfHospitalAdmission}}{{humanPgtypeDate $surgery.DateOfHospitalAdmission}}{{else}}{{end}}">
+                    </div>                                       
 
-                        <div class="form-group ">
-                            <label>{{i18n "surgery time"}}:</label>
-                            {{ with .Form.Errors.Get "surgery_time"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <select id="surgery_time" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{range $surgerytime}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{i18n .Text}}</option>
-                                {{end}}
-                            </select>
-                            <input class="form-control {{with .Form.Errors.Get " time"}} is-invalid {{end}}"
-                                type="hidden" name="surgery_time" id="surgery_time" autocomplete="off"
-                                value="{{$rep.SurgeryTime}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="surgery_type">{{i18n "surgery type"}}:</label>
+                        {{ with .Form.Errors.Get "surgery_type"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " surgery_type"}} is-invalid {{end}}"
+                            type="text" name="surgery_type" id="surgery_type" autocomplete="off"
+                            value="{{$surgery.SurgeryType}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="surgery_type">{{i18n "surgery type"}}:</label>
-                            {{ with .Form.Errors.Get "surgery_type"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " surgery_type"}} is-invalid {{end}}"
-                                type="text" name="surgery_type" id="surgery_type" autocomplete="off"
-                                value="{{$surgery.SurgeryType}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="surgeon_second">{{i18n "surgeon second"}}:</label>
+                        {{ with .Form.Errors.Get "surgeon_second"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " surgeon_second"}} is-invalid {{end}}"
+                            type="text" name="surgeon_second" id="surgeon_second" autocomplete="off"
+                            value="{{$surgery.SurgeonSecond}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label>{{i18n "surgery area"}}:</label>
-                            {{ with .Form.Errors.Get "surgery_area"}}
-                            <label class="text-danger">{{.}}</label>
+                    <div class="form-group ">
+                        <label>{{i18n "surgery area"}}:</label>
+                        {{ with .Form.Errors.Get "surgery_area"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="surgery_area" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{range $surgeryarea}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{.Text}}</option>
                             {{end}}
-                            <select id="surgery_area" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{range $surgeryarea}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
-                                {{end}}
-                            </select>
-                                <input class="form-control {{with .Form.Errors.Get " surgery_area"}} is-invalid {{end}}"
-                                    type="hidden" name="surgery_area" id="surgery_area" autocomplete="off"
-                                    value="{{$surgery.SurgeryArea}}">
-                        </div>
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " surgery_area"}} is-invalid {{end}}"
+                            type="hidden" name="surgery_area" id="surgery_area" autocomplete="off"
+                            value="{{$surgery.SurgeryArea}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="surgery_description">{{i18n "surgery description"}}:</label>
-                            {{ with .Form.Errors.Get "surgery_description"}}
-                            <label class="text-danger">{{.}}</label>
+                    <div class="form-group ">
+                        <label for="surgery_description">{{i18n "surgery description"}}:</label>
+                        {{ with .Form.Errors.Get "surgery_description"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <textarea style="height: 83px; width: 100%;" class="wpcf7-form-control wpcf7-textarea"
+                            aria-invalid="false" class="form-control {{with .Form.Errors.Get " surgery_description"}}
+                            is-invalid {{end}}" name="surgery_description" id="surgery_description" autocomplete="off"
+                            value="{{$surgery.SurgeryDescription}}">{{$surgery.SurgeryDescription}}</textarea>
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="resident">{{i18n "resident"}}:</label>
+                        {{ with .Form.Errors.Get "resident"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " resident"}} is-invalid {{end}}" type="text"
+                            name="resident" id="resident" autocomplete="off" value="{{$surgery.Resident}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="hospital_address">{{i18n "hospital address"}}:</label>
+                        {{ with .Form.Errors.Get "hospital_address"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " hospital_address"}} is-invalid {{end}}"
+                            type="text" name="hospital_address" id="hospital_address" autocomplete="off"
+                            value="{{$surgery.HospitalAddress}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label>MR:</label>
+                        {{ with .Form.Errors.Get "mr"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="mr" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{if eq $patient.Name ""}}
+                            {{range $imagevalidity}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <textarea style="height: 172px; width: 100%;" class="wpcf7-form-control wpcf7-textarea"
-                                aria-invalid="false" class="form-control {{with .Form.Errors.Get "surgery_description"}} is-invalid {{end}}" name="surgery_description"
-                                id="surgery_description" autocomplete="off"
-                                value="{{$surgery.SurgeryDescription}}">{{$surgery.SurgeryDescription}}</textarea>
-                        </div>
-
-                        <div class="form-group ">
-                            <label>{{i18n "surgery result"}}:</label>
-                            {{ with .Form.Errors.Get "surgery_result"}}
-                            <label class="text-danger">{{.}}</label>
+                            {{else}}
+                            {{range $mr}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <select id="surgery_result" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{range $surgeryresult}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{i18n .Text}}</option>
-                                {{end}}
-                            </select>
-                                <input class="form-control {{with .Form.Errors.Get " surgery_result"}} is-invalid
-                                    {{end}}" type="hidden" name="surgery_result" id="surgery_result" autocomplete="off"
-                                    value="{{$rep.SurgeryResult}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="surgeon_first">{{i18n "surgeon first"}}:</label>
-                            {{ with .Form.Errors.Get "surgeon_first"}}
-                            <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " surgeon_first"}} is-invalid {{end}}"
-                                type="text" name="surgeon_first" id="surgeon_first" autocomplete="off"
-                                value="{{$surgery.SurgeonFirst}}">
-                        </div>
 
-                        <div class="form-group ">
-                            <label for="surgeon_second">{{i18n "surgeon second"}}:</label>
-                            {{ with .Form.Errors.Get "surgeon_second"}}
-                            <label class="text-danger">{{.}}</label>
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " mr"}} is-invalid {{end}}" type="hidden"
+                            name="mr" id="mr" autocomplete="off" value="{{$surgery.MR}}">
+                    </div>
+
+                    <div class="form-group ">
+                        <label>CT:</label>
+                        {{ with .Form.Errors.Get "ct"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="ct" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{if eq $patient.Name ""}}
+                            {{range $imagevalidity}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " surgeon_second"}} is-invalid {{end}}"
-                                type="text" name="surgeon_second" id="surgeon_second" autocomplete="off"
-                                value="{{$surgery.SurgeonSecond}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="resident">{{i18n "resident"}}:</label>
-                            {{ with .Form.Errors.Get "resident"}}
-                            <label class="text-danger">{{.}}</label>
+                            {{else}}
+                            {{range $ct}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " resident"}} is-invalid {{end}}"
-                                type="text" name="resident" id="resident" autocomplete="off"
-                                value="{{$surgery.Resident}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="hospital">{{i18n "hospital"}}:</label>
-                            {{ with .Form.Errors.Get "hospital"}}
-                            <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " hospital"}} is-invalid {{end}}"
-                                type="text" name="hospital" id="hospital" autocomplete="off"
-                                value="{{$surgery.Hospital}}">
-                        </div>
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " ct"}} is-invalid {{end}}" type="hidden"
+                            name="ct" id="ct" autocomplete="off" value="{{$surgery.CT}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label>{{i18n "hospital type"}}:</label>
-                            {{ with .Form.Errors.Get "hospital_type"}}
-                            <label class="text-danger">{{.}}</label>
+                    <div class="form-group ">
+                        <label>FMRI:</label>
+                        {{ with .Form.Errors.Get "fmri"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="fmri" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{if eq $patient.Name ""}}
+                            {{range $imagevalidity}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <select id="hospital_type" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{range $hospitaltype}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{i18n .Text}}</option>
-                                {{end}}
-                            </select>
-                                <input class="form-control {{with .Form.Errors.Get " hospital_type"}} is-invalid
-                                    {{end}}" type="hidden" name="hospital_type" id="hospital_type" autocomplete="off"
-                                    value="{{$surgery.HospitalType}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="hospital_address">{{i18n "hospital address"}}:</label>
-                            {{ with .Form.Errors.Get "hospital_address"}}
-                            <label class="text-danger">{{.}}</label>
+                            {{else}}
+                            {{range $fmri}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " hospital_address"}} is-invalid {{end}}"
-                                type="text" name="hospital_address" id="hospital_address" autocomplete="off"
-                                value="{{$surgery.HospitalAddress}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label>MR:</label>
-                            {{ with .Form.Errors.Get "mr"}}
-                            <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <select id="mr" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{if eq $patient.Name ""}}
-                                    {{range $imagevalidity}}
-                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                        {{i18n .Text}}</option>
-                                    {{end}}
-                                {{else}}
-                                    {{range $mr}}
-                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                        {{i18n .Text}}</option>
-                                    {{end}}
-                                {{end}}
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " fmri"}} is-invalid {{end}}" type="hidden"
+                            name="fmri" id="fmri" autocomplete="off" value="{{$surgery.FMRI}}">
+                    </div>
 
-                            </select>
-                            <input class="form-control {{with .Form.Errors.Get " mr"}} is-invalid {{end}}" type="hidden"
-                                name="mr" id="mr" autocomplete="off" value="{{$surgery.MR}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label>CT:</label>
-                            {{ with .Form.Errors.Get "ct"}}
-                            <label class="text-danger">{{.}}</label>
+                    <div class="form-group ">
+                        <label>DTI:</label>
+                        {{ with .Form.Errors.Get "dti"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="dti" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{if eq $patient.Name ""}}
+                            {{range $imagevalidity}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <select id="ct" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{if eq $patient.Name ""}}
-                                    {{range $imagevalidity}}
-                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                        {{i18n .Text}}</option>
-                                    {{end}}
-                                {{else}}
-                                    {{range $ct}}
-                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                        {{i18n .Text}}</option>
-                                    {{end}}
-                                {{end}}
-                            </select>
-                            <input class="form-control {{with .Form.Errors.Get " ct"}} is-invalid {{end}}" type="hidden"
-                                name="ct" id="ct" autocomplete="off" value="{{$surgery.CT}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label>FMRI:</label>
-                            {{ with .Form.Errors.Get "fmri"}}
-                            <label class="text-danger">{{.}}</label>
+                            {{else}}
+                            {{range $dti}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{i18n .Text}}</option>
                             {{end}}
-                            <select id="fmri" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{if eq $patient.Name ""}}
-                                    {{range $imagevalidity}}
-                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                        {{i18n .Text}}</option>
-                                    {{end}}
-                                {{else}}
-                                    {{range $fmri}}
-                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                        {{i18n .Text}}</option>
-                                    {{end}}
-                                {{end}}
-                            </select>
-                            <input class="form-control {{with .Form.Errors.Get " fmri"}} is-invalid {{end}}"
-                                type="hidden" name="fmri" id="fmri" autocomplete="off" value="{{$surgery.FMRI}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label>DTI:</label>
-                            {{ with .Form.Errors.Get "dti"}}
-                            <label class="text-danger">{{.}}</label>
                             {{end}}
-                            <select id="dti" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{if eq $patient.Name ""}}
-                                    {{range $imagevalidity}}
-                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                        {{i18n .Text}}</option>
-                                    {{end}}
-                                {{else}}
-                                    {{range $dti}}
-                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                        {{i18n .Text}}</option>
-                                    {{end}}
-                                {{end}}
-                            </select>
-                            <input class="form-control {{with .Form.Errors.Get " dti"}} is-invalid {{end}}"
-                                type="hidden" name="dti" id="dti" autocomplete="off" value="{{$surgery.DTI}}">
-                        </div>
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " dti"}} is-invalid {{end}}" type="hidden"
+                            name="dti" id="dti" autocomplete="off" value="{{$surgery.DTI}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="operator_first">{{i18n "operator first"}}:</label>
-                            {{ with .Form.Errors.Get "operator_first"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " operator_first"}} is-invalid {{end}}"
-                                type="text" name="operator_first" id="operator_first" autocomplete="off"
-                                value="{{$surgery.OperatorFirst}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="start_time">{{i18n "start time"}}:</label>
+                        {{ with .Form.Errors.Get "start_time"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " start_time"}} is-invalid {{end}}"
+                            type="time" name="start_time" id="start_time" autocomplete="off"
+                            value="{{if $surgery.StartTime}}{{timestampToTime $surgery.StartTime}}{{else}}{{end}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="operator_second">{{i18n "operator second"}}:</label>
-                            {{ with .Form.Errors.Get "operator_second"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " operator_second"}} is-invalid {{end}}"
-                                type="text" name="operator_second" id="operator_second" autocomplete="off"
-                                value="{{$surgery.OperatorSecond}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="stop_time">{{i18n "end time"}}:</label>
+                        {{ with .Form.Errors.Get "stop_time"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " stop_time"}} is-invalid {{end}}"
+                            type="time" name="stop_time" id="stop_time" autocomplete="off"
+                            value="{{if $surgery.StopTime}}{{timestampToTime $surgery.StopTime}}{{else}}{{end}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="start_time">{{i18n "start time"}}:</label>
-                            {{ with .Form.Errors.Get "start_time"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " start_time"}} is-invalid {{end}}"
-                                type="time" name="start_time" id="start_time" autocomplete="off"
-                                value="{{if $surgery.StartTime}}{{timestampToTime $surgery.StartTime}}{{else}}{{end}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="enter_time">{{i18n "enter time"}}:</label>
+                        {{ with .Form.Errors.Get "enter_time"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " enter_time"}} is-invalid {{end}}"
+                            type="time" name="enter_time" id="enter_time" autocomplete="off"
+                            value="{{if $surgery.EnterTime}}{{timestampToTime $surgery.EnterTime}}{{else}}{{end}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="stop_time">{{i18n "end time"}}:</label>
-                            {{ with .Form.Errors.Get "stop_time"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " stop_time"}} is-invalid {{end}}"
-                                type="time" name="stop_time" id="stop_time" autocomplete="off"
-                                value="{{if $surgery.StopTime}}{{timestampToTime $surgery.StopTime}}{{else}}{{end}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="exit_time">{{i18n "exit time"}}:</label>
+                        {{ with .Form.Errors.Get "exit_time"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " exit_time"}} is-invalid {{end}}"
+                            type="time" name="exit_time" id="exit_time" autocomplete="off"
+                            value="{{if $surgery.ExitTime}}{{timestampToTime $surgery.ExitTime}}{{else}}{{end}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="enter_time">{{i18n "enter time"}}:</label>
-                            {{ with .Form.Errors.Get "enter_time"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " enter_time"}} is-invalid {{end}}"
-                                type="time" name="enter_time" id="enter_time" autocomplete="off"
-                                value="{{if $surgery.EnterTime}}{{timestampToTime $surgery.EnterTime}}{{else}}{{end}}">
-                        </div>
+                    <div class="form-group ">
+                        <label for="patient_enter_time">{{i18n "patient enter time"}}:</label>
+                        {{ with .Form.Errors.Get "patient_enter_time"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <input class="form-control {{with .Form.Errors.Get " patient_enter_time"}} is-invalid {{end}}"
+                            type="time" name="patient_enter_time" id="patient_enter_time" autocomplete="off"
+                            value="{{if $surgery.PatientEnterTime}}{{timestampToTime $surgery.PatientEnterTime}}{{else}}{{end}}">
+                    </div>
 
-                        <div class="form-group ">
-                            <label for="exit_time">{{i18n "exit time"}}:</label>
-                            {{ with .Form.Errors.Get "exit_time"}}
-                            <label class="text-danger">{{.}}</label>
+                    <div class="form-group ">
+                        <label>{{i18n "headband fix type"}}:</label>
+                        {{ with .Form.Errors.Get "head_fix_type"}}
+                        <label class="text-danger">{{.}}</label>
+                        {{end}}
+                        <select id="head_fix_type" class="form-control">
+                            <option disabled selected value> {{i18n "background text"}} </option>
+                            {{range $headfixtype}}
+                            <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                {{.Text}}</option>
                             {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " exit_time"}} is-invalid {{end}}"
-                                type="time" name="exit_time" id="exit_time" autocomplete="off"
-                                value="{{if $surgery.ExitTime}}{{timestampToTime $surgery.ExitTime}}{{else}}{{end}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="patient_enter_time">{{i18n "patient enter time"}}:</label>
-                            {{ with .Form.Errors.Get "patient_enter_time"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " patient_enter_time"}} is-invalid
-                                {{end}}" type="time" name="patient_enter_time" id="patient_enter_time"
-                                autocomplete="off"
-                                value="{{if $surgery.PatientEnterTime}}{{timestampToTime $surgery.PatientEnterTime}}{{else}}{{end}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label>{{i18n "headband fix type"}}:</label>
-                            {{ with .Form.Errors.Get "head_fix_type"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <select id="head_fix_type" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{range $headfixtype}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
-                                {{end}}
-                            </select>
-                                <input class="form-control {{with .Form.Errors.Get " head_fix_type"}} is-invalid
-                                    {{end}}" type="hidden" name="head_fix_type" id="head_fix_type" autocomplete="off"
-                                    value="{{$surgery.HeadFixType}}" list="head_fix_type">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="cancelation_reason">{{i18n "cancellation reason"}}:</label>
-                            {{ with .Form.Errors.Get "cancelation_reason"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " cancelation_reason"}} is-invalid
-                                {{end}}" type="text" name="cancelation_reason" id="cancelation_reason"
-                                autocomplete="off" value="{{$surgery.CancellationReason}}">
-                        </div>
+                        </select>
+                        <input class="form-control {{with .Form.Errors.Get " head_fix_type"}} is-invalid {{end}}"
+                            type="hidden" name="head_fix_type" id="head_fix_type" autocomplete="off"
+                            value="{{$surgery.HeadFixType}}" list="head_fix_type">
+                    </div>                    
                 </div>
-
-                <h4 class="mt-4">{{i18n "financial information"}}</h4>
-
-                <div class="grid-container ">
-
-                        <div class="form-group ">
-                            <label>{{i18n "payment status"}}:</label>
-                            {{ with .Form.Errors.Get "payment_status"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <select id="payment_status" class="form-control">
-                                <option disabled selected value> {{i18n "background text"}} </option>
-                                {{range $paymentstatus}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected"}}selected="selected" {{end}}>
-                                    {{i18n .Text}}</option>
-                                {{end}}
-                            </select>
-                                <input class="form-control {{with .Form.Errors.Get " payment_status"}} is-invalid
-                                    {{end}}" type="hidden" name="payment_status" id="payment_status" autocomplete="off"
-                                    value="{{$financial.PaymentStatus}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="payment_date">{{i18n "payment date"}}:</label>
-                            {{ with .Form.Errors.Get "payment_date"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="usage form-control {{with .Form.Errors.Get " payment_date"}} is-invalid
-                                {{end}}" type="text" name="payment_date" id="payment_date" autocomplete="off"
-                                style="background-color: #FFFFFF" readonly value="
-                                {{if $financial.DateOfPayment}}
-                                {{humanPgtypeDate $financial.DateOfPayment}}
-                                {{else}}
-                                {{end}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="receipt_number">{{i18n "receipt number"}}:</label>
-                            {{ with .Form.Errors.Get "receipt_number"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " receipt_number"}} is-invalid {{end}}"
-                                oninput="return validateNumber(event, this)"
-                                type="text" name="receipt_number" id="receipt_number" autocomplete="off"
-                                value="{{$financial.ReceiptNumber}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="payment_receipt_amount">{{i18n "payment receipt amount"}}:</label>
-                            {{ with .Form.Errors.Get "payment_receipt_amount"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " payment_receipt_amount"}} is-invalid
-                                {{end}}" type="text" name="payment_receipt_amount" id="payment_receipt_amount"
-                                autocomplete="off" value="{{$financial.CashAmount}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="first_contact">{{i18n "first contact"}}:</label>
-                            {{ with .Form.Errors.Get "first_contact"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="usage form-control {{with .Form.Errors.Get " first_contact"}} is-invalid
-                                {{end}}" type="text" name="first_contact" id="first_contact" autocomplete="off"
-                                style="background-color: #FFFFFF" readonly="readonly" value="
-                                {{if $financial.DateOfFirstContact}}
-                                {{humanPgtypeDate $financial.DateOfFirstContact}}
-                                {{else}}
-                                {{end}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="first_caller">{{i18n "first caller"}}:</label>
-                            {{ with .Form.Errors.Get "first_caller"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " first_caller"}} is-invalid {{end}}"
-                                type="text" name="first_caller" id="first_caller" autocomplete="off"
-                                value="{{$financial.FirstCaller}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="payment_card_number">{{i18n "payment card number"}}:</label>
-                            {{ with .Form.Errors.Get "payment_card_number"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " payment_card_number"}} is-invalid
-                                {{end}}" type="text" name="payment_card_number" id="payment_card_number"
-                                autocomplete="off" value="{{$financial.LastFourDigitsCard}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="bank">{{i18n "bank"}}:</label>
-                            {{ with .Form.Errors.Get "bank"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " bank"}} is-invalid {{end}}" type="text"
-                                name="bank" id="bank" autocomplete="off" value="{{$financial.Bank}}">
-                        </div>
-
-
-                        <div class="form-group ">
-                            <label for="discount_percentage">{{i18n "discount percentage"}}:</label>
-                            {{ with .Form.Errors.Get "discount_percentage"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " discount_percentage"}} is-invalid
-                                {{end}}" type="number" name="discount_percentage" id="discount_percentage" min="0"
-                                max="100" autocomplete="off" value="{{$financial.DiscountPercent}}">
-                        </div>
-
-
-                        <div class="form-group ">
-                            <label for="discount_reason">{{i18n "discount reason"}}:</label>
-                            {{ with .Form.Errors.Get "discount_reason"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " discount_reason"}} is-invalid {{end}}"
-                                type="text" name="discount_reason" id="discount_reason" autocomplete="off"
-                                value="{{$financial.ReasonForDiscount}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="insurance_type">{{i18n "insurance"}}:</label>
-                            {{ with .Form.Errors.Get "insurance_type"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " insurance_type"}} is-invalid {{end}}"
-                                type="text" name="insurance_type" id="insurance_type" autocomplete="off"
-                                value="{{$financial.TypeOfInsurance}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="financial_verifier">{{i18n "financial verifier"}}:</label>
-                            {{ with .Form.Errors.Get "financial_verifier"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " financial_verifier"}} is-invalid
-                                {{end}}" type="text" name="financial_verifier" id="financial_verifier"
-                                autocomplete="off" value="{{$financial.FinancialVerifier}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="receipt_received_date">{{i18n "receipt received date"}}:</label>
-                            {{ with .Form.Errors.Get "receipt_received_date"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="usage form-control {{with .Form.Errors.Get " receipt_received_date"}}
-                                is-invalid {{end}}" type="text" name="receipt_received_date" id="receipt_received_date"
-                                style="background-color: #FFFFFF" readonly="readonly" autocomplete="off" value="
-                                {{if $financial.ReceiptDate}}
-                                {{humanPgtypeDate $financial.ReceiptDate}}
-                                {{else}}
-                                {{end}}">
-                        </div>
-
-                        <div class="form-group ">
-                            <label for="receipt_receiver">{{i18n "receipt receiver"}}:</label>
-                            {{ with .Form.Errors.Get "receipt_receiver"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get " receipt_receiver"}} is-invalid {{end}}"
-                                type="text" name="receipt_receiver" id="receipt_receiver" autocomplete="off"
-                                style="background-color: #FFFFFF"
-                                value="{{$financial.ReceiptReceiver}}" >
-                        </div>
-                </div>
-
                 <hr>
-                
-
             </form>
         </div>
     </div>
@@ -753,11 +756,11 @@ Add new report
     }
 </style>
 <script>
-    jQuery.validator.addMethod("phoneNumber", function(value, element) {
-        if(value.length == '') {
+    jQuery.validator.addMethod("phoneNumber", function (value, element) {
+        if (value.length == '') {
             return true;
         }
-        if(value[0] == '+') {
+        if (value[0] == '+') {
             return this.optional(element) || /^\+[0-9]{2}[0-9]{3}[0-9]{7}$/.test(value);
         } else {
             return this.optional(element) || /^[0-9]{11}$/.test(value);
@@ -809,25 +812,25 @@ Add new report
     })
 
     function validateNumber(event, input) {
-        if(!/^[0-9]+$/g.test(input.value)) {
+        if (!/^[0-9]+$/g.test(input.value)) {
             input.value = input.value.replace(/[^0-9]/g, '');
         }
-        
+
     }
 
     function phoneCheck(event, input) {
         input.value = input.value.replace(/^\s+|\s+$/g, '');
-        if(input.value === '') {
+        if (input.value === '') {
             return;
         }
-        if(input.value[0] == '+') {
+        if (input.value[0] == '+') {
             input.value = '+' + input.value.replace(/[^0-9]/g, '');
-            if(input.value.length > 13) {
+            if (input.value.length > 13) {
                 input.value = input.value.substring(0, 13);
             }
         } else {
             input.value = input.value.replace(/[^0-9]/g, '');
-            if(input.value.length > 11) {
+            if (input.value.length > 11) {
                 input.value = input.value.substring(0, 11);
             }
         }
@@ -858,7 +861,7 @@ Add new report
         parent.find('input').val($(this).val())
     })
 
-    $('input[type="submit"]').on('click',function(){
+    $('input[type="submit"]').on('click', function () {
         $('#main-form').submit()
     })
 </script>
