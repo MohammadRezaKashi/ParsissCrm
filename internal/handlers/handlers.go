@@ -500,9 +500,9 @@ func InitSurgeryInfoComboBoxes(surgeryInfo []models.SurgeriesInformation) ([]mod
 func GetAllSelectOptionsFinancial() []models.Option {
 	paymentstatus := []models.Option{
 		{Value: "1", Text: "Paid", Selected: ""},
-		{Value: "2", Text: "Unpaid", Selected: ""},
+		{Value: "2", Text: "Not Paid", Selected: ""},
 		{Value: "3", Text: "Free", Selected: ""},
-		{Value: "4", Text: "Health Plan", Selected: ""},
+		{Value: "4", Text: "Healthy Insurance", Selected: ""},
 		{Value: "5", Text: "Paid By Hospital", Selected: ""},
 	}
 
@@ -524,6 +524,7 @@ func GetAllSelectOptionsSurgery() ([]models.Option, []models.Option, []models.Op
 		{Value: "1", Text: "Morning", Selected: ""},
 		{Value: "2", Text: "Afternoon", Selected: ""},
 		{Value: "3", Text: "Evening", Selected: ""},
+		{Value: "4", Text: "Night", Selected: ""},
 	}
 
 	surgeryarea := []models.Option{
@@ -543,7 +544,7 @@ func GetAllSelectOptionsSurgery() ([]models.Option, []models.Option, []models.Op
 
 	hospitaltype := []models.Option{
 		{Value: "0", Text: "Private", Selected: ""},
-		{Value: "1", Text: "Govermental", Selected: ""},
+		{Value: "1", Text: "Governmental", Selected: ""},
 		{Value: "2", Text: "Other", Selected: ""},
 	}
 

@@ -60,12 +60,45 @@
         "save": "ذخیره",
 
         "filters": "فیلترها",
-        "details": "جزییات"
-    },
+        "details": "جزییات",
+
+        "background text": "-- یک گزینه را انتخاب کنید --",
+
+        "Saturday": "شنبه",
+        "Sunday": "یکشنبه",
+        "Monday": "دوشنبه",
+        "Tuesday": "سه شنبه",
+        "Wednesday": "چهارشنبه",
+        "Thursday": "پنج شنبه",
+        "Friday": "جمعه",
+
+        "Morning": "صبح",
+        "Afternoon": "بعد از ظهر",
+        "Evening": "عصر",
+        "Night": "شب",
+
+        "Success": "موفق",
+        "Canceled": "لغو شد",
+        "Fail": "ناموفق",
+
+        "Private": "خصوصی",
+        "Governmental": "دولتی",
+        "Other": "سایر",
+
+        "Not Checked": "چک نشد",
+        "Not Exist": "ندارد",
+        "Exist And Valid": "چک شد و تایید شد",
+        "Exist And Not Valid": "چک شد و تایید نشد",
+
+        "Paid": "پرداخت شد",
+        "Not Paid": "پرداخت نشد",
+        "Free": "رایگان",
+        "Healthy Insurance": "بیمه سلامت",
+        "Paid By Hospital": "پرداخت شده توسط بیمارستان"
+},
     "en": {
         "home": "Home",
         "report": "Report",
-        "about": "About",
         "contact": "Contact",
         "reports": "Reports",
         "add new report": "Add new report",
@@ -123,6 +156,40 @@
         "save": "Save",
 
         "filters": "Filters",
-        "details": "Details"
+        "details": "Details",
+
+        "background text": "-- Select an option --",
+
+        "Saturday": "Saturday",
+        "Sunday": "Sunday",
+        "Monday": "Monday",
+        "Tuesday": "Tuesday",
+        "Wednesday": "Wednesday",
+        "Thursday": "Thursday",
+        "Friday": "Friday",
+
+        "Morning": "Morning",
+        "Afternoon": "Afternoon",
+        "Evening": "Evening",
+        "Night": "Night",
+
+        "Success": "Success",
+        "Canceled": "Cancel",
+        "Fail": "Fail",
+
+        "Private": "Private",
+        "Governmental": "Governmental",
+        "Other": "Other",
+
+        "Not Checked": "Not checked",
+        "Not Exist": "Not exist",
+        "Exist And Valid": "Exist and valid",
+        "Exist And Not Valid": "Exist and not valid",
+
+        "Paid": "Paid",
+        "Not Paid": "Not paid",
+        "Free": "Free",
+        "Healthy Insurance": "Healthy Insurance",
+        "Paid By Hospital": "Paid by hospital"
     }
 }

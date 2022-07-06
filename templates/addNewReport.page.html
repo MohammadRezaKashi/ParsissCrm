@@ -220,10 +220,10 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="surgery_day" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{range $surgeryday}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
+                                    {{i18n .Text}}</option>
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " surgery_day"}} is-invalid {{end}}"
@@ -237,10 +237,10 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="surgery_time" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{range $surgerytime}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
+                                    {{i18n .Text}}</option>
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " time"}} is-invalid {{end}}"
@@ -264,12 +264,12 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="surgery_area" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{range $surgeryarea}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
                                     {{.Text}}</option>
                                 {{end}}
-                                </datalist>
+                            </select>
                                 <input class="form-control {{with .Form.Errors.Get " surgery_area"}} is-invalid {{end}}"
                                     type="hidden" name="surgery_area" id="surgery_area" autocomplete="off"
                                     value="{{$surgery.SurgeryArea}}">
@@ -292,12 +292,12 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="surgery_result" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{range $surgeryresult}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
+                                    {{i18n .Text}}</option>
                                 {{end}}
-                                </datalist>
+                            </select>
                                 <input class="form-control {{with .Form.Errors.Get " surgery_result"}} is-invalid
                                     {{end}}" type="hidden" name="surgery_result" id="surgery_result" autocomplete="off"
                                     value="{{$rep.SurgeryResult}}">
@@ -349,10 +349,10 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="hospital_type" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{range $hospitaltype}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
-                                    {{.Text}}</option>
+                                    {{i18n .Text}}</option>
                                 {{end}}
                             </select>
                                 <input class="form-control {{with .Form.Errors.Get " hospital_type"}} is-invalid
@@ -376,15 +376,17 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="mr" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{if eq $patient.Name ""}}
-                                {{range $imagevalidity}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
-                                {{end}}
+                                    {{range $imagevalidity}}
+                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                        {{i18n .Text}}</option>
+                                    {{end}}
                                 {{else}}
-                                {{range $mr}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
-                                {{end}}
+                                    {{range $mr}}
+                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                        {{i18n .Text}}</option>
+                                    {{end}}
                                 {{end}}
 
                             </select>
@@ -398,15 +400,17 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="ct" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{if eq $patient.Name ""}}
-                                {{range $imagevalidity}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
-                                {{end}}
+                                    {{range $imagevalidity}}
+                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                        {{i18n .Text}}</option>
+                                    {{end}}
                                 {{else}}
-                                {{range $ct}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
-                                {{end}}
+                                    {{range $ct}}
+                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                        {{i18n .Text}}</option>
+                                    {{end}}
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " ct"}} is-invalid {{end}}" type="hidden"
@@ -419,15 +423,17 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="fmri" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{if eq $patient.Name ""}}
-                                {{range $imagevalidity}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
-                                {{end}}
+                                    {{range $imagevalidity}}
+                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                        {{i18n .Text}}</option>
+                                    {{end}}
                                 {{else}}
-                                {{range $fmri}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
-                                {{end}}
+                                    {{range $fmri}}
+                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                        {{i18n .Text}}</option>
+                                    {{end}}
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " fmri"}} is-invalid {{end}}"
@@ -440,15 +446,17 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="dti" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{if eq $patient.Name ""}}
-                                {{range $imagevalidity}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
-                                {{end}}
+                                    {{range $imagevalidity}}
+                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                        {{i18n .Text}}</option>
+                                    {{end}}
                                 {{else}}
-                                {{range $dti}}
-                                <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>{{.Text}}</option>
-                                {{end}}
+                                    {{range $dti}}
+                                    <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
+                                        {{i18n .Text}}</option>
+                                    {{end}}
                                 {{end}}
                             </select>
                             <input class="form-control {{with .Form.Errors.Get " dti"}} is-invalid {{end}}"
@@ -532,7 +540,7 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="head_fix_type" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{range $headfixtype}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected" }}selected="selected" {{end}}>
                                     {{.Text}}</option>
@@ -564,10 +572,10 @@ Add new report
                             <label class="text-danger">{{.}}</label>
                             {{end}}
                             <select id="payment_status" class="form-control">
-                                <option disabled selected value> -- select an option -- </option>
+                                <option disabled selected value> {{i18n "background text"}} </option>
                                 {{range $paymentstatus}}
                                 <option value="{{.Value}}" {{if eq .Selected "selected"}}selected="selected" {{end}}>
-                                    {{.Text}}</option>
+                                    {{i18n .Text}}</option>
                                 {{end}}
                             </select>
                                 <input class="form-control {{with .Form.Errors.Get " payment_status"}} is-invalid
