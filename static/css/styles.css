@@ -1,3 +1,10 @@
+@import url('./fontiran.css');
+html[lang="fa"],body[lang="fa"]{
+    font-family: IRANSansX !important;
+    -moz-font-feature-settings: "ss02";
+    -webkit-font-feature-settings: "ss02";
+    font-feature-settings: "ss02";
+}
 .my-footer {
     height: 5em;
     background-color: #163b65;

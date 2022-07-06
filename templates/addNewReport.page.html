@@ -97,19 +97,15 @@ Add new report
 
                 <div class="grid-container">
                         <div class="form-group required-label required">
-                            <label for="name">{{i18n "name"}}:</label>
-                            {{ with .Form.Errors.Get "name"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
+                            <label for="name">{{i18n "name"}}: <span class="text-danger">
+                                {{ with .Form.Errors.Get "name"}}{{.}}{{end}}</span></label>
                             <input class="form-control {{with .Form.Errors.Get " name"}} is-invalid {{end}}" type="text"
                                 name="name" id="name" autocomplete="off" value="{{$patient.Name}}" required>
                         </div>
 
                         <div class="form-group  required-label required">
-                            <label for="family">{{i18n "family"}}:</label>
-                            {{ with .Form.Errors.Get "family"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
+                            <label for="family">{{i18n "family"}}: <span class="text-danger">
+                                {{ with .Form.Errors.Get "family"}}{{.}}{{end}}</span></label>
                             <input class="form-control {{with .Form.Errors.Get " family"}} is-invalid {{end}}"
                                 type="text" name="family" id="family" autocomplete="off" value="{{$patient.Family}}">
                         </div>
@@ -134,10 +130,8 @@ Add new report
                         </div>
 
                         <div class="form-group">
-                            <label for="phone_number">{{i18n "phone"}}:</label>
-                            {{ with .Form.Errors.Get "phone_number"}}
-                            <label class="text-danger">{{.}}</label>
-                            {{end}}
+                            <label for="phone_number">{{i18n "phone"}}: <span class="text-danger">
+                                {{ with .Form.Errors.Get "phone_number"}}{{.}}{{end}}</span></label>
                             <input class="form-control {{with .Form.Errors.Get " phone_number"}} is-invalid {{end}}"
                                 oninput ="return phoneCheck(event, this)"
                                 type="text" name="phone_number" id="phone_number" autocomplete="off"
@@ -763,11 +757,15 @@ Add new report
             return this.optional(element) || /^[0-9]{11}$/.test(value);
         }
     }, "Please enter a valid phone number.");
-
+    $('input').on('change', function() {
+        $(this).parent().find('label > span').html('');
+    });
     $('#main-form').validate({
         errorPlacement: function (label, element) {
             label.addClass('arrow');
-            label.insertAfter(element);
+            console.log(element.parent());
+            let lableReal = element.parent().find('label > span')[0]
+            lableReal.innerHTML = label.html();
         },
         wrapper: 'span',
         rules: {
