@@ -265,13 +265,14 @@ Statistical Report
     }
 
     $('input[type="checkbox"]').on('change', function () {
+        console.log(filterBody)
         if ($(this).is(":checked")) {
             if(filterBody[$(this).parent().attr('name')] == undefined){
                 filterBody[$(this).parent().attr('name')] = {}
+                filterBody[$(this).parent().attr('name')].values = []
             }
             filterBody[$(this).parent().attr('name')].type = 'checkbox'
-            filterBody[$(this).parent().attr('name')].values = []
-            filterBody[$(this).parent().attr('name')].values.push($(this).attr('value'));
+            filterBody[$(this).parent().attr('name')].values = [...filterBody[$(this).parent().attr('name')].values, $(this).attr('value')]
         } else {
             filterBody[$(this).parent().attr('name')].values.splice(
                 filterBody[$(this).parent().attr('name')].values.indexOf($(this).attr('value')), 1
@@ -280,6 +281,7 @@ Statistical Report
                 delete filterBody[$(this).parent().attr('name')]
             }
         }
+        console.log(filterBody)
         doFilter()
     })
 
@@ -308,7 +310,7 @@ Statistical Report
                         value.Family,
                         value.NationalID,
                         value.PhoneNumber,
-                        '<button class="btn btn-primary"><a href="/report/detail/'+value.ID+'/show">Detail</a></button>'
+                        '<button class="btn btn-primary"><a href="/report/detail/'+value.ID+'/show">{{i18n "details"}}</a></button>'
                     ])
                 })
                 $('#all-rep').DataTable().draw()

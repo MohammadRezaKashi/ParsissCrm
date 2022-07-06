@@ -332,15 +332,14 @@ func (m *postgresDBRepo) GetFilterData(filter interface{}) ([]models.PersonalInf
 	for key, value := range filter.(map[string]interface{}) {
 		var ors []string
 		var typeOfValue string
+		var tvalues []interface{}
 		for k, v := range value.(map[string]interface{}) {
 			if k == "type" {
-				typeOfValue = v.(string)
-			} else {
-				for i, v := range v.([]interface{}) {
-					if typeOfValue == "checkbox" {
-						ors = append(ors, fmt.Sprintf("%s = '%s'", key, v.(string)))
-					} else if typeOfValue == "date" {
-						d := driver.ConvertStringToDate(v.(string))
+				for i, x := range tvalues {
+					if v.(string) == "checkbox" {
+						ors = append(ors, fmt.Sprintf("%s = '%s'", key, x.(string)))
+					} else if v.(string) == "date" {
+						d := driver.ConvertStringToDate(x.(string))
 						switch i {
 						case 0:
 							ors = append(ors, fmt.Sprintf("%s >= '%s'", key, d.Time.Format("2006-01-02")))
@@ -349,6 +348,9 @@ func (m *postgresDBRepo) GetFilterData(filter interface{}) ([]models.PersonalInf
 						}
 					}
 				}
+				typeOfValue = v.(string)
+			} else {
+				tvalues = v.([]interface{})
 			}
 		}
 		if typeOfValue == "checkbox" {
