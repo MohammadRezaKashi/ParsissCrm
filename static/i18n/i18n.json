@@ -94,7 +94,10 @@
         "Not Paid": "پرداخت نشد",
         "Free": "رایگان",
         "Healthy Insurance": "بیمه سلامت",
-        "Paid By Hospital": "پرداخت شده توسط بیمارستان"
+        "Paid By Hospital": "پرداخت شده توسط بیمارستان",
+
+        "from": "از",
+        "to": "تا"
 },
     "en": {
         "home": "Home",
@@ -190,6 +193,9 @@
         "Not Paid": "Not paid",
         "Free": "Free",
         "Healthy Insurance": "Healthy Insurance",
-        "Paid By Hospital": "Paid by hospital"
+        "Paid By Hospital": "Paid by hospital",
+
+        "from": "From",
+        "to": "To"
     }
 }
