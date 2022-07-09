@@ -12,7 +12,7 @@ create_table("FinancialInformation") {
     t.Column("bank", "text", {})
     t.Column("discount_percentage", "float", {})
     t.Column("discount_reason", "text", {})
-    t.Column("credit_amount", "text", {})
+    t.Column("health_plan_amount", "text", {})
     t.Column("insurance_type", "text", {})
     t.Column("financial_verifier", "text", {})
     t.Column("receipt_received_date", "date", {})

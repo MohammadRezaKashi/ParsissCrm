@@ -71,13 +71,13 @@ func (m *postgresDBRepo) AddFinancialInformation(financialInfo models.FinancialI
 	INSERT INTO public."FinancialInformation"(
 		patient_id, payment_status, payment_date, payment_amount, payment_notes, receipt_number,
 	                                          first_contact, first_caller, last_four_card_number, bank,
-	                                          discount_percentage, discount_reason, credit_amount, insurance_type,
+	                                          discount_percentage, discount_reason, health_plan_amount, insurance_type,
 	                                          financial_verifier, receipt_received_date, receipt_receiver)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`
 	_, err := m.DB.ExecContext(ctx, query, patientID, financialInfo.PaymentStatus, financialInfo.DateOfPayment.Time,
 		financialInfo.CashAmount, financialInfo.PaymentNote, financialInfo.ReceiptNumber, financialInfo.DateOfFirstContact.Time,
 		financialInfo.FirstCaller, financialInfo.LastFourDigitsCard, financialInfo.Bank, financialInfo.DiscountPercent,
-		financialInfo.ReasonForDiscount, financialInfo.CreditAmount, financialInfo.TypeOfInsurance,
+		financialInfo.ReasonForDiscount, financialInfo.HealthPlanAmount, financialInfo.TypeOfInsurance,
 		financialInfo.FinancialVerifier, financialInfo.ReceiptDate.Time, financialInfo.ReceiptReceiver)
 	if err != nil {
 		log.Println(err)
@@ -204,7 +204,7 @@ func (m *postgresDBRepo) GetFinancialInformationByPatientID(id int) ([]models.Fi
 		err := rows.Scan(&financial.ID, &financial.PatientID, &financial.PaymentStatus, &financial.DateOfPayment,
 			&financial.CashAmount, &financial.PaymentNote, &financial.ReceiptNumber, &financial.DateOfFirstContact,
 			&financial.FirstCaller, &financial.LastFourDigitsCard, &financial.Bank, &financial.DiscountPercent,
-			&financial.ReasonForDiscount, &financial.CreditAmount, &financial.TypeOfInsurance, &financial.FinancialVerifier,
+			&financial.ReasonForDiscount, &financial.HealthPlanAmount, &financial.TypeOfInsurance, &financial.FinancialVerifier,
 			&financial.ReceiptDate, &financial.ReceiptReceiver, new(time.Time), new(time.Time))
 		if err != nil {
 			log.Println(err)
@@ -276,13 +276,13 @@ func (m *postgresDBRepo) PutFinancialInformation(financialInfo models.FinancialI
 	UPDATE public."FinancialInformation"
 	SET patient_id = $1, payment_status = $2, payment_date = $3, payment_amount = $4, payment_notes = $5,
 	    receipt_number = $6, first_contact = $7, first_caller = $8, last_four_card_number = $9,
-	    bank = $10, discount_percentage = $11, discount_reason = $12, credit_amount = $13, insurance_type = $14,
+	    bank = $10, discount_percentage = $11, discount_reason = $12, health_plan_amount = $13, insurance_type = $14,
 	    financial_verifier = $15, receipt_received_date = $16, receipt_receiver = $17, updated_at = $18
 	WHERE id = $19`
 	_, err := m.DB.ExecContext(ctx, query, financialInfo.PatientID, financialInfo.PaymentStatus,
 		financialInfo.DateOfPayment, financialInfo.CashAmount, financialInfo.PaymentNote, financialInfo.ReceiptNumber,
 		financialInfo.DateOfFirstContact, financialInfo.FirstCaller, financialInfo.LastFourDigitsCard,
-		financialInfo.Bank, financialInfo.DiscountPercent, financialInfo.ReasonForDiscount, financialInfo.CreditAmount,
+		financialInfo.Bank, financialInfo.DiscountPercent, financialInfo.ReasonForDiscount, financialInfo.HealthPlanAmount,
 		financialInfo.TypeOfInsurance, financialInfo.FinancialVerifier, financialInfo.ReceiptDate,
 		financialInfo.ReceiptReceiver, time.Now(), financialInfo.ID)
 	if err != nil {
