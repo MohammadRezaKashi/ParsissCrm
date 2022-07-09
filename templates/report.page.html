@@ -192,6 +192,7 @@ Statistical Report
             onChangeDate($(this))
         }
     });
+
     from = $(".datepickerFrom").persianDatepicker({
         format: 'YYYY/MM/DD',
         altField: '.observer-example-alt',
@@ -213,6 +214,7 @@ Statistical Report
             onChangeDate($(this))
         }
     });
+
     function onChangeDate(dateObj) {
         $(dateObj[0].model.input.elem).val()
         let inputFromSelect = dateObj[0].model.input.elem
@@ -290,6 +292,7 @@ Statistical Report
         filterBody[$(this).attr('name')] = $(this).val()
         doFilter()
     })
+    
     function doFilter() {
         $.ajax({
             method: 'post',
