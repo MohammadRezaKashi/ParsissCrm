@@ -214,7 +214,7 @@ func GetAllFinancialInformation() []models.FinancialInformation {
 			Bank:               row[28],
 			DiscountPercent:    ConvertDiscountPercentToFloat64(row[29]),
 			ReasonForDiscount:  row[30],
-			CreditAmount:       row[31],
+			HealthPlanAmount:   row[31],
 			TypeOfInsurance:    row[32],
 			FinancialVerifier:  row[33],
 			ReceiptNumber:      receiptNumber,

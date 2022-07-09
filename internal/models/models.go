@@ -74,7 +74,7 @@ type FinancialInformation struct {
 	Bank               string
 	DiscountPercent    float64
 	ReasonForDiscount  string
-	CreditAmount       string
+	HealthPlanAmount   string
 	TypeOfInsurance    string
 	FinancialVerifier  string
 	ReceiptNumber      int
