@@ -141,17 +141,17 @@ Statistical Report
         <div name="hospital_type" class="panel">
             {{range $filters.HospitalTypeOptions}}
             <input type="checkbox" name="{{.Text}}" value="{{.Value}}" {{if eq .Selected "selected" }}checked{{end}}
-                style="margin: 1px;"> {{.Text}}<br></input>
+                style="margin: 1px;"> {{i18n .Text}}<br></input>
             {{end}}
         </div>
 
         <button class="accordion">{{i18n "surgery date"}}</button>
         <div id="surgeryDatePick" name="surgery_date" class="panel">
-            <label class="label_filter block">From:</label>
+            <label class="label_filter block">{{i18n "from"}}:</label>
             <input class="datepickerFrom form-control" name="surgery_date_from" data-type="dateSelector" id="surgery_date_from"
                    style="background-color: #FFFFFF"
                    autocomplete="off">
-            <label class="label_filter block">To:</label>
+            <label class="label_filter block">{{i18n "to"}}:</label>
             <input class="datepickerTo form-control" name="surgery_date_to" data-type="dateSelector" id="surgery_date_to"
                    style="background-color: #FFFFFF;" readonly="readonly"
                    autocomplete="off">
